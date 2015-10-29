@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -23,16 +24,18 @@ public class ScreenPanel extends JPanel implements Screen
     public ScreenPanel( Window frame )
     {
         window = frame;
+//        this.setPreferredSize( new Dimension( frame.getWidth(), frame.getHeight() ) );
     }
     
     public ScreenPanel( Window frame, String fileName )
     {
         this( frame );
+        fileName =  "/imgs/" + fileName; // Package images are found in
         while ( background == null )
         {
             try
             {
-                background = ImageIO.read( ScreenPanel.class.getResource( "/imgs/" + fileName ) );
+                background = ImageIO.read( ScreenPanel.class.getResource( fileName ) );
             }
             catch ( IOException e )
             {
@@ -47,11 +50,18 @@ public class ScreenPanel extends JPanel implements Screen
     }
     
     @Override
-    protected void paintComponent( Graphics g ) {
-
-      super.paintComponent( g );
-      g.drawImage( background, 0, 0, null );
-  }
+    protected void paintComponent( Graphics g ) 
+    {
+        super.paintComponent( g );
+        g.drawImage( background, 0, 0, null );
+    }
+    
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(
+            background.getWidth(null),
+            background.getHeight(null));
+    }
     
     @Override
     public void shown()

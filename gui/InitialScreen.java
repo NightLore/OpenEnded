@@ -22,14 +22,15 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
 
     public InitialScreen( Window frame )
     {
-        super( frame );
+        super( frame, "GrassyBackground.png" );
         this.addKeyListener( this );
         this.addMouseListener( this );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
         
         JPanel menuTitlePanel = new JPanel();
+        menuTitlePanel.setOpaque( false );
         JLabel title = new JLabel( frame.getName() );
-        JLabel start = new JLabel( "Press any key to continue" );
+        JLabel start = new JLabel( "PRESS ANY KEY TO CONTINUE" );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         title.setAlignmentX( CENTER_ALIGNMENT );

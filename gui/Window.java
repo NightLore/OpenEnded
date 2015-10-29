@@ -16,11 +16,11 @@ public class Window extends JFrame// implements KeyListener, MouseListener
     private static final long serialVersionUID = 1L;
     
     public static final String GAME_TITLE = "OpenEnded";
-    static final Dimension WINDOW_SIZE = new Dimension( 1280, 720 );
-    static final Dimension buttonSize = new Dimension( WINDOW_SIZE.width / 10, WINDOW_SIZE.height / 20 );
+    private static final Dimension windowSize = new Dimension( 1280, 720 );
+    public final Dimension buttonSize = new Dimension( windowSize.width / 10, windowSize.height / 20 );
     
     public enum Panel {
-        INIT, MENU, GAME
+        INIT, MENU, GAME, LOAD, STGS
     }
     private JPanel main;
     private CardLayout cards;
@@ -30,7 +30,7 @@ public class Window extends JFrame// implements KeyListener, MouseListener
     {
         this.setTitle( GAME_TITLE + " V" + serialVersionUID );
         this.setName( GAME_TITLE );
-        this.setSize( WINDOW_SIZE );
+        this.setSize( windowSize );
         this.setLocationRelativeTo( null );
         this.setDefaultCloseOperation( EXIT_ON_CLOSE );
 //        this.setResizable( false );
@@ -44,14 +44,20 @@ public class Window extends JFrame// implements KeyListener, MouseListener
         ScreenPanel init = new InitialScreen( this );
         ScreenPanel menu = new MainMenu( this );
         ScreenPanel game = new Game( this );
+        ScreenPanel load = new LoadingScreen( this );
+        ScreenPanel stgs = new SettingsScreen( this );
         
         screens.put( Panel.INIT, init );
         screens.put( Panel.MENU, menu );
         screens.put( Panel.GAME, game );
+        screens.put( Panel.LOAD, load );
+        screens.put( Panel.STGS, stgs );
         
         main.add( init, Panel.INIT.toString() );
         main.add( menu, Panel.MENU.toString() );
         main.add( game, Panel.GAME.toString() );
+        main.add( load, Panel.LOAD.toString() );
+        main.add( stgs, Panel.STGS.toString() );
         
         this.add( main );
     }

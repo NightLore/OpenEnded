@@ -14,8 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import static gui.Window.WINDOW_SIZE;
-
 public class MainMenu extends ScreenPanel implements ActionListener
 {
 
@@ -27,9 +25,9 @@ public class MainMenu extends ScreenPanel implements ActionListener
     public MainMenu( Window frame )
     {
         super( frame, "GrassyBackground.png" );
-        Dimension buttonSize = new Dimension( WINDOW_SIZE.width / 10, WINDOW_SIZE.height / 20 );
-        Dimension filler = new Dimension( WINDOW_SIZE.width / 20, WINDOW_SIZE.height / 20 );
-
+        Dimension buttonSize = frame.buttonSize;
+        Dimension filler = new Dimension( frame.getWidth() / 20, frame.getHeight() / 20 );
+        
         JPanel titlePanel = new JPanel();
         JPanel buttonPanel = new JPanel();
         JLabel title = new JLabel( window.getName() );
@@ -42,22 +40,26 @@ public class MainMenu extends ScreenPanel implements ActionListener
         this.setLayout( new BorderLayout() );
         buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.Y_AXIS ) );
 
+        titlePanel.setOpaque( false );
+        buttonPanel.setOpaque( false );
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
-        
+
+        // -------------------- Setting Listeners ----------------------- //
         playButton.addActionListener( this );
         loadButton.addActionListener( this );
         stgsButton.addActionListener( this );
         backButton.addActionListener( this );
         exitButton.addActionListener( this );
-        
-        this.setPreferredSize( WINDOW_SIZE );
-        buttonPanel.setPreferredSize( new Dimension( WINDOW_SIZE.width / 4, WINDOW_SIZE.height / 3 ) );
+
+        // -------------------- Setting Sizes     ----------------------- //
+        buttonPanel.setPreferredSize( new Dimension( frame.getWidth() / 4, frame.getHeight() / 3 ) );
         playButton.setPreferredSize( buttonSize );
         loadButton.setPreferredSize( buttonSize );
         stgsButton.setPreferredSize( buttonSize );
         backButton.setPreferredSize( buttonSize );
         exitButton.setPreferredSize( buttonSize );
 
+        // -------------------- Setting Alignment ----------------------- //
         title.setAlignmentX( CENTER_ALIGNMENT );
         playButton.setAlignmentX( CENTER_ALIGNMENT );
         loadButton.setAlignmentX( CENTER_ALIGNMENT );
@@ -65,6 +67,7 @@ public class MainMenu extends ScreenPanel implements ActionListener
         backButton.setAlignmentX( CENTER_ALIGNMENT );
         exitButton.setAlignmentX( CENTER_ALIGNMENT );
 
+        // -------------------- Adding Components ----------------------- //
         this.add( titlePanel, BorderLayout.NORTH );
         this.add( buttonPanel, BorderLayout.EAST );
 
@@ -98,25 +101,14 @@ public class MainMenu extends ScreenPanel implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        if ( e.getActionCommand().equals( "Play Game" ) )
-        {
-            window.switchTo( this, Panel.GAME );
-        }
-        else if ( e.getActionCommand().equals( "Load Game" ) )
-        {
-            
-        }
-        else if ( e.getActionCommand().equals( "Settings" ) )
-        {
-            
-        }
-        else if ( e.getActionCommand().equals( "Back" ) )
-        {
-            window.switchTo( this, Panel.INIT );
-        }
-        else if ( e.getActionCommand().equals( "Exit Game" ) )
-        {
-            System.exit( 0 );
-        }
+        Panel p = null;
+        
+        if ( e.getActionCommand().equals( "Play Game" ) )      p = Panel.GAME;
+        else if ( e.getActionCommand().equals( "Load Game" ) ) p = Panel.LOAD;
+        else if ( e.getActionCommand().equals( "Settings" ) )  p = Panel.STGS;
+        else if ( e.getActionCommand().equals( "Back" ) )      p = Panel.INIT;
+        else if ( e.getActionCommand().equals( "Exit Game" ) ) System.exit( 0 );
+        
+        if ( p != null ) window.switchTo( this, p );
     }
 }
