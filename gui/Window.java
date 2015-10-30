@@ -15,12 +15,11 @@ public class Window extends JFrame// implements KeyListener, MouseListener
      */
     private static final long serialVersionUID = 1L;
     
-    public static final String GAME_TITLE = "OpenEnded";
     private static final Dimension windowSize = new Dimension( 1280, 720 );
-    public final Dimension buttonSize = new Dimension( windowSize.width / 10, windowSize.height / 20 );
+    public final Dimension buttonSize = new Dimension( windowSize.width, windowSize.height / 20 );
     
     public enum Panel {
-        INIT, MENU, GAME, LOAD, STGS
+        INITIAL, MAINMENU, SETTINGS, LISTGAME, STORYGAME, LOADGAME, FREEGAME 
     }
     private JPanel main;
     private CardLayout cards;
@@ -28,9 +27,10 @@ public class Window extends JFrame// implements KeyListener, MouseListener
 
     public Window()
     {
-        this.setTitle( GAME_TITLE + " V" + serialVersionUID );
-        this.setName( GAME_TITLE );
+        this.setTitle( getGameName() + " " + getVersion() );
+        this.setName( getGameName() );
         this.setSize( windowSize );
+        this.setMinimumSize( windowSize );
         this.setLocationRelativeTo( null );
         this.setDefaultCloseOperation( EXIT_ON_CLOSE );
 //        this.setResizable( false );
@@ -41,36 +41,51 @@ public class Window extends JFrame// implements KeyListener, MouseListener
         cards = new CardLayout();
         main.setLayout( cards );
         
-        ScreenPanel init = new InitialScreen( this );
-        ScreenPanel menu = new MainMenu( this );
-        ScreenPanel game = new Game( this );
-        ScreenPanel load = new LoadingScreen( this );
-        ScreenPanel stgs = new SettingsScreen( this );
+        ScreenPanel initial = new InitialScreen( this, Panel.INITIAL );
+        ScreenPanel mainMenu = new MainMenuScreen( this, Panel.MAINMENU );
+        ScreenPanel settings = new SettingsScreen( this, Panel.SETTINGS );
+        ScreenPanel listGame = new ListGameScreen( this, Panel.LISTGAME );
+        ScreenPanel storyGame = new GameScreen( this, Panel.STORYGAME );
+        ScreenPanel loadGame = new LoadGameScreen( this, Panel.LOADGAME );
+        ScreenPanel freeGame = new GameScreen( this, Panel.FREEGAME );
         
-        screens.put( Panel.INIT, init );
-        screens.put( Panel.MENU, menu );
-        screens.put( Panel.GAME, game );
-        screens.put( Panel.LOAD, load );
-        screens.put( Panel.STGS, stgs );
+        screens.put( Panel.INITIAL, initial );
+        screens.put( Panel.MAINMENU, mainMenu );
+        screens.put( Panel.SETTINGS, settings );
+        screens.put( Panel.LISTGAME, listGame );
+        screens.put( Panel.STORYGAME, storyGame );
+        screens.put( Panel.LOADGAME, loadGame );
+        screens.put( Panel.FREEGAME, freeGame );
         
-        main.add( init, Panel.INIT.toString() );
-        main.add( menu, Panel.MENU.toString() );
-        main.add( game, Panel.GAME.toString() );
-        main.add( load, Panel.LOAD.toString() );
-        main.add( stgs, Panel.STGS.toString() );
+        main.add( initial, Panel.INITIAL.toString() );
+        main.add( mainMenu, Panel.MAINMENU.toString() );
+        main.add( settings, Panel.SETTINGS.toString() );
+        main.add( listGame, Panel.LISTGAME.toString() );
+        main.add( storyGame, Panel.STORYGAME.toString() );
+        main.add( loadGame, Panel.LOADGAME.toString() );
+        main.add( freeGame, Panel.FREEGAME.toString() );
         
         this.add( main );
     }
     
-    public void switchTo( Screen from, Panel p )
+    public void switchTo( Panel from, Panel p )
     {
-        from.cover();
+        screens.get( from ).cover();
         cards.show( main, p.toString() );
         screens.get( p ).shown();
     }
     
 //    public static int getWindowWidth() { return WINDOW_SIZE.width; }
 //    public static int getWindowHeight() { return WINDOW_SIZE.height; }
+    public String getGameName()
+    {
+        return "OpenEnded";
+    }
+    
+    public String getVersion()
+    {
+        return "V" + serialVersionUID;
+    }
 
     public static void main( String[] args ) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

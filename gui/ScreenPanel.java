@@ -1,5 +1,8 @@
 package gui;
 
+import gui.Window.Panel;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -18,18 +21,21 @@ public class ScreenPanel extends JPanel implements Screen
     private static final long serialVersionUID = 1L;
 
     protected Window window;
+    protected Panel screen;
     private BufferedImage background;
     
     
-    public ScreenPanel( Window frame )
+    public ScreenPanel( Window frame, Panel panel )
     {
         window = frame;
-//        this.setPreferredSize( new Dimension( frame.getWidth(), frame.getHeight() ) );
+        screen = panel;
+        this.setBackground( Color.BLACK );
+        this.setPreferredSize( new Dimension( frame.getWidth(), frame.getHeight() ) );
     }
     
-    public ScreenPanel( Window frame, String fileName )
+    public ScreenPanel( Window frame, Panel panel, String fileName )
     {
-        this( frame );
+        this( frame, panel );
         fileName =  "/imgs/" + fileName; // Package images are found in
         while ( background == null )
         {
@@ -56,12 +62,12 @@ public class ScreenPanel extends JPanel implements Screen
         g.drawImage( background, 0, 0, null );
     }
     
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(
-            background.getWidth(null),
-            background.getHeight(null));
-    }
+//    @Override
+//    public Dimension getPreferredSize() {
+//        return new Dimension(
+//            background.getWidth(null),
+//            background.getHeight(null));
+//    }
     
     @Override
     public void shown()

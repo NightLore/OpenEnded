@@ -14,9 +14,9 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
 
-    public SettingsScreen( Window frame )
+    public SettingsScreen( Window frame, Panel panel )
     {
-        super( frame );
+        super( frame, panel );
         JButton backButton = new JButton( "Back" );
         backButton.addActionListener( this );
         this.add( backButton );
@@ -27,7 +27,7 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     {
         if ( e.getActionCommand().equals( "Back" ) )
         {
-            window.switchTo( this, Panel.MENU );
+            window.switchTo( screen, Panel.MAINMENU );
         }
     }
 }
