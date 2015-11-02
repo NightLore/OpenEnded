@@ -1,16 +1,18 @@
 package sprites;
 
+import game.Collidable;
+
 import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
-public class Sprite extends ImageSprite
+public class Sprite extends ImageSprite implements Collidable
 {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    
+    private boolean canCollide;
     public Sprite( String imgFile )
     {
         this( makeTransparent( toImage( "/imgs/" + imgFile ), java.awt.Color.WHITE ) );
@@ -19,6 +21,7 @@ public class Sprite extends ImageSprite
     public Sprite( BufferedImage img )
     {
         super( img );
+        this.setCollidable( false );
     }
     
     public void move( long gameTime )
@@ -60,6 +63,18 @@ public class Sprite extends ImageSprite
             return toImage( scanIn.nextLine() );
         }
         // return null;
+    }
+
+    @Override
+    public boolean canCollide()
+    {
+        return canCollide;
+    }
+
+    @Override
+    public void setCollidable( boolean canCollide )
+    {
+        this.canCollide = canCollide;
     }
 
 }
