@@ -5,7 +5,8 @@ import gui.Window.Panel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -22,7 +23,7 @@ public class ScreenPanel extends JPanel implements Screen
 
     protected Window window;
     protected Panel screen;
-    private BufferedImage background;
+    private Image background;
     
     
     public ScreenPanel( Window frame, Panel panel )
@@ -42,6 +43,7 @@ public class ScreenPanel extends JPanel implements Screen
             try
             {
                 background = ImageIO.read( ScreenPanel.class.getResource( fileName ) );
+//                background = new ImageIcon( ScreenPanel.class.getResource( fileName ) ).getImage();
             }
             catch ( IOException e )
             {
@@ -54,12 +56,15 @@ public class ScreenPanel extends JPanel implements Screen
             }
         }
     }
+    public void draw(Graphics2D g2d) {}
     
     @Override
     protected void paintComponent( Graphics g ) 
     {
-        super.paintComponent( g );
-        g.drawImage( background, 0, 0, null );
+        Graphics2D g2d = (Graphics2D)g;        
+        super.paintComponent( g2d );
+        g.drawImage( background, 0, 0, this );
+        draw( g2d );
     }
     
 //    @Override
