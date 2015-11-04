@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import map.Map;
 import sprites.Player;
 import sprites.Sprite;
 import sprites.SpriteGroup;
@@ -22,6 +23,7 @@ public class Game {
     private List<Sprite> sprites;
     private SpriteGroup players;
     private Window window;
+    private Map map;
 
     public Game( Window frame )
     {
@@ -49,6 +51,7 @@ public class Game {
     {
         sprites = new ArrayList<Sprite>();
         players = new SpriteGroup();
+        map = new Map( window.getWidth(), window.getHeight() );
     }
     
     /**
@@ -103,6 +106,8 @@ public class Game {
 //                        + ( -player.getY() + window.getHeight() / 2 ) );
         if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
         {
+            map.draw( g2d );
+            
             Point pCenter = players.getCenter();
             int originX = window.getWidth() / 2 - pCenter.x;
             int originY = window.getHeight() / 2 - pCenter.y;
