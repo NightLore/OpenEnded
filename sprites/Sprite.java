@@ -43,6 +43,18 @@ public class Sprite extends ImageSprite implements Collidable
     {
         translate( 0, dy );
     }
+
+    @Override
+    public boolean canCollide()
+    {
+        return canCollide;
+    }
+
+    @Override
+    public void setCollidable( boolean canCollide )
+    {
+        this.canCollide = canCollide;
+    }
     
     /**
      * Return BufferedImage object of a picture file
@@ -63,18 +75,6 @@ public class Sprite extends ImageSprite implements Collidable
             return toImage( scanIn.nextLine() );
         }
         // return null;
-    }
-
-    @Override
-    public boolean canCollide()
-    {
-        return canCollide;
-    }
-
-    @Override
-    public void setCollidable( boolean canCollide )
-    {
-        this.canCollide = canCollide;
     }
 
 }

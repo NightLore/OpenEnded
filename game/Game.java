@@ -86,6 +86,7 @@ public class Game {
      */
     public void updateGame( long gameTime, Point mousePosition )
     {
+//        map.update( centerX, centerY, screenW, screenH ); // TODO
         for ( Sprite s : sprites )
         {
             s.move( gameTime );

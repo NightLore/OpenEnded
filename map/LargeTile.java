@@ -2,12 +2,9 @@ package map;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 public class LargeTile
 {
-    private static final Random RAND = new Random();
-    
     private BufferedImage[] floors;
     private BufferedImage[] blocks;
     private Tile[][] tiles;
@@ -37,7 +34,7 @@ public class LargeTile
     
     public void generate()
     {
-        if ( floors == null )
+        if ( floors == null || blocks == null )
             System.err.println( "Biomes not initialized" );
         // TODO
     }

@@ -2,6 +2,11 @@ package map;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.EnumMap;
+import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 public class Map
 {
@@ -11,12 +16,25 @@ public class Map
     public static final Biome[] biomes = Biome.values();
     public static final int MAP_TILE_SIZE = 3;
     
-    private BufferedImage[][] floors;
-    private BufferedImage[][] blocks;
+//    private static final String[][] FLOORS = { { "background.png" } };
+//    private static final String[][] BLOCKS = { { "DarkGreen.png" } };
+    private static EnumMap<Biome, String[]> FLOORS;
+    private static EnumMap<Biome, String[]> BLOCKS;
+    {
+        FLOORS = new EnumMap<Biome, String[]>( Biome.class );
+        BLOCKS = new EnumMap<Biome, String[]>( Biome.class );
+        FLOORS.put( Biome.PLAINS, new String[]{ "background.png" } );
+        BLOCKS.put( Biome.PLAINS, new String[]{ "DarkGreen.png" } );
+    }
+    
+    private EnumMap<Biome, BufferedImage[]> floors;
+    private EnumMap<Biome, BufferedImage[]> blocks;
     
     private LargeTile[][] tiles;
     private int width;
     private int height;
+    private int x;
+    private int y;
     
     public Map( int frameWidth, int frameHeight )
     {
@@ -25,20 +43,39 @@ public class Map
         height = frameHeight;
     }
     
-    public void create( int x, int y )
+    /**
+     * Creates this map
+     */
+    public void create()
     {
-        floors = new BufferedImage[biomes.length][];
-        blocks = new BufferedImage[biomes.length][];
+        floors = new EnumMap<Biome,BufferedImage[]>( Biome.class );
+        blocks = new EnumMap<Biome,BufferedImage[]>( Biome.class );
         // TODO initialize images
         int frameSize = Math.max( width, height );
         for ( int i = 0; i < MAP_TILE_SIZE; i++ )
         {
             for ( int j = 0; j < MAP_TILE_SIZE; j++ )
             {
-                int tileX = x + i * frameSize;
-                int tileY = y + j * frameSize;
+                int tileX = i * frameSize;
+                int tileY = j * frameSize;
                 tiles[i][j] = new LargeTile( tileX, tileY, frameSize );
             }
+        }
+        
+        for ( Biome b : biomes )
+        {
+            String[] fFiles = FLOORS.get( b );
+            String[] bFiles = BLOCKS.get( b );
+            int fLength = fFiles.length;
+            int bLength = bFiles.length;
+            BufferedImage[] floor = new BufferedImage[fLength];
+            BufferedImage[] block = new BufferedImage[bLength];
+            for ( int i = 0; i < fLength; i++ ) 
+                floor[i] = toImage( fFiles[i] );
+            for ( int i = 0; i < bLength; i++ ) 
+                block[i] = toImage( bFiles[i] );
+            floors.put( b, floor );
+            blocks.put( b, block );
         }
     }
     
@@ -63,7 +100,7 @@ public class Map
      * @param screenW width of screen
      * @param screenH height of screen
      */
-    public void update( int centerX, int centerY, int screenW, int screenH )
+    public void update( int centerX, int centerY )
     {
         // TODO updating formula
     }
@@ -76,6 +113,25 @@ public class Map
             {
                 t.draw( g2d );
             }
+        }
+    }
+    
+    /**
+     * Return BufferedImage object of a picture file
+     * @param fileName
+     * @return buffered image
+     */
+    public static BufferedImage toImage( String fileName )
+    {
+        try { 
+            return ImageIO.read( Map.class.getResource( fileName ) );
+        } catch ( java.io.IOException e ) { 
+            System.out.println( "Cannot find: " + fileName );
+            e.printStackTrace(); 
+            @SuppressWarnings("resource")
+            Scanner scanIn = new Scanner( System.in );
+            System.out.print( "Input file: " );
+            return toImage( scanIn.nextLine() );
         }
     }
 }
