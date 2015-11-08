@@ -26,13 +26,11 @@ public class Player extends Sprite
     @Override
     public void move( long gameTime )
     {
-        Point p = getDirections();
-//        dx *= gameTime / GameScreen.secInNanosec;
-//        dy *= gameTime / GameScreen.secInNanosec;
-        translate( p.x, p.y );
+        Point p = getDirections( gameTime );
+        translate( p.x * getSpeed(), p.y * getSpeed() );
     }
     
-    private Point getDirections()
+    private Point getDirections( long gameTime )
     {
         int dx = 0;
         int dy = 0;
@@ -57,7 +55,14 @@ public class Player extends Sprite
         {
             dx--;
         }
+//        dx *= gameTime / GameScreen.secInNanosec;
+//        dy *= gameTime / GameScreen.secInNanosec;
         return new Point( dx, dy );
+    }
+    
+    public int getSpeed()
+    {
+        return 5;
     }
     
 }

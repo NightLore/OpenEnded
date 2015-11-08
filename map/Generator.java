@@ -3,19 +3,48 @@ package map;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ *  This class randomly generates 2D-boolean arrays with random content intended
+ *  to simulate random generation of a tiled game where "false" is a wall and 
+ *  "true" is a space.<br>
+ *  Current types of generation:
+ *  @see map.Generator#generate(int)
+ *
+ *  @author  Nathan Lui
+ *  @version Nov 6, 2015
+ *  @author  Assignment: OpenEnded
+ */
 public class Generator
 {
     private static final Random RAND = new Random();
 
     public enum Generation {
-        DEFAULT, ROOM, MAZE, 
+        DEFAULT, ROOM, MAZE;
+        
+        private static final Generation[] TYPES = values();
+        private static final int NUMTYPES = TYPES.length;
+        public static Generation randomType()
+        {
+            return TYPES[RAND.nextInt( NUMTYPES )];
+        }
     }
+//    private static final List<Generation> TYPES = Collections.unmodifiableList(Arrays.asList(values()));
     
+    /**
+     * Randomly picks a type of generation and returns a 2D-boolean 
+     * representation of that generation
+     * @param size
+     * @return
+     */
+    public static boolean[][] generate( int size )
+    {
+        return generate( Generation.randomType(), size );
+    }
     public static boolean[][] generate( Generation g, int size )
     {
         return generate( RAND, g, size );
     }
-    public static boolean[][] generate( Random rand, Generation g, int size )
+    private static boolean[][] generate( Random rand, Generation g, int size )
     {
         boolean[][] map = new boolean[size][size];
         switch( g )
@@ -26,6 +55,7 @@ public class Generator
                 break;
             case MAZE:
                 fill( map, false );
+                generateRoom( rand, map );
                 generateMaze( rand, map );
                 break;
             case ROOM:
@@ -125,13 +155,19 @@ public class Generator
 //    }
     private static void generateRoom( Random rand, boolean[][] map )
     {
-        for ( int i = 0; i < map.length; i++ )
+        int length = map.length;
+        for ( int i = 0; i < length; i++ )
         {
             map[i][0] = rand.nextBoolean();
             map[0][i] = rand.nextBoolean();
-            map[i][map[i].length - 1] = rand.nextBoolean();
-            map[map.length - 1][i] = rand.nextBoolean();
+            map[i][length - 1] = rand.nextBoolean();
+            map[length - 1][i] = rand.nextBoolean();
         }
+    }
+    
+    public static int randInt( int limit )
+    {
+        return RAND.nextInt( limit );
     }
     
     public static void main( String[] args )

@@ -36,7 +36,7 @@ public class Game {
                 initialize();
                 // Load game files (images, sounds, ...)
                 loadContent();
-                System.out.println( "Game Loaded" );
+//                System.out.println( "Game Loaded" );
                 GameScreen.gameState = GameScreen.GameState.PLAYING;
             }
         };
@@ -63,9 +63,13 @@ public class Game {
         player = new Player( "player.png" );
         player.splitSprite( 2, 3 );
         player.setRefPixel( player.getWidth(), player.getHeight() );
-        player.setPosition( window.getWidth() / 2, window.getHeight() / 2 );
+//        player.setPosition( window.getWidth() / 2, window.getHeight() / 2 );
+        player.setPosition( 0, 0 );
         sprites.add( player );
         players.add( player );
+        map.loadAssets();
+        map.create();
+        map.generate();
     }    
     
     
@@ -74,15 +78,16 @@ public class Game {
      */
     public void restartGame()
     {
-        
+        map.generate();
     }
     
     
     /**
      * Update game logic.
      * 
-     * @param gameTime gameTime of the game.
+     * @param gameTime total time of game. // TODO see if need to change 
      * @param mousePosition current mouse position.
+     * @see gui.GameScreen#gameLoop
      */
     public void updateGame( long gameTime, Point mousePosition )
     {
@@ -107,13 +112,12 @@ public class Game {
 //                        + ( -player.getY() + window.getHeight() / 2 ) );
         if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
         {
-            map.draw( g2d );
             
             Point pCenter = players.getCenter();
             int originX = window.getWidth() / 2 - pCenter.x;
             int originY = window.getHeight() / 2 - pCenter.y;
             g2d.translate( originX, originY );
-            g2d.fillRect( 100, 100, 100, 100 );
+            map.draw( g2d );
 //            System.out.println( "draw: " + sprites.size() );
             for( Sprite s : sprites )
             {

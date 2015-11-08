@@ -29,7 +29,8 @@ public class Tile extends CollidableAdapter
     public void draw( Graphics2D g2d )
     {
         floor.paint( g2d );
-        block.paint( g2d );
+        if ( block != null )
+            block.paint( g2d );
     }
     
     /**

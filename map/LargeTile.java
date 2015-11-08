@@ -1,6 +1,7 @@
 package map;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 public class LargeTile
@@ -8,34 +9,59 @@ public class LargeTile
     private BufferedImage[] floors;
     private BufferedImage[] blocks;
     private Tile[][] tiles;
-    private int x;
-    private int y;
+    private Point position;
     private int size;
     public LargeTile( int x, int y, int frameSize )
     {
-        this.x = x;
-        this.y = y;
-        size = frameSize / Tile.TILE_SIZE;
+        this( new Point( x, y ), frameSize );
+    }
+    public LargeTile( Point p, int frameSize )
+    {
+        setPosition( p );
+        size = frameToTileSize( frameSize );
         tiles = new Tile[size][size];
     }
     
     public void create()
     {
+        int adjust = getSize() / 2;
         for ( int i = 0; i < size; i++ )
         {
             for ( int j = 0; j < size; j++ )
             {
-                int tileX = x + i * Tile.TILE_SIZE;
-                int tileY = y + j * Tile.TILE_SIZE;
+                int tileX = i * Tile.TILE_SIZE - adjust;
+                int tileY = j * Tile.TILE_SIZE - adjust;
                 tiles[i][j] = new Tile( tileX, tileY );
             }
         }
     }
     
+    /**
+     * Randomly Generates this LargeTile based on Generator
+     * @see map.Generator
+     */
     public void generate()
     {
         if ( floors == null || blocks == null )
             System.err.println( "Biomes not initialized" );
+        boolean[][] map = Generator.generate( size );
+        for ( int i = 0; i < size; i++ )
+        {
+            for ( int j = 0; j < size; j++ )
+            {
+                BufferedImage floor = floors[Generator.randInt( floors.length )];
+                BufferedImage block = map[i][j]?null:blocks[Generator.randInt( blocks.length )];
+                tiles[i][j].setTileImages( floor, block );
+            }
+        }
+    }
+    
+    /**
+     * NOT IMPLEMENTED
+     * Intended to load a saved generation of map, for story purposes
+     */
+    public void load()
+    {
         // TODO
     }
     
@@ -53,6 +79,7 @@ public class LargeTile
     
     public void draw( Graphics2D g2d )
     {
+        g2d.translate( position.x, position.y );
         for ( Tile[] row : tiles )
         {
             for ( Tile t : row )
@@ -60,5 +87,31 @@ public class LargeTile
                 t.draw( g2d );
             }
         }
+        g2d.translate( -position.x, -position.y );
+    }
+    
+    public int getSize()
+    {
+        return size * Tile.TILE_SIZE;
+    }
+    
+    public void setPosition( Point p )
+    {
+        this.position = p;
+    }
+    
+    public Point getPosition()
+    {
+        return position;
+    }
+    
+    public static int frameToTileSize( int frameSize )
+    {
+        return frameSize / Tile.TILE_SIZE + 1;
+    }
+    
+    public static int frameToTilePixelSize( int frameSize )
+    {
+        return frameToTileSize( frameSize ) * Tile.TILE_SIZE;
     }
 }
