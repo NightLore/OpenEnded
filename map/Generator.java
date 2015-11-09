@@ -10,7 +10,7 @@ import java.util.Scanner;
  *  Current types of generation:
  *  @see map.Generator#generate(int)
  *
- *  @author  Nathan Lui
+ *  @author  Nathan Man-ho Lui
  *  @version Nov 6, 2015
  *  @author  Assignment: OpenEnded
  */

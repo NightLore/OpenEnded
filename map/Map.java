@@ -8,6 +8,15 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+/**
+ *  Infinite map design
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 8, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: 
+ */
 public class Map
 {
     public enum Biome {
@@ -47,10 +56,10 @@ public class Map
     public Map( int frameWidth, int frameHeight )
     {
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
-        this.x = 0;
-        this.y = 0;
         this.frameSize = Math.max( frameWidth, frameHeight );
         this.tileSize = LargeTile.frameToTilePixelSize( frameSize );
+        this.x = 0;
+        this.y = 0;
     }
     
     /**
@@ -120,26 +129,76 @@ public class Map
      */
     public void update( Point center )
     {
-        double dx = center.x - x; // TODO if comes out negative
-        double dy = center.y - y;
+        int dx = center.x - x; // TODO if comes out negative
+        int dy = center.y - y;
 
-        LargeTile temp = tiles[0][0];
+        LargeTile temp;
+        Point pTemp;
+        Point p;
         if ( Math.abs( dx ) > tileSize )
         {
             if ( dx > 0 )
+            {
+                for ( int j = 0; j < MAP_TILE_SIZE; j++ )
+                {
+                    int i = 0;
+                    temp = tiles[i][j];
+                    pTemp = temp.getPosition();
+                    for ( ; i < MAP_TILE_SIZE - 1; i++ ) // TODO set Positions of tiles
+                    {
+                        p = tiles[i+1][j].getPosition();
+                        tiles[i+1][j].setPosition( pTemp );
+                        tiles[i][j] = tiles[i+1][j];
+                        pTemp = p;
+                    }
+                    temp.setPosition( pTemp );
+                    tiles[i][j] = temp;
+                    temp.generate();
+                }
+                x += frameSize;
+            }
+            else
+            {
+                for ( int j = 0; j < MAP_TILE_SIZE; j++ )
+                {
+                    int i = MAP_TILE_SIZE - 1;
+                    temp = tiles[i][j];
+                    pTemp = temp.getPosition();
+                    for ( ; i > 0; i-- ) // TODO set Positions of tiles
+                    {
+                        p = tiles[i-1][j].getPosition();
+                        tiles[i-1][j].setPosition( pTemp );
+                        tiles[i][j] = tiles[i-1][j];
+                        pTemp = p;
+                    }
+                    temp.setPosition( pTemp );
+                    tiles[i][j] = temp;
+                    temp.generate();
+                }
+                x -= frameSize;
+            }
+        }
+        if ( Math.abs( dy ) > tileSize )
+        {
+            if ( dy > 0 )
             {
                 for ( int i = 0; i < MAP_TILE_SIZE; i++ )
                 {
                     int j = 0;
                     temp = tiles[i][j];
+                    pTemp = temp.getPosition();
                     for ( ; j < MAP_TILE_SIZE - 1; j++ ) // TODO set Positions of tiles
                     {
+                        p = tiles[i][j+1].getPosition();
+                        tiles[i][j+1].setPosition( pTemp );
                         tiles[i][j] = tiles[i][j+1];
+                        pTemp = p;
                     }
+                    temp.setPosition( pTemp );
                     tiles[i][j] = temp;
-//                    temp.generate();
+                    temp.generate();
                 }
-                
+                y += frameSize;
             }
             else
             {
@@ -147,24 +206,27 @@ public class Map
                 {
                     int j = MAP_TILE_SIZE - 1;
                     temp = tiles[i][j];
-                    for ( ; j > 0; j++ )
+//                    System.out.println( i + ":temp=" + j + "," + tiles[i][j] );
+                    pTemp = temp.getPosition();
+//                    System.out.println( i + ":pTemp=" + pTemp );
+                    for ( ; j > 0; j-- )
                     {
+                        p = tiles[i][j-1].getPosition();
+//                        System.out.println( i + ":p=" + p );
+                        tiles[i][j-1].setPosition( pTemp );
+//                        System.out.println( i + ":tile" + (j-1) + "p=" + pTemp );
+//                        System.out.println( i + ":tile" + j + "," + tiles[i][j] + "=" + (j-1) + "," + tiles[i][j-1] );
                         tiles[i][j] = tiles[i][j-1];
+                        pTemp = p;
+//                        System.out.println( i + ":pTemp=" + pTemp );
                     }
+                    temp.setPosition( pTemp );
+//                    System.out.println( i + ":temp p=" + pTemp );
+//                    System.out.println( i + ":" + j + "," + tiles[i][j] + "=" + temp + ",temp" );
                     tiles[i][j] = temp;
-//                    temp.generate();
+                    temp.generate();
                 }
-            }
-        }
-        if ( Math.abs( dy ) > tileSize )
-        {
-            if ( dy > 0 )
-            {
-                
-            }
-            else
-            {
-                
+                y -= frameSize;
             }
         }
         // TODO updating formula
@@ -172,7 +234,7 @@ public class Map
     
     public void draw( Graphics2D g2d )
     {
-        
+        g2d.translate( x, y );
         for ( LargeTile[] row : tiles )
         {
             for ( LargeTile t : row )
@@ -180,6 +242,7 @@ public class Map
                 t.draw( g2d );
             }
         }
+        g2d.translate( -x, -y );
     }
     
     /**
@@ -202,4 +265,33 @@ public class Map
             return toImage( scanIn.nextLine() );
         }
     }
+    
+//    public static void main( String[] args )
+//    {
+//        int[][] array = { { 1, 2, 3 }, 
+//                          { 4, 5, 6 }, 
+//                          { 7, 8, 9 }, };
+//        for ( int[] a : array )
+//        {
+//            System.out.println( Arrays.toString( a ) );
+//        }
+//        int temp;
+//        for ( int i = 0; i < array.length; i++ )
+//        {
+//            int j = 0;
+//            temp = array[i][j];
+//            for ( ; j < array[i].length - 1; j++ ) // TODO set Positions of tiles
+//            {
+////                array[i][j+1].setPosition( array[i][j].getPosition() );
+//                array[i][j] = array[i][j+1];
+//            }
+////            temp.setPosition( array[i][j].getPosition() );
+//            array[i][j] = temp;
+////            temp.generate();
+//        }
+//        for ( int[] a : array )
+//        {
+//            System.out.println( Arrays.toString( a ) );
+//        }
+//    }
 }

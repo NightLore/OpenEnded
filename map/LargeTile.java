@@ -17,7 +17,7 @@ public class LargeTile
     }
     public LargeTile( Point p, int frameSize )
     {
-        setPosition( p );
+        this.position = p;
         size = frameToTileSize( frameSize );
         tiles = new Tile[size][size];
     }
@@ -97,7 +97,9 @@ public class LargeTile
     
     public void setPosition( Point p )
     {
-        this.position = p;
+        this.position = (Point)p.clone();
+//        position.x = p.x;
+//        position.y = p.y;
     }
     
     public Point getPosition()

@@ -3,6 +3,7 @@ package game;
 import gui.GameScreen;
 import gui.Window;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class Game {
      */
     public void updateGame( long gameTime, Point mousePosition )
     {
-//        map.update( centerX, centerY, screenW, screenH ); // TODO
+        map.update( players.getCenter() ); // TODO
         for ( Sprite s : sprites )
         {
             s.move( gameTime );
@@ -125,6 +126,8 @@ public class Game {
                 s.paint( g2d );
             }
             g2d.translate( -originX, -originY );
+            g2d.setColor( Color.WHITE );
+            g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );
         }
     }
 }
