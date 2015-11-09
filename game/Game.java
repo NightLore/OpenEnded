@@ -17,7 +17,8 @@ import sprites.SpriteGroup;
 /**
  * Actual game.
  * 
- * @author www.gametutorial.net
+ * @author www.gametutorial.net for the framework
+ * @author Nathan Man-ho Lui
  */
 public class Game {
 
@@ -95,7 +96,15 @@ public class Game {
         map.update( players.getCenter() ); // TODO
         for ( Sprite s : sprites )
         {
+            int x = s.getX();
+            int y = s.getY();
             s.move( gameTime );
+            boolean b = map.isColliding( s );
+            System.out.println( b );
+            if ( b )
+            {
+                s.setPosition( x, y );
+            }
         }
     }
     
@@ -107,10 +116,6 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )
     {
-//        System.out.println( g2d.getTransform() + ";\n    " 
-//                        + player.getX() + ", " + player.getY()
-//                        + ( -player.getX() + window.getWidth() / 2 ) + ", "
-//                        + ( -player.getY() + window.getHeight() / 2 ) );
         if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
         {
             

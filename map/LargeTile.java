@@ -2,7 +2,10 @@ package map;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import map.Generator.Generation;
 
 public class LargeTile
 {
@@ -29,8 +32,8 @@ public class LargeTile
         {
             for ( int j = 0; j < size; j++ )
             {
-                int tileX = i * Tile.TILE_SIZE - adjust;
-                int tileY = j * Tile.TILE_SIZE - adjust;
+                int tileX = Tile.toPixelSize( i ) - adjust;
+                int tileY = Tile.toPixelSize( j ) - adjust;
                 tiles[i][j] = new Tile( tileX, tileY );
             }
         }
@@ -42,9 +45,13 @@ public class LargeTile
      */
     public void generate()
     {
+        generate( Generation.randomType() );
+    }
+    public void generate( Generation g )
+    {
         if ( floors == null || blocks == null )
             System.err.println( "Biomes not initialized" );
-        boolean[][] map = Generator.generate( size );
+        boolean[][] map = Generator.generate( g, size );
         for ( int i = 0; i < size; i++ )
         {
             for ( int j = 0; j < size; j++ )
@@ -62,7 +69,7 @@ public class LargeTile
      */
     public void load()
     {
-        // TODO
+        // TODO pre-load
     }
     
     /**
@@ -90,30 +97,57 @@ public class LargeTile
         g2d.translate( -position.x, -position.y );
     }
     
+    public boolean isColliding( Rectangle rect )
+    {
+        int x = Tile.toTileSize( rect.x ) - 1;
+        int y = Tile.toTileSize( rect.y ) - 1;
+        for ( int i = 0; i < 3; i++ )
+        {
+            for ( int j = 0; j < 3; j++ )
+            {
+                if ( inTileBounds( x + i, y + j ) && tiles[x + i][y + j].isColliding( rect ) )
+                    return true;
+            }
+        } // TODO collision
+        return false;
+    }
+    private boolean inTileBounds( int x, int y )
+    {
+        return x >= 0 && x < size && y >= 0 && y < size;
+    }
+    
     public int getSize()
     {
-        return size * Tile.TILE_SIZE;
+        return Tile.toPixelSize( size );
     }
     
     public void setPosition( Point p )
     {
-        this.position = (Point)p.clone();
+        this.position = p.getLocation();
 //        position.x = p.x;
 //        position.y = p.y;
     }
     
     public Point getPosition()
     {
-        return position;
+        return position.getLocation();
+    }
+    
+    public Rectangle getBounds()
+    {
+        int pixelSize = this.getSize();
+        return new Rectangle( position.x - pixelSize / 2, 
+                              position.y - pixelSize / 2, 
+                              pixelSize, pixelSize );
     }
     
     public static int frameToTileSize( int frameSize )
     {
-        return frameSize / Tile.TILE_SIZE + 1;
+        return Tile.toTileSize( frameSize ) + 1;
     }
     
     public static int frameToTilePixelSize( int frameSize )
     {
-        return frameToTileSize( frameSize ) * Tile.TILE_SIZE;
+        return Tile.toPixelSize( frameToTileSize( frameSize ) );
     }
 }

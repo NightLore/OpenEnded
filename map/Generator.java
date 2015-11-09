@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  *  This class randomly generates 2D-boolean arrays with random content intended
  *  to simulate random generation of a tiled game where "false" is a wall and 
- *  "true" is a space.<br>
+ *  "true" is a space. All code assumes the 2D arrays are squares.<br>
  *  Current types of generation:
  *  @see map.Generator#generate(int)
  *
@@ -98,10 +98,6 @@ public class Generator
         }
     }
     
-//    private static void generateMaze( boolean[][] map )
-//    {
-//        generateMaze( RAND, map );
-//    }
     private static void generateMaze( Random rand, boolean[][] map )
     {
         int size = map.length;
@@ -149,10 +145,6 @@ public class Generator
      * Assumes map is a square. Randomly generates walls at the edge of the map
      * @param map
      */
-//    private static void generateRoom( boolean[][] map )
-//    {
-//        generateRoom( RAND, map );
-//    }
     private static void generateRoom( Random rand, boolean[][] map )
     {
         int length = map.length;

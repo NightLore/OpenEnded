@@ -3,6 +3,7 @@ package map;
 import game.CollidableAdapter;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import sprites.ImageSprite;
@@ -16,6 +17,7 @@ public class Tile extends CollidableAdapter
     
     private int x;
     private int y;
+    private Rectangle bounds;
     public Tile( int x, int y )
     {
         this.setPosition( x, y );
@@ -33,6 +35,11 @@ public class Tile extends CollidableAdapter
             block.paint( g2d );
     }
     
+    public boolean isColliding( Rectangle rect )
+    {
+        return canCollide() && bounds.intersects( rect );
+    }
+    
     /**
      * Sets this Tiles Images
      * @param floor
@@ -44,6 +51,7 @@ public class Tile extends CollidableAdapter
     {
         setFloor( floor );
         setBlock( block );
+        syncPosition();
     }
     
     /**
@@ -60,7 +68,7 @@ public class Tile extends CollidableAdapter
      * Tile is collidable based on whether parameter is null or not
      * @param block
      */
-    public void setBlock( BufferedImage block )
+    private void setBlock( BufferedImage block )
     {
         boolean collidable = block != null;
         this.block = collidable ? newSprite( block, x, y ) : null;
@@ -72,7 +80,7 @@ public class Tile extends CollidableAdapter
      * @param x
      * @param y
      */
-    public void setPosition( int x, int y )
+    private void setPosition( int x, int y )
     {
         this.x = x;
         this.y = y;
@@ -84,6 +92,7 @@ public class Tile extends CollidableAdapter
         if ( floor != null )
         {
             this.floor.setPosition( x, y );
+            this.bounds = ImageSprite.getBounds( floor );
             if ( this.canCollide() )
             {
                 this.block.setPosition( x, y );
@@ -97,5 +106,15 @@ public class Tile extends CollidableAdapter
         sprite.setRefPixel( TILE_SIZE / 2, TILE_SIZE / 2 );
         sprite.setPosition( x, y );
         return sprite;
+    }
+    
+    public static int toTileSize( int pixelSize )
+    {
+        return pixelSize / TILE_SIZE;
+    }
+    
+    public static int toPixelSize( int tileSize )
+    {
+        return tileSize * TILE_SIZE;
     }
 }

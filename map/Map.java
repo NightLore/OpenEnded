@@ -2,11 +2,15 @@ package map;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+
+import map.Generator.Generation;
+import sprites.ImageSprite;
 
 /**
  *  Infinite map design
@@ -113,7 +117,7 @@ public class Map
             for ( LargeTile t : row )
             {
                 // TODO generation formula/biome determination
-                t.generate();
+                t.generate( Generation.DEFAULT );
             }
         }
     }
@@ -144,7 +148,7 @@ public class Map
                     int i = 0;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
-                    for ( ; i < MAP_TILE_SIZE - 1; i++ ) // TODO set Positions of tiles
+                    for ( ; i < MAP_TILE_SIZE - 1; i++ )
                     {
                         p = tiles[i+1][j].getPosition();
                         tiles[i+1][j].setPosition( pTemp );
@@ -164,7 +168,7 @@ public class Map
                     int i = MAP_TILE_SIZE - 1;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
-                    for ( ; i > 0; i-- ) // TODO set Positions of tiles
+                    for ( ; i > 0; i-- )
                     {
                         p = tiles[i-1][j].getPosition();
                         tiles[i-1][j].setPosition( pTemp );
@@ -187,7 +191,7 @@ public class Map
                     int j = 0;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
-                    for ( ; j < MAP_TILE_SIZE - 1; j++ ) // TODO set Positions of tiles
+                    for ( ; j < MAP_TILE_SIZE - 1; j++ )
                     {
                         p = tiles[i][j+1].getPosition();
                         tiles[i][j+1].setPosition( pTemp );
@@ -229,13 +233,34 @@ public class Map
                 y -= frameSize;
             }
         }
-        // TODO updating formula
     }
+//    private void shift( int x, int y, int dx, int dy )// TODO compress code
+//    {
+//        LargeTile temp;
+//        Point pTemp;
+//        Point p;
+//        for ( int j = x; j < MAP_TILE_SIZE; j+=dx )
+//        {
+//            int i = y;
+//            temp = tiles[i][j];
+//            pTemp = temp.getPosition();
+//            for ( ; i < MAP_TILE_SIZE - 1; i+=dy )
+//            {
+//                p = tiles[i+1][j].getPosition();
+//                tiles[i+1][j].setPosition( pTemp );
+//                tiles[i][j] = tiles[i+1][j];
+//                pTemp = p;
+//            }
+//            temp.setPosition( pTemp );
+//            tiles[i][j] = temp;
+//            temp.generate();
+//        }
+//    }
     
     public void draw( Graphics2D g2d )
     {
         g2d.translate( x, y );
-        for ( LargeTile[] row : tiles )
+        for ( LargeTile[] row : tiles ) // TODO check efficiency (draw only if in screen
         {
             for ( LargeTile t : row )
             {
@@ -243,6 +268,25 @@ public class Map
             }
         }
         g2d.translate( -x, -y );
+    }
+    
+    public boolean isColliding( ImageSprite s )
+    {
+        Rectangle rect = ImageSprite.getBounds( s );
+        for ( LargeTile[] row : tiles )
+        {
+            for ( LargeTile t : row )
+            {
+                Rectangle r = t.getBounds();
+                if ( r.intersects( rect ) )
+                {
+                    rect.setLocation( rect.x - r.x, rect.y - r.y );
+                    if ( t.isColliding( rect ) )
+                        return true;
+                }
+            }
+        }
+        return false; // TODO
     }
     
     /**
@@ -280,7 +324,7 @@ public class Map
 //        {
 //            int j = 0;
 //            temp = array[i][j];
-//            for ( ; j < array[i].length - 1; j++ ) // TODO set Positions of tiles
+//            for ( ; j < array[i].length - 1; j++ )
 //            {
 ////                array[i][j+1].setPosition( array[i][j].getPosition() );
 //                array[i][j] = array[i][j+1];
