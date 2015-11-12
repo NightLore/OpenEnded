@@ -34,6 +34,7 @@ public class LargeTile
             {
                 int tileX = Tile.toPixelSize( i ) - adjust;
                 int tileY = Tile.toPixelSize( j ) - adjust;
+//                System.out.println( "Load LargeTile: " + tileX + ", " + tileY );
                 tiles[i][j] = new Tile( tileX, tileY );
             }
         }
@@ -99,13 +100,20 @@ public class LargeTile
     
     public boolean isColliding( Rectangle rect )
     {
-        int x = Tile.toTileSize( rect.x ) - 1;
-        int y = Tile.toTileSize( rect.y ) - 1;
-        for ( int i = 0; i < 3; i++ )
+        Rectangle r = new Rectangle( rect );
+        System.out.println( "Try LargeTile: " + r );
+//        r.setLocation( rect.x - this.getSize() / 2, rect.y - this.getSize() / 2 );
+//        r.setLocation( rect.x - this.position.x, rect.y - this.position.y );
+//        System.out.println( "Try LargeTile1: " + r );
+        int x = Tile.toTileSize( r.x ) + size / 2;
+        int y = Tile.toTileSize( r.y ) + size / 2;
+        System.out.println( "Locating...(" + x + ", " + y + ")" );
+        for ( int i = 0; i < 2; i++ )
         {
-            for ( int j = 0; j < 3; j++ )
+            for ( int j = 0; j < 2; j++ )
             {
-                if ( inTileBounds( x + i, y + j ) && tiles[x + i][y + j].isColliding( rect ) )
+                if ( inTileBounds( x + i, y + j ) 
+                  && tiles[x + i][y + j].isColliding( r, position.x, position.y ) )
                     return true;
             }
         } // TODO collision
@@ -115,6 +123,11 @@ public class LargeTile
     {
         return x >= 0 && x < size && y >= 0 && y < size;
     }
+//  Try: java.awt.Rectangle[x=-736,y=-736,width=1344,height=1344], 
+//       java.awt.Rectangle[x=-315,y=265,width=51,height=50]
+//  Try LargeTile: java.awt.Rectangle[x=-315,y=265,width=51,height=50]
+//  Map colliding = false
+    // -290,290
     
     public int getSize()
     {

@@ -40,6 +40,15 @@ public class Tile extends CollidableAdapter
         return canCollide() && bounds.intersects( rect );
     }
     
+    public boolean isColliding( Rectangle rectangle, int tx, int ty )
+    {
+        Rectangle rect = new Rectangle( rectangle );
+//        rect.setLocation( rect.x - tx, rect.y - ty );
+        Rectangle r = getBounds();
+        System.out.println( canCollide() + "--Compare: " + rect + ", " + r );
+        return canCollide() && r.intersects( rect );
+    }
+    
     /**
      * Sets this Tiles Images
      * @param floor
@@ -98,6 +107,11 @@ public class Tile extends CollidableAdapter
                 this.block.setPosition( x, y );
             }
         }
+    }
+    
+    public Rectangle getBounds() // TODO for testing getBounds()
+    {
+        return new Rectangle( this.bounds );
     }
     
     private static ImageSprite newSprite( BufferedImage image, int x, int y )

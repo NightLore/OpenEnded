@@ -64,7 +64,7 @@ public class Game {
         Player player;
         player = new Player( "player.png" );
         player.splitSprite( 2, 3 );
-        player.setRefPixel( player.getWidth(), player.getHeight() );
+        player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
 //        player.setPosition( window.getWidth() / 2, window.getHeight() / 2 );
         player.setPosition( 0, 0 );
         sprites.add( player );
@@ -100,7 +100,7 @@ public class Game {
             int y = s.getY();
             s.move( gameTime );
             boolean b = map.isColliding( s );
-            System.out.println( b );
+            System.out.println( "Map colliding = " + b );
             if ( b )
             {
                 s.setPosition( x, y );

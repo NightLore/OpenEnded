@@ -77,6 +77,7 @@ public class Map
             {
                 int tileX = i * frameSize - tileSize;
                 int tileY = j * frameSize - tileSize;
+                System.out.println( "Load Map: " + tileX + ", " + tileY );
                 tiles[i][j] = new LargeTile( tileX, tileY, frameSize );
                 tiles[i][j].changeBiome( floors.get( Biome.randomType() ), blocks.get( Biome.randomType() ) );
                 tiles[i][j].create();
@@ -280,7 +281,9 @@ public class Map
                 Rectangle r = t.getBounds();
                 if ( r.intersects( rect ) )
                 {
-                    rect.setLocation( rect.x - r.x, rect.y - r.y );
+//                    System.out.println( "Try1: " + r + ", " + rect );
+                    rect.setLocation( rect.x - x, rect.y - y );
+                    System.out.println( "Try: " + r + ", " + rect );
                     if ( t.isColliding( rect ) )
                         return true;
                 }
