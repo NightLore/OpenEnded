@@ -35,7 +35,6 @@ public class LargeTile
             {
                 int tileX = Tile.toPixelSize( i ) - adjust;
                 int tileY = Tile.toPixelSize( j ) - adjust;
-//                System.out.println( "Load LargeTile: " + tileX + ", " + tileY );
                 tiles[i][j] = new Tile( tileX, tileY );
             }
         }
@@ -47,7 +46,7 @@ public class LargeTile
      */
     public void generate()
     {
-        generate( Generation.randomType() );
+        generate( Generation.randomType() ); // TODO generating
     }
     public void generate( Generation g )
     {
@@ -86,73 +85,66 @@ public class LargeTile
         this.blocks = blocks;
     }
     
-    public void draw( Graphics2D g2d )
+    public void draw( Graphics2D g2d, boolean debug )
     {
         g2d.translate( position.x, position.y );
-//        for ( Tile[] row : tiles )
-//        {
-//            for ( Tile t : row )
-//            {
-//                t.draw( g2d );
-//            }
-//        }
-        for ( int i = 0; i < size; i++ )
+        if ( debug )
         {
-            for ( int j = 0; j < size; j++ )
+            g2d.setColor( java.awt.Color.WHITE );
+            for ( int i = 0; i < size; i++ )
             {
-                Tile t = tiles[i][j];
-                Rectangle r = t.getBounds();
-                t.draw( g2d );
-                g2d.setColor( java.awt.Color.WHITE );
-                g2d.drawString( "(" + i + "," + j + ")", r.x, r.y + r.height );
+                for ( int j = 0; j < size; j++ )
+                {
+                    Tile t = tiles[i][j];
+                    Rectangle r = t.getBounds();
+                    t.draw( g2d );
+                    g2d.drawString( "(" + i + "," + j + ")", r.x, r.y + r.height );
+                }
             }
+            g2d.translate( -position.x, -position.y );
+            int rad = 64;
+            int x = position.x - rad / 2;
+            int y = position.y - rad / 2;
+            Rectangle r = getBounds();
+            g2d.drawOval( x, y, rad, rad );
+            g2d.drawRect( r.x, r.y, r.width, r.height );
         }
-        g2d.translate( -position.x, -position.y );
+        else
+        {
+            for ( Tile[] row : tiles )
+            {
+                for ( Tile t : row )
+                {
+                    t.draw( g2d );
+                }
+            }
+            g2d.translate( -position.x, -position.y );
+        }
     }
     
     public boolean isColliding( ImageSprite sprite )
     {
-//        for ( Tile[] row : tiles )
-//        {
-//            for ( Tile t : row )
-//            {
-//                if ( t.isColliding( sprite ) )
-//                {
-//                    System.out.println( t );
-//                    return true;
-//                }
-//            }
-//        }
-        
-//        Rectangle r = new Rectangle( rect );
-//        System.out.println( "Try LargeTile: " + r );
-//        r.setLocation( rect.x - this.getSize() / 2, rect.y - this.getSize() / 2 );
-//        r.setLocation( rect.x - this.position.x, rect.y - this.position.y );
-//        System.out.println( "Try LargeTile1: " + r );
+        sprite.setPosition( sprite.getX() - position.x, sprite.getY() - position.y );
         int x = Tile.toTileSize( sprite.getX() ) + size / 2 - 1;
         int y = Tile.toTileSize( sprite.getY() ) + size / 2 - 1;
-        int checkSize = 4;
-        System.out.println( "Locating...(" + x + ", " + y + ")" );
+        int checkSize = 3;
+//        System.out.println( "Locating...(" + x + ", " + y + ")" );
         for ( int i = 0; i < checkSize; i++ )
         {
             for ( int j = 0; j < checkSize; j++ )
             {
-                if ( inTileBounds( x + i, y + j ) 
-                  && tiles[x + i][y + j].isColliding( sprite ) )
+                int a = x+i;
+                int b = y+j;
+                if ( inTileBounds( a, b ) && tiles[a][b].isColliding( sprite ) )
                     return true;
             }
-        } // TODO collision
+        }
         return false;
     }
     private boolean inTileBounds( int x, int y )
     {
         return x >= 0 && x < size && y >= 0 && y < size;
     }
-//  Try: java.awt.Rectangle[x=-736,y=-736,width=1344,height=1344], 
-//       java.awt.Rectangle[x=-315,y=265,width=51,height=50]
-//  Try LargeTile: java.awt.Rectangle[x=-315,y=265,width=51,height=50]
-//  Map colliding = false
-    // -290,290
     
     public int getSize()
     {
@@ -162,8 +154,6 @@ public class LargeTile
     public void setPosition( Point p )
     {
         this.position = p.getLocation();
-//        position.x = p.x;
-//        position.y = p.y;
     }
     
     public Point getPosition()
@@ -174,18 +164,26 @@ public class LargeTile
     public Rectangle getBounds()
     {
         int pixelSize = this.getSize();
-        return new Rectangle( position.x - pixelSize / 2, 
-                              position.y - pixelSize / 2, 
+        return new Rectangle( position.x - pixelSize / 2 - Tile.TILE_SIZE / 2, 
+                              position.y - pixelSize / 2 - Tile.TILE_SIZE / 2, 
                               pixelSize, pixelSize );
     }
     
     public static int frameToTileSize( int frameSize )
     {
-        return Tile.toTileSize( frameSize ) + 1;
+        return Tile.toTileSize( frameSize );
     }
     
     public static int frameToTilePixelSize( int frameSize )
     {
         return Tile.toPixelSize( frameToTileSize( frameSize ) );
+    }
+    
+    // --------------------------- Debug Code -------------------------- //
+    
+    @Override
+    public String toString()
+    {
+        return "LargeTile["+position.x+","+position.y+";"+getSize()+"]";
     }
 }

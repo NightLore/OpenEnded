@@ -32,22 +32,15 @@ public class Tile extends CollidableAdapter
         floor.paint( g2d );
         if ( block != null )
             block.paint( g2d );
-//        g2d.setColor( java.awt.Color.WHITE );
-//        g2d.drawString( "(" + x + "," + y + ")", x, y );
     }
     
     public boolean isColliding( ImageSprite sprite )
     {
-        return canCollide() && block.collidesWith( sprite, false );
+        return isColliding( sprite, false );
     }
-    
-    public boolean isColliding( Rectangle rectangle, int tx, int ty )
+    public boolean isColliding( ImageSprite sprite, boolean pixelPerfect )
     {
-        Rectangle rect = new Rectangle( rectangle );
-//        rect.setLocation( rect.x - tx, rect.y - ty );
-        Rectangle r = getBounds();
-        System.out.println( canCollide() + "--Compare: " + rect + ", " + r );
-        return canCollide() && r.intersects( rect );
+        return canCollide() && block.collidesWith( sprite, pixelPerfect );
     }
     
     /**
@@ -109,15 +102,16 @@ public class Tile extends CollidableAdapter
         }
     }
     
-    public Rectangle getBounds() // TODO for testing getBounds()
-    {
-        return ImageSprite.getBounds( floor );
-    }
-    
     private static ImageSprite newSprite( BufferedImage image, int x, int y )
     {
+        return newSprite( image, x, y, false );
+    }
+    public static ImageSprite newSprite( BufferedImage image, int x, int y, boolean half )
+    {
         ImageSprite sprite = new ImageSprite( image );
-        sprite.setRefPixel( TILE_SIZE / 2, TILE_SIZE / 2 );
+        int refX = ( half ? image.getWidth() : TILE_SIZE ) / 2;
+        int refY = ( half ? image.getHeight() : TILE_SIZE ) / 2;
+        sprite.setRefPixel( refX, refY );
         sprite.setPosition( x, y );
         return sprite;
     }
@@ -130,6 +124,14 @@ public class Tile extends CollidableAdapter
     public static int toPixelSize( int tileSize )
     {
         return tileSize * TILE_SIZE;
+    }
+    
+    //-------------------------- Debug Code -------------------------- //
+
+    
+    public Rectangle getBounds()
+    {
+        return ImageSprite.getBounds( floor );
     }
     
     /**

@@ -26,10 +26,12 @@ public class Game {
     private SpriteGroup players;
     private Window window;
     private Map map;
+    private boolean debug;
 
     public Game( Window frame )
     {
         window = frame;
+        setDebug( true );
 //        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
         Thread threadForInitGame = new Thread() {
             @Override
@@ -101,7 +103,7 @@ public class Game {
             int y = s.getY();
             s.move( gameTime );
             boolean b = map.isColliding( s );
-            System.out.println( "Map colliding = " + b );
+//            System.out.println( "Map colliding = " + b );
             if ( b )
             {
                 s.setPosition( x, y );
@@ -124,7 +126,7 @@ public class Game {
             int originX = window.getWidth() / 2 - pCenter.x;
             int originY = window.getHeight() / 2 - pCenter.y;
             g2d.translate( originX, originY );
-            map.draw( g2d );
+            map.draw( g2d, debug );
 //            System.out.println( "draw: " + sprites.size() );
             for( Sprite s : sprites )
             {
@@ -135,5 +137,10 @@ public class Game {
             g2d.setColor( Color.WHITE );
             g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );
         }
+    }
+    
+    public void setDebug( boolean debug )
+    {
+        this.debug = debug;
     }
 }
