@@ -57,7 +57,7 @@ public class Map
     private int y;
     private int tileSize;
     
-    public Map( int frameWidth, int frameHeight )
+    public Map( int x, int y, int frameWidth, int frameHeight )
     {
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
         this.frameSize = Math.max( frameWidth, frameHeight );
@@ -75,8 +75,10 @@ public class Map
         {
             for ( int j = 0; j < MAP_TILE_SIZE; j++ )
             {
-                int tileX = i * frameSize - tileSize;
-                int tileY = j * frameSize - tileSize;
+//                int tileX = i * frameSize - tileSize;
+//                int tileY = j * frameSize - tileSize;
+                int tileX = i * frameSize - frameSize;
+                int tileY = j * frameSize - frameSize;
                 System.out.println( "Load Map: " + tileX + ", " + tileY );
                 tiles[i][j] = new LargeTile( tileX, tileY, frameSize );
                 tiles[i][j].changeBiome( floors.get( Biome.randomType() ), blocks.get( Biome.randomType() ) );
@@ -136,11 +138,13 @@ public class Map
     {
         int dx = center.x - x; // TODO if comes out negative
         int dy = center.y - y;
+        int adjust = frameSize;
+        int distance = tileSize;
 
         LargeTile temp;
         Point pTemp;
         Point p;
-        if ( Math.abs( dx ) > tileSize )
+        if ( Math.abs( dx ) > distance )
         {
             if ( dx > 0 )
             {
@@ -160,7 +164,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                x += frameSize;
+                x += adjust;
             }
             else
             {
@@ -180,10 +184,10 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                x -= frameSize;
+                x -= adjust;
             }
         }
-        if ( Math.abs( dy ) > tileSize )
+        if ( Math.abs( dy ) > distance )
         {
             if ( dy > 0 )
             {
@@ -203,7 +207,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                y += frameSize;
+                y += adjust;
             }
             else
             {
@@ -231,7 +235,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                y -= frameSize;
+                y -= adjust;
             }
         }
     }
@@ -282,9 +286,9 @@ public class Map
                 if ( r.intersects( rect ) )
                 {
 //                    System.out.println( "Try1: " + r + ", " + rect );
-                    rect.setLocation( rect.x - x, rect.y - y );
+//                    rect.setLocation( rect.x - x, rect.y - y );
                     System.out.println( "Try: " + r + ", " + rect );
-                    if ( t.isColliding( rect ) )
+                    if ( t.isColliding( s ) )
                         return true;
                 }
             }

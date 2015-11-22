@@ -17,7 +17,6 @@ public class Tile extends CollidableAdapter
     
     private int x;
     private int y;
-    private Rectangle bounds;
     public Tile( int x, int y )
     {
         this.setPosition( x, y );
@@ -33,11 +32,13 @@ public class Tile extends CollidableAdapter
         floor.paint( g2d );
         if ( block != null )
             block.paint( g2d );
+//        g2d.setColor( java.awt.Color.WHITE );
+//        g2d.drawString( "(" + x + "," + y + ")", x, y );
     }
     
-    public boolean isColliding( Rectangle rect )
+    public boolean isColliding( ImageSprite sprite )
     {
-        return canCollide() && bounds.intersects( rect );
+        return canCollide() && block.collidesWith( sprite, false );
     }
     
     public boolean isColliding( Rectangle rectangle, int tx, int ty )
@@ -101,7 +102,6 @@ public class Tile extends CollidableAdapter
         if ( floor != null )
         {
             this.floor.setPosition( x, y );
-            this.bounds = ImageSprite.getBounds( floor );
             if ( this.canCollide() )
             {
                 this.block.setPosition( x, y );
@@ -111,7 +111,7 @@ public class Tile extends CollidableAdapter
     
     public Rectangle getBounds() // TODO for testing getBounds()
     {
-        return new Rectangle( this.bounds );
+        return ImageSprite.getBounds( floor );
     }
     
     private static ImageSprite newSprite( BufferedImage image, int x, int y )
@@ -130,5 +130,16 @@ public class Tile extends CollidableAdapter
     public static int toPixelSize( int tileSize )
     {
         return tileSize * TILE_SIZE;
+    }
+    
+    /**
+     * return Tile[x,y;canCollide()]
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+        return "Tile[x="+x+",y="+y+";collide="+canCollide()+"]";
     }
 }

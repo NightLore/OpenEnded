@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import sprites.ImageSprite;
 import map.Generator.Generation;
 
 public class LargeTile
@@ -88,32 +89,56 @@ public class LargeTile
     public void draw( Graphics2D g2d )
     {
         g2d.translate( position.x, position.y );
-        for ( Tile[] row : tiles )
+//        for ( Tile[] row : tiles )
+//        {
+//            for ( Tile t : row )
+//            {
+//                t.draw( g2d );
+//            }
+//        }
+        for ( int i = 0; i < size; i++ )
         {
-            for ( Tile t : row )
+            for ( int j = 0; j < size; j++ )
             {
+                Tile t = tiles[i][j];
+                Rectangle r = t.getBounds();
                 t.draw( g2d );
+                g2d.setColor( java.awt.Color.WHITE );
+                g2d.drawString( "(" + i + "," + j + ")", r.x, r.y + r.height );
             }
         }
         g2d.translate( -position.x, -position.y );
     }
     
-    public boolean isColliding( Rectangle rect )
+    public boolean isColliding( ImageSprite sprite )
     {
-        Rectangle r = new Rectangle( rect );
-        System.out.println( "Try LargeTile: " + r );
+//        for ( Tile[] row : tiles )
+//        {
+//            for ( Tile t : row )
+//            {
+//                if ( t.isColliding( sprite ) )
+//                {
+//                    System.out.println( t );
+//                    return true;
+//                }
+//            }
+//        }
+        
+//        Rectangle r = new Rectangle( rect );
+//        System.out.println( "Try LargeTile: " + r );
 //        r.setLocation( rect.x - this.getSize() / 2, rect.y - this.getSize() / 2 );
 //        r.setLocation( rect.x - this.position.x, rect.y - this.position.y );
 //        System.out.println( "Try LargeTile1: " + r );
-        int x = Tile.toTileSize( r.x ) + size / 2;
-        int y = Tile.toTileSize( r.y ) + size / 2;
+        int x = Tile.toTileSize( sprite.getX() ) + size / 2 - 1;
+        int y = Tile.toTileSize( sprite.getY() ) + size / 2 - 1;
+        int checkSize = 4;
         System.out.println( "Locating...(" + x + ", " + y + ")" );
-        for ( int i = 0; i < 2; i++ )
+        for ( int i = 0; i < checkSize; i++ )
         {
-            for ( int j = 0; j < 2; j++ )
+            for ( int j = 0; j < checkSize; j++ )
             {
                 if ( inTileBounds( x + i, y + j ) 
-                  && tiles[x + i][y + j].isColliding( r, position.x, position.y ) )
+                  && tiles[x + i][y + j].isColliding( sprite ) )
                     return true;
             }
         } // TODO collision
