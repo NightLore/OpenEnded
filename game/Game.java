@@ -38,7 +38,7 @@ public class Game {
             public void run(){
                 initialize(); // Sets variables and objects for the game.
                 loadContent(); // Load game files (images, sounds, ...)
-                GameScreen.gameState = GameScreen.GameState.PLAYING;
+                GameScreen.gameState = GameScreen.GameState.VISUALIZING;
             }
         };
         threadForInitGame.start();

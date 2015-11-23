@@ -69,6 +69,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
 //        inGame = false;
         gameState = GameState.STARTING;
         input = new InputManager( this );
+        this.newGame();
         // If you will draw your own mouse cursor or if you just want that mouse cursor disapear, 
         // insert "true" into if condition and mouse cursor will be removed.
 //        if( false )
@@ -87,6 +88,15 @@ public class GameScreen extends ScreenPanel implements ActionListener
         backButton.addActionListener( this );
 //        backButton.setAlignmentX( RIGHT_ALIGNMENT ); // TODO
         this.add( backButton );
+        Thread game = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                gameLoop();
+            }
+        };
+        game.start();
     }
     
     @Override
@@ -97,7 +107,6 @@ public class GameScreen extends ScreenPanel implements ActionListener
         switch( gameState )
         {
             case STARTING:
-                this.newGame();
                 break;
             case VISUALIZING:
                 this.restartGame();
@@ -110,15 +119,6 @@ public class GameScreen extends ScreenPanel implements ActionListener
             case RESUMED:
                 break;
         }
-        Thread game = new Thread()
-        {
-            @Override
-            public void run()
-            {
-                gameLoop();
-            }
-        };
-        game.start();
     }
     
     @Override
