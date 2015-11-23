@@ -5,6 +5,8 @@ import game.Collidable;
 import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
+import world.Map;
+
 public class Sprite extends ImageSprite implements Collidable
 {
 
@@ -24,7 +26,7 @@ public class Sprite extends ImageSprite implements Collidable
         this.setCollidable( false );
     }
     
-    public void move( long gameTime )
+    public void move( long gameTime, Map map )
     {
         // TODO
     }

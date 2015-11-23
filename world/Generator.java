@@ -1,4 +1,4 @@
-package map;
+package world;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -8,7 +8,7 @@ import java.util.Scanner;
  *  to simulate random generation of a tiled game where "false" is a wall and 
  *  "true" is a space. All code assumes the 2D arrays are squares.<br>
  *  Current types of generation:
- *  @see map.Generator#generate(int)
+ *  @see world.Generator#generate(int)
  *
  *  @author  Nathan Man-ho Lui
  *  @version Nov 6, 2015

@@ -1,4 +1,4 @@
-package map;
+package world;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-import map.Generator.Generation;
 import sprites.ImageSprite;
+import world.Generator.Generation;
 
 /**
  *  Infinite map design
@@ -52,6 +52,7 @@ public class Map
     private EnumMap<Biome, BufferedImage[]> blocks;
     
     private LargeTile[][] tiles;
+    private Rectangle frame;
     private int x;
     private int y;
     private int size;
@@ -59,6 +60,7 @@ public class Map
     public Map( int x, int y, int frameWidth, int frameHeight )
     {
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
+        frame = new Rectangle( x - frameWidth / 2, y - frameHeight / 2, frameWidth, frameHeight );
         int frameSize = Math.max( frameWidth, frameHeight );
         int tileSize = LargeTile.frameToTilePixelSize( frameSize );
         this.size = tileSize;
@@ -132,6 +134,7 @@ public class Map
      */
     public void update( Point center ) // TODO update
     {
+        frame.setLocation( center.x - frame.width / 2, center.y - frame.height / 2 );
         int dx = center.x - x;
         int dy = center.y - y;
         int adjust = size;
@@ -261,18 +264,15 @@ public class Map
     public void draw( Graphics2D g2d, boolean debug )
     {
         g2d.translate( x, y );
-        g2d.setColor( java.awt.Color.WHITE );
         for ( LargeTile[] row : tiles ) // TODO check efficiency (draw only if in screen)
         {
             for ( LargeTile t : row )
             {
-                t.draw( g2d, debug );
+                Rectangle bounds = new Rectangle( frame );
+                bounds.setLocation( frame.x - x, frame.y - y );
+                if ( bounds.intersects( t.getBounds() ) )
+                    t.draw( g2d, bounds, debug );
             }
-        }
-        if ( debug )
-        {
-            int rad = Tile.TILE_SIZE;
-            g2d.drawOval( x - rad / 2, y - rad / 2, rad, rad );
         }
         g2d.translate( -x, -y );
     }

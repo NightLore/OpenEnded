@@ -1,4 +1,4 @@
-package map;
+package world;
 
 import game.CollidableAdapter;
 
@@ -47,8 +47,8 @@ public class Tile extends CollidableAdapter
      * Sets this Tiles Images
      * @param floor
      * @param block
-     * @see map.Tile#setFloor(BufferedImage)
-     * @see map.Tile#setBlock(BufferedImage)
+     * @see world.Tile#setFloor(BufferedImage)
+     * @see world.Tile#setBlock(BufferedImage)
      */
     public void setTileImages( BufferedImage floor, BufferedImage block )
     {

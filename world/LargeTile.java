@@ -1,4 +1,4 @@
-package map;
+package world;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -6,24 +6,22 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import sprites.ImageSprite;
-import map.Generator.Generation;
+import world.Generator.Generation;
 
 public class LargeTile
 {
     private BufferedImage[] floors;
     private BufferedImage[] blocks;
     private Tile[][] tiles;
-    private Point position;
+    private int x;
+    private int y;
     private int size;
     public LargeTile( int x, int y, int frameSize )
     {
-        this( new Point( x, y ), frameSize );
-    }
-    public LargeTile( Point p, int frameSize )
-    {
-        this.position = p;
-        size = frameToTileSize( frameSize );
-        tiles = new Tile[size][size];
+        this.x = x;
+        this.y = y;
+        this.size = frameToTileSize( frameSize );
+        this.tiles = new Tile[size][size];
     }
     
     public void create()
@@ -42,7 +40,7 @@ public class LargeTile
     
     /**
      * Randomly Generates this LargeTile based on Generator
-     * @see map.Generator
+     * @see world.Generator
      */
     public void generate()
     {
@@ -85,9 +83,10 @@ public class LargeTile
         this.blocks = blocks;
     }
     
-    public void draw( Graphics2D g2d, boolean debug )
+    public void draw( Graphics2D g2d, Rectangle frame, boolean debug )
     {
-        g2d.translate( position.x, position.y );
+        g2d.translate( x, y );
+        frame.setLocation( frame.x - x, frame.y - y );
         if ( debug )
         {
             g2d.setColor( java.awt.Color.WHITE );
@@ -97,14 +96,16 @@ public class LargeTile
                 {
                     Tile t = tiles[i][j];
                     Rectangle r = t.getBounds();
-                    t.draw( g2d );
-                    g2d.drawString( "(" + i + "," + j + ")", r.x, r.y + r.height );
+//                    System.out.println( "DrawCompare:"+r+";"+frame);
+                    if ( r.intersects( frame ) )
+                        t.draw( g2d );
+                    g2d.drawString( "(" + i + "," + j + ")", r.x + 5, r.y + r.height - 5 );
                 }
             }
-            g2d.translate( -position.x, -position.y );
+            g2d.translate( -x, -y );
             int rad = 64;
-            int x = position.x - rad / 2;
-            int y = position.y - rad / 2;
+            int x = this.x - rad / 2;
+            int y = this.y - rad / 2;
             Rectangle r = getBounds();
             g2d.drawOval( x, y, rad, rad );
             g2d.drawRect( r.x, r.y, r.width, r.height );
@@ -115,16 +116,17 @@ public class LargeTile
             {
                 for ( Tile t : row )
                 {
-                    t.draw( g2d );
+                    if ( t.getBounds().intersects( frame ) )
+                        t.draw( g2d );
                 }
             }
-            g2d.translate( -position.x, -position.y );
+            g2d.translate( -x, -y );
         }
     }
     
     public boolean isColliding( ImageSprite sprite )
     {
-        sprite.setPosition( sprite.getX() - position.x, sprite.getY() - position.y );
+        sprite.setPosition( sprite.getX() - x, sprite.getY() - y );
         int x = Tile.toTileSize( sprite.getX() ) + size / 2 - 1;
         int y = Tile.toTileSize( sprite.getY() ) + size / 2 - 1;
         int checkSize = 3;
@@ -153,19 +155,20 @@ public class LargeTile
     
     public void setPosition( Point p )
     {
-        this.position = p.getLocation();
+        this.x = p.x;
+        this.y = p.y;
     }
     
     public Point getPosition()
     {
-        return position.getLocation();
+        return new Point( x, y );
     }
     
     public Rectangle getBounds()
     {
         int pixelSize = this.getSize();
-        return new Rectangle( position.x - pixelSize / 2 - Tile.TILE_SIZE / 2, 
-                              position.y - pixelSize / 2 - Tile.TILE_SIZE / 2, 
+        return new Rectangle( x - pixelSize / 2 - Tile.TILE_SIZE / 2, 
+                              y - pixelSize / 2 - Tile.TILE_SIZE / 2, 
                               pixelSize, pixelSize );
     }
     
@@ -184,6 +187,6 @@ public class LargeTile
     @Override
     public String toString()
     {
-        return "LargeTile["+position.x+","+position.y+";"+getSize()+"]";
+        return "LargeTile["+x+","+y+";"+getSize()+"]";
     }
 }

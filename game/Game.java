@@ -9,10 +9,10 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import map.Map;
 import sprites.Player;
 import sprites.Sprite;
 import sprites.SpriteGroup;
+import world.Map;
 
 /**
  * Actual game.
@@ -31,16 +31,13 @@ public class Game {
     public Game( Window frame )
     {
         window = frame;
-        setDebug( true );
+        setDebug( false );
 //        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
         Thread threadForInitGame = new Thread() {
             @Override
             public void run(){
-                // Sets variables and objects for the game.
-                initialize();
-                // Load game files (images, sounds, ...)
-                loadContent();
-//                System.out.println( "Game Loaded" );
+                initialize(); // Sets variables and objects for the game.
+                loadContent(); // Load game files (images, sounds, ...)
                 GameScreen.gameState = GameScreen.GameState.PLAYING;
             }
         };
@@ -66,7 +63,6 @@ public class Game {
         player = new Player( "player.png" );
         player.splitSprite( 2, 3 );
         player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
-//        player.setPosition( window.getWidth() / 2, window.getHeight() / 2 );
         player.setPosition( 0, 0 );
         sprites.add( player );
         players.add( player );
@@ -99,15 +95,7 @@ public class Game {
         map.update( players.getCenter() ); // TODO
         for ( Sprite s : sprites )
         {
-            int x = s.getX();
-            int y = s.getY();
-            s.move( gameTime );
-            boolean b = map.isColliding( s );
-//            System.out.println( "Map colliding = " + b );
-            if ( b )
-            {
-                s.setPosition( x, y );
-            }
+            s.move( gameTime, map );
         }
     }
     
@@ -127,10 +115,8 @@ public class Game {
             int originY = window.getHeight() / 2 - pCenter.y;
             g2d.translate( originX, originY );
             map.draw( g2d, debug );
-//            System.out.println( "draw: " + sprites.size() );
             for( Sprite s : sprites )
             {
-                // System.out.println( s );
                 s.paint( g2d );
             }
             g2d.translate( -originX, -originY );

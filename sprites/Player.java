@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import world.Map;
+
 public class Player extends Sprite
 {
     /**
@@ -24,37 +26,44 @@ public class Player extends Sprite
     }
     
     @Override
-    public void move( long gameTime )
+    public void move( long gameTime, Map map )
     {
         Point p = getDirections( gameTime );
-        translate( p.x * getSpeed(), p.y * getSpeed() );
+        translate( p.x, 0 );
+        if ( map.isColliding( this ) )
+        {
+            translate( -p.x, 0 );
+        }
+        translate( 0, p.y );
+        if ( map.isColliding( this ) )
+        {
+            translate( 0, -p.y );
+        }
     }
     
     private Point getDirections( long gameTime )
     {
         int dx = 0;
         int dy = 0;
-//        System.out.println( GameScreen.keyboardKeyState( controls[0] ) );
         if ( InputManager.keyboardKeyState( controls[0] ) )
         {
             dy--;
         }
-//        System.out.println( GameScreen.keyboardKeyState( controls[1] ) );
         if ( InputManager.keyboardKeyState( controls[1] ) )
         {
             dx++;
         }
 
-//        System.out.println( GameScreen.keyboardKeyState( controls[2] ) );
         if ( InputManager.keyboardKeyState( controls[2] ) )
         {
             dy++;
         }
-//        System.out.println( GameScreen.keyboardKeyState( controls[3] ) );
         if ( InputManager.keyboardKeyState( controls[3] ) )
         {
             dx--;
         }
+        dx *= getSpeed();
+        dy *= getSpeed();
 //        dx *= gameTime / GameScreen.secInNanosec;
 //        dy *= gameTime / GameScreen.secInNanosec;
         return new Point( dx, dy );
