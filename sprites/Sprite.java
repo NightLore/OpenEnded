@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import world.Map;
 
-public class Sprite extends ImageSprite implements Collidable
+public abstract class Sprite extends ImageSprite implements Collidable
 {
 
     /**
@@ -28,8 +28,38 @@ public class Sprite extends ImageSprite implements Collidable
     
     public void move( long gameTime, Map map )
     {
-        // TODO
+        double dir = getDirection( gameTime );
+        if ( dir == -1 ) return;
+        dir = Math.toRadians( dir );
+        int speed = getSpeed();
+        int x = (int)Math.round( speed * Math.cos( dir ) ); // note: does not work because ints
+        int y = (int)Math.round( speed * Math.sin( dir ) );
+        translate( x, 0 );
+        if ( map.isColliding( this ) )
+        {
+            translate( -x, 0 );
+        }
+        translate( 0, y );
+        if ( map.isColliding( this ) )
+        {
+            translate( 0, -y );
+        }
     }
+    
+    /**
+     * Returns the direction that this sprite should move or -1.0
+     * if not moving.
+     * @param gameTime the total time in the game
+     * @return direction in degrees
+     */
+    public abstract double getDirection( long gameTime );
+    
+//    public abstract void hitWall( Rectangle wall );
+    public abstract void hitSprite( Sprite sprite );
+//    public abstract void hitWeapon( Sprite weapon );
+    public abstract void seeSprite( Sprite sprite );
+    
+    public abstract int getSpeed();
     
     public void translate( int dx, int dy)
     {

@@ -12,15 +12,6 @@ import world.Map;
 public class SpriteGroup extends ArrayList<Sprite> implements Serializable
 {
     private static final long serialVersionUID = 1L;
-
-    
-    
-//    public void setAllDeltas( int d )
-//    {
-//        for ( Sprite s : this ) {
-//                s.setDelta( d );
-//        }
-//    }
     
     public void moveAll( long gameTime, Map map )
     {
@@ -28,20 +19,6 @@ public class SpriteGroup extends ArrayList<Sprite> implements Serializable
             s.move( gameTime, map );
         }
     }
-    
-//    public void moveAll( SpriteGroup[] sprites )
-//    {
-//        for ( Sprite s : this ) {
-//            s.move( sprites );
-//        }
-//    }
-    
-//    public void moveAll( int x, int y )
-//    {
-//        for ( MovableSprite s : this ) {
-//            s.move( x, y );
-//        }
-//    }
     
     public void paintAll( Graphics g )
     {

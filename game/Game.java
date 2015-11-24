@@ -52,6 +52,8 @@ public class Game {
     {
         sprites = new ArrayList<Sprite>();
         players = new SpriteGroup();
+        Map.loadFileNames();
+        Map.loadAssets();
     }
     
     /**
@@ -68,7 +70,6 @@ public class Game {
         players.add( player );
         Point p = players.getCenter();
         map = new Map( p.x, p.y, window.getWidth(), window.getHeight() );
-        map.loadAssets();
         map.create();
         map.generate();
     }    

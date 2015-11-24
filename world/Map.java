@@ -37,10 +37,9 @@ public class Map
     private static final int NUMBIOMES = biomes.length;
     public static final int MAP_TILE_SIZE = 3;
     
-//    private static final String[][] FLOORS = { { "background.png" } };
-//    private static final String[][] BLOCKS = { { "DarkGreen.png" } };
     private static EnumMap<Biome, String[]> FLOORS;
     private static EnumMap<Biome, String[]> BLOCKS;
+    public static void loadFileNames()
     {
         FLOORS = new EnumMap<Biome, String[]>( Biome.class );
         BLOCKS = new EnumMap<Biome, String[]>( Biome.class );
@@ -48,8 +47,34 @@ public class Map
         BLOCKS.put( Biome.PLAINS, new String[]{ "DarkGreen.png" } );
     }
     
-    private EnumMap<Biome, BufferedImage[]> floors;
-    private EnumMap<Biome, BufferedImage[]> blocks;
+    private static EnumMap<Biome, BufferedImage[]> floors;
+    private static EnumMap<Biome, BufferedImage[]> blocks;
+    
+    /**
+     * Loads all biome images
+     */
+    public static void loadAssets()
+    {
+        floors = new EnumMap<Biome,BufferedImage[]>( Biome.class );
+        blocks = new EnumMap<Biome,BufferedImage[]>( Biome.class );
+        for ( Biome b : biomes )
+        {
+            String[] fFiles = FLOORS.get( b );
+            String[] bFiles = BLOCKS.get( b );
+            int fLength = fFiles.length;
+            int bLength = bFiles.length;
+            BufferedImage[] floor = new BufferedImage[fLength];
+            BufferedImage[] block = new BufferedImage[bLength];
+            for ( int i = 0; i < fLength; i++ ) 
+                floor[i] = toImage( "/imgs/" + fFiles[i] );// TODO image packages
+            for ( int i = 0; i < bLength; i++ ) 
+                block[i] = toImage( "/imgs/" + bFiles[i] );
+            floors.put( b, floor );
+            blocks.put( b, block );
+        }
+    }
+    
+    // ------------------------------- Class --------------------------- //
     
     private LargeTile[][] tiles;
     private Rectangle frame;
@@ -60,7 +85,11 @@ public class Map
     public Map( int x, int y, int frameWidth, int frameHeight )
     {
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
-        frame = new Rectangle( x - frameWidth / 2, y - frameHeight / 2, frameWidth, frameHeight );
+        int tSize = Tile.TILE_SIZE;
+        frame = new Rectangle( x - frameWidth / 2 - tSize, 
+                               y - frameHeight / 2 - tSize, 
+                               frameWidth + tSize, 
+                               frameHeight + tSize );
         int frameSize = Math.max( frameWidth, frameHeight );
         int tileSize = LargeTile.frameToTilePixelSize( frameSize );
         this.size = tileSize;
@@ -87,30 +116,6 @@ public class Map
         
     }
     
-    /**
-     * Loads all biome images
-     */
-    public void loadAssets()
-    {
-        floors = new EnumMap<Biome,BufferedImage[]>( Biome.class );
-        blocks = new EnumMap<Biome,BufferedImage[]>( Biome.class );
-        for ( Biome b : biomes )
-        {
-            String[] fFiles = FLOORS.get( b );
-            String[] bFiles = BLOCKS.get( b );
-            int fLength = fFiles.length;
-            int bLength = bFiles.length;
-            BufferedImage[] floor = new BufferedImage[fLength];
-            BufferedImage[] block = new BufferedImage[bLength];
-            for ( int i = 0; i < fLength; i++ ) 
-                floor[i] = toImage( "/imgs/" + fFiles[i] );// TODO image packages
-            for ( int i = 0; i < bLength; i++ ) 
-                block[i] = toImage( "/imgs/" + bFiles[i] );
-            floors.put( b, floor );
-            blocks.put( b, block );
-        }
-    }
-    
     public void generate()
     {
         for ( LargeTile[] row : tiles )
@@ -135,8 +140,8 @@ public class Map
     public void update( Point center ) // TODO update
     {
         frame.setLocation( center.x - frame.width / 2, center.y - frame.height / 2 );
-        int dx = center.x - x;
-        int dy = center.y - y;
+        int dx = toTileCoordX( center.x );
+        int dy = toTileCoordY( center.y );
         int adjust = size;
         int distance = size;
 
@@ -214,23 +219,15 @@ public class Map
                 {
                     int j = MAP_TILE_SIZE - 1;
                     temp = tiles[i][j];
-//                    System.out.println( i + ":temp=" + j + "," + tiles[i][j] );
                     pTemp = temp.getPosition();
-//                    System.out.println( i + ":pTemp=" + pTemp );
                     for ( ; j > 0; j-- )
                     {
                         p = tiles[i][j-1].getPosition();
-//                        System.out.println( i + ":p=" + p );
                         tiles[i][j-1].setPosition( pTemp );
-//                        System.out.println( i + ":tile" + (j-1) + "p=" + pTemp );
-//                        System.out.println( i + ":tile" + j + "," + tiles[i][j] + "=" + (j-1) + "," + tiles[i][j-1] );
                         tiles[i][j] = tiles[i][j-1];
                         pTemp = p;
-//                        System.out.println( i + ":pTemp=" + pTemp );
                     }
                     temp.setPosition( pTemp );
-//                    System.out.println( i + ":temp p=" + pTemp );
-//                    System.out.println( i + ":" + j + "," + tiles[i][j] + "=" + temp + ",temp" );
                     tiles[i][j] = temp;
                     temp.generate();
                 }
@@ -269,7 +266,7 @@ public class Map
             for ( LargeTile t : row )
             {
                 Rectangle bounds = new Rectangle( frame );
-                bounds.setLocation( frame.x - x, frame.y - y );
+                bounds.setLocation( toTileCoordX( frame.x ), toTileCoordY( frame.y ) );
                 if ( bounds.intersects( t.getBounds() ) )
                     t.draw( g2d, bounds, debug );
             }
@@ -280,7 +277,7 @@ public class Map
     public boolean isColliding( ImageSprite sprite )
     {
         Rectangle rect = ImageSprite.getBounds( sprite );
-        rect.setLocation( rect.x - x, rect.y - y );
+        rect.setLocation( toTileCoordX( rect.x ), toTileCoordY( rect.y ) );
         for ( LargeTile[] row : tiles )
         {
             for ( LargeTile t : row )
@@ -289,7 +286,7 @@ public class Map
                 if ( r.intersects( rect ) )
                 {
                     ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
-                    s.setPosition( sprite.getX() - x, sprite.getY() - y );
+                    s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) );
                     if ( t.isColliding( s ) )
                         return true;
                 }
@@ -317,6 +314,24 @@ public class Map
             System.out.print( "Input file: " );
             return toImage( scanIn.nextLine() );
         }
+    }
+    
+    public int toMapCoordX( int x )
+    {
+        return x + this.x;
+    }
+    public int toMapCoordY( int y )
+    {
+        return y + this.y;
+    }
+    
+    public int toTileCoordX( int x )
+    {
+        return x - this.x;
+    }
+    public int toTileCoordY( int y )
+    {
+        return y - this.y;
     }
     
 //    public static void main( String[] args )

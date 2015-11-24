@@ -2,11 +2,8 @@ package sprites;
 
 import game.InputManager;
 
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-
-import world.Map;
 
 public class Player extends Sprite
 {
@@ -25,23 +22,14 @@ public class Player extends Sprite
         super( img );
     }
     
-    @Override
-    public void move( long gameTime, Map map )
-    {
-        Point p = getDirections( gameTime );
-        translate( p.x, 0 );
-        if ( map.isColliding( this ) )
-        {
-            translate( -p.x, 0 );
-        }
-        translate( 0, p.y );
-        if ( map.isColliding( this ) )
-        {
-            translate( 0, -p.y );
-        }
-    }
+//    @Override
+//    public void move( long gameTime, Map map )
+//    {
+//        super.move( gameTime, map );
+//    }
     
-    private Point getDirections( long gameTime )
+    @Override
+    public double getDirection( long gameTime )
     {
         int dx = 0;
         int dy = 0;
@@ -62,12 +50,14 @@ public class Player extends Sprite
         {
             dx--;
         }
-        dx *= getSpeed();
-        dy *= getSpeed();
-//        dx *= gameTime / GameScreen.secInNanosec;
-//        dy *= gameTime / GameScreen.secInNanosec;
-        return new Point( dx, dy );
+        return ( dx == 0 && dy == 0 ) ? -1.0 : Math.toDegrees( Math.atan2( dy, dx ) );
     }
+
+    @Override
+    public void hitSprite( Sprite sprite ) {}
+
+    @Override
+    public void seeSprite( Sprite sprite ) {}
     
     public int getSpeed()
     {
