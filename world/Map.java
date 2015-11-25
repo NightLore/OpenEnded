@@ -118,10 +118,11 @@ public class Map
     
     public void generate()
     {
-        for ( LargeTile[] row : tiles )
+        for ( int i = 0; i < MAP_TILE_SIZE; i++ )
         {
-            for ( LargeTile t : row )
+            for ( int j = 0; j < MAP_TILE_SIZE; j++ )
             {
+                LargeTile t = tiles[i][j];
                 // TODO generation formula/biome determination
                 t.generate( Generation.DEFAULT );
             }
@@ -235,7 +236,7 @@ public class Map
             }
         }
     }
-//    private void shift( int x, int y, int dx, int dy )// TODO compress code for update
+//    private void shift( int x, int y, int dx, int dy )// TODO compress code for update?
 //    {
 //        LargeTile temp;
 //        Point pTemp;
@@ -266,7 +267,7 @@ public class Map
             for ( LargeTile t : row )
             {
                 Rectangle bounds = new Rectangle( frame );
-                bounds.setLocation( toTileCoordX( frame.x ), toTileCoordY( frame.y ) );
+                bounds.setLocation( toTileCoords( frame.getLocation() ) );
                 if ( bounds.intersects( t.getBounds() ) )
                     t.draw( g2d, bounds, debug );
             }
@@ -277,7 +278,7 @@ public class Map
     public boolean isColliding( ImageSprite sprite )
     {
         Rectangle rect = ImageSprite.getBounds( sprite );
-        rect.setLocation( toTileCoordX( rect.x ), toTileCoordY( rect.y ) );
+        rect.setLocation( toTileCoords( rect.getLocation() ) );
         for ( LargeTile[] row : tiles )
         {
             for ( LargeTile t : row )
@@ -286,7 +287,7 @@ public class Map
                 if ( r.intersects( rect ) )
                 {
                     ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
-                    s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) );
+                    s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) ); // TODO
                     if ( t.isColliding( s ) )
                         return true;
                 }
@@ -294,6 +295,20 @@ public class Map
         }
         return false;
     }
+    
+    public Point toMapCoords( Point p )
+    {
+        return new Point( toMapCoordX( p.x ), toMapCoordY( p.y ) );
+    }
+    public int toMapCoordX( int x ) { return x + this.x; }
+    public int toMapCoordY( int y ) { return y + this.y; }
+
+    public Point toTileCoords( Point p )
+    {
+        return new Point( toTileCoordX( p.x ), toTileCoordY( p.y ) );
+    }
+    public int toTileCoordX( int x ) { return x - this.x; }
+    public int toTileCoordY( int y ) { return y - this.y; }
     
     /**
      * Return BufferedImage object of a picture file
@@ -314,24 +329,6 @@ public class Map
             System.out.print( "Input file: " );
             return toImage( scanIn.nextLine() );
         }
-    }
-    
-    public int toMapCoordX( int x )
-    {
-        return x + this.x;
-    }
-    public int toMapCoordY( int y )
-    {
-        return y + this.y;
-    }
-    
-    public int toTileCoordX( int x )
-    {
-        return x - this.x;
-    }
-    public int toTileCoordY( int y )
-    {
-        return y - this.y;
     }
     
 //    public static void main( String[] args )

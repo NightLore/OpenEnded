@@ -48,7 +48,7 @@ public class LargeTile
     }
     public void generate( Generation g )
     {
-        if ( floors == null || blocks == null )
+        if ( floors == null || blocks == null ) // TODO remove check when coding finished?
             System.err.println( "Biomes not initialized" );
         boolean[][] map = Generator.generate( g, size );
         for ( int i = 0; i < size; i++ )
@@ -86,7 +86,7 @@ public class LargeTile
     public void draw( Graphics2D g2d, Rectangle frame, boolean debug )
     {
         g2d.translate( x, y );
-        frame.setLocation( frame.x - x, frame.y - y );
+        frame.setLocation( toTileCoords( frame.getLocation() ) );
         if ( debug )
         {
             g2d.setColor( java.awt.Color.WHITE );
@@ -126,7 +126,7 @@ public class LargeTile
     
     public boolean isColliding( ImageSprite sprite )
     {
-        sprite.setPosition( sprite.getX() - x, sprite.getY() - y );
+        sprite.setPosition( toTileX( sprite.getX() ), toTileY( sprite.getY() ) ); // TODO
         int x = Tile.toTileSize( sprite.getX() ) + size / 2 - 1;
         int y = Tile.toTileSize( sprite.getY() ) + size / 2 - 1;
         int checkSize = 3;
@@ -172,11 +172,23 @@ public class LargeTile
                               pixelSize, pixelSize );
     }
     
+    public Point toTileCoords( Point p )
+    {
+        return new Point( toTileX( p.x ), toTileY( p.y ) );
+    }
+    public int toTileX( int x )
+    {
+        return x - this.x;
+    }
+    public int toTileY( int y )
+    {
+        return y - this.y;
+    }
+    
     public static int frameToTileSize( int frameSize )
     {
         return Tile.toTileSize( frameSize );
     }
-    
     public static int frameToTilePixelSize( int frameSize )
     {
         return Tile.toPixelSize( frameToTileSize( frameSize ) );
