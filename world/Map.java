@@ -118,13 +118,25 @@ public class Map
     
     public void generate()
     {
+        int x1 = Generator.randInt( MAP_TILE_SIZE );
+        int y1 = x1 == MAP_TILE_SIZE / 2?
+            Generator.nextBoolean()?0:MAP_TILE_SIZE-1:
+                Generator.randInt( MAP_TILE_SIZE );
         for ( int i = 0; i < MAP_TILE_SIZE; i++ )
         {
             for ( int j = 0; j < MAP_TILE_SIZE; j++ )
             {
                 LargeTile t = tiles[i][j];
                 // TODO generation formula/biome determination
-                t.generate( Generation.DEFAULT );
+                if ( i == MAP_TILE_SIZE / 2 && j == MAP_TILE_SIZE / 2 )
+                {
+                    t.generate( Generation.DEFAULT, 
+                                Tile.toTileSize( x ), 
+                                Tile.toTileSize( y ), 5, 5 );
+                }
+                else if ( i == x1 && j == y1 )
+                     t.generate( Generation.DEFAULT );
+                else t.generate();
             }
         }
     }

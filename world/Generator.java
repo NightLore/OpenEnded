@@ -1,5 +1,8 @@
 package world;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -27,13 +30,41 @@ public class Generator
         {
             return TYPES[RAND.nextInt( NUMTYPES )];
         }
-//        public class Properties
-//        {
-//            public Properties( Generation g, Point... p )
-//            {
-//                
-//            }
-//        }
+        public class Properties
+        {
+            private boolean areSpaces;
+            private List<Point> points;
+            private boolean[][] map;
+            private Generation g;
+            public Properties( Generation g, int size )
+            {
+                this.g = g;
+                this.map = new boolean[size][size];
+                this.points = new ArrayList<Point>();
+                this.areSpaces = false;
+            }
+            public void setAreSpaces( boolean b )
+            {
+                this.areSpaces = b;
+            }
+            
+            public boolean[][] getMap()
+            {
+                return map;
+            }
+            public List<Point> getPoints()
+            {
+                return points;
+            }
+            public boolean areSpaces()
+            {
+                return areSpaces;
+            }
+            public Generation getGeneration()
+            {
+                return g;
+            }
+        }
     }
 //    private static final List<Generation> TYPES = Collections.unmodifiableList(Arrays.asList(values()));
     private static Generation lastGeneration = Generation.DEFAULT;
@@ -47,6 +78,10 @@ public class Generator
     {
         return RAND.nextInt( limit );
     }
+    public static boolean nextBoolean()
+    {
+        return RAND.nextBoolean();
+    }
     
     /**
      * Randomly picks a type of generation and returns a 2D-boolean 
@@ -54,7 +89,7 @@ public class Generator
      * @param size
      * @return
      */
-    public static boolean[][] generate( Generation g, int size )
+    private static boolean[][] generate( Generation g, int size )
     {
         return generate( RAND, g, size );
     }
@@ -106,6 +141,7 @@ public class Generator
         return map;
     }
     
+    // ------------------------ generation methods ------------------------ //
     private static void fill( boolean[][] map, boolean fill )
     {
         generateRoom( map, 0, 0, map.length, map[0].length, fill );

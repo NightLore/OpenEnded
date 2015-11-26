@@ -46,11 +46,11 @@ public class LargeTile
     {
         generate( Generation.randomType() ); // TODO generating
     }
-    public void generate( Generation g )
+    public void generate( Generation g, int x, int y, int w, int h )
     {
         if ( floors == null || blocks == null ) // TODO remove check when coding finished?
             System.err.println( "Biomes not initialized" );
-        boolean[][] map = Generator.generate( g, size );
+        boolean[][] map = Generator.generate( g, size, x, y, w, h );
         for ( int i = 0; i < size; i++ )
         {
             for ( int j = 0; j < size; j++ )
@@ -60,6 +60,10 @@ public class LargeTile
                 tiles[i][j].setTileImages( floor, block );
             }
         }
+    }
+    public void generate( Generation g )
+    {
+        generate( g, 0, 0, 0, 0);
     }
     
     /**
