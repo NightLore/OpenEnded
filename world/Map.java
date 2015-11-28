@@ -21,7 +21,7 @@ import world.Generator.Generation;
  *
  *  @author  Sources: 
  */
-public class Map
+public class Map extends TileCoordinator
 {
     public enum Biome {
         PLAINS //, FOREST, SNOW, ROCKY, DESERT, 
@@ -78,30 +78,25 @@ public class Map
     
     private LargeTile[][] tiles;
     private Rectangle frame;
-    private int x;
-    private int y;
-    private int size;
     
     public Map( int x, int y, int frameWidth, int frameHeight )
     {
+        super( x, y, LargeTile.frameToTilePixelSize( Math.max( frameWidth, frameHeight ) ) );
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
         int tSize = Tile.TILE_SIZE;
         frame = new Rectangle( x - frameWidth / 2 - tSize, 
                                y - frameHeight / 2 - tSize, 
                                frameWidth + tSize, 
                                frameHeight + tSize );
-        int frameSize = Math.max( frameWidth, frameHeight );
-        int tileSize = LargeTile.frameToTilePixelSize( frameSize );
-        this.size = tileSize;
-        this.x = 0;
-        this.y = 0;
     }
     
     /**
      * Creates this map
      */
+    @Override
     public void create()
     {
+        int size = this.getSize();
         for ( int i = 0; i < MAP_TILE_SIZE; i++ )
         {
             for ( int j = 0; j < MAP_TILE_SIZE; j++ )
@@ -115,9 +110,12 @@ public class Map
         }
         
     }
-    
+
+    @Override
     public void generate()
     {
+        int x = this.getX();
+        int y = this.getY();
         int x1 = Generator.randInt( MAP_TILE_SIZE );
         int y1 = x1 == MAP_TILE_SIZE / 2?
             Generator.nextBoolean()?0:MAP_TILE_SIZE-1:
@@ -140,6 +138,53 @@ public class Map
             }
         }
     }
+
+    @Override
+    public void load()
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    public void draw( Graphics2D g2d, boolean debug )
+    {
+        int x = this.getX();
+        int y = this.getY();
+        g2d.translate( x, y );
+        for ( LargeTile[] row : tiles ) // TODO check efficiency (draw only if in screen)
+        {
+            for ( LargeTile t : row )
+            {
+                Rectangle bounds = new Rectangle( frame );
+                bounds.setLocation( toTileCoords( frame.getLocation() ) );
+                if ( bounds.intersects( t.getBounds() ) )
+                    t.draw( g2d, bounds, debug );
+            }
+        }
+        g2d.translate( -x, -y );
+    }
+    
+    @Override
+    public boolean isColliding( ImageSprite sprite )
+    {
+        Rectangle rect = ImageSprite.getBounds( sprite );
+        rect.setLocation( toTileCoords( rect.getLocation() ) );
+        for ( LargeTile[] row : tiles )
+        {
+            for ( LargeTile t : row )
+            {
+                Rectangle r = t.getBounds();
+                if ( r.intersects( rect ) )
+                {
+                    ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
+                    s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) ); // TODO
+                    if ( t.isColliding( s ) )
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
     
     
     /**
@@ -155,6 +200,7 @@ public class Map
         frame.setLocation( center.x - frame.width / 2, center.y - frame.height / 2 );
         int dx = toTileCoordX( center.x );
         int dy = toTileCoordY( center.y );
+        int size = this.getSize();
         int adjust = size;
         int distance = size;
 
@@ -181,7 +227,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                x += adjust;
+                this.setX( getX() + adjust );
             }
             else
             {
@@ -201,7 +247,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                x -= adjust;
+                this.setX( getX() - adjust );
             }
         }
         if ( Math.abs( dy ) > distance )
@@ -224,7 +270,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                y += adjust;
+                this.setY( getY() + adjust );
             }
             else
             {
@@ -244,7 +290,7 @@ public class Map
                     tiles[i][j] = temp;
                     temp.generate();
                 }
-                y -= adjust;
+                this.setY( getY() - adjust );
             }
         }
     }
@@ -270,57 +316,12 @@ public class Map
 //            temp.generate();
 //        }
 //    }
-    
-    public void draw( Graphics2D g2d, boolean debug )
+    public Point getSpawnableLocation()
     {
-        g2d.translate( x, y );
-        for ( LargeTile[] row : tiles ) // TODO check efficiency (draw only if in screen)
-        {
-            for ( LargeTile t : row )
-            {
-                Rectangle bounds = new Rectangle( frame );
-                bounds.setLocation( toTileCoords( frame.getLocation() ) );
-                if ( bounds.intersects( t.getBounds() ) )
-                    t.draw( g2d, bounds, debug );
-            }
-        }
-        g2d.translate( -x, -y );
+        int loc = Generator.randInt( 8 );
+        if ( loc >= 4 ) loc++;
+        return tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation();
     }
-    
-    public boolean isColliding( ImageSprite sprite )
-    {
-        Rectangle rect = ImageSprite.getBounds( sprite );
-        rect.setLocation( toTileCoords( rect.getLocation() ) );
-        for ( LargeTile[] row : tiles )
-        {
-            for ( LargeTile t : row )
-            {
-                Rectangle r = t.getBounds();
-                if ( r.intersects( rect ) )
-                {
-                    ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
-                    s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) ); // TODO
-                    if ( t.isColliding( s ) )
-                        return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    public Point toMapCoords( Point p )
-    {
-        return new Point( toMapCoordX( p.x ), toMapCoordY( p.y ) );
-    }
-    public int toMapCoordX( int x ) { return x + this.x; }
-    public int toMapCoordY( int y ) { return y + this.y; }
-
-    public Point toTileCoords( Point p )
-    {
-        return new Point( toTileCoordX( p.x ), toTileCoordY( p.y ) );
-    }
-    public int toTileCoordX( int x ) { return x - this.x; }
-    public int toTileCoordY( int y ) { return y - this.y; }
     
     /**
      * Return BufferedImage object of a picture file

@@ -30,9 +30,8 @@ public class Generator
         {
             return TYPES[RAND.nextInt( NUMTYPES )];
         }
-        public class Properties
+        public static class Properties
         {
-            private boolean areSpaces;
             private List<Point> points;
             private boolean[][] map;
             private Generation g;
@@ -41,11 +40,6 @@ public class Generator
                 this.g = g;
                 this.map = new boolean[size][size];
                 this.points = new ArrayList<Point>();
-                this.areSpaces = false;
-            }
-            public void setAreSpaces( boolean b )
-            {
-                this.areSpaces = b;
             }
             
             public boolean[][] getMap()
@@ -56,13 +50,13 @@ public class Generator
             {
                 return points;
             }
-            public boolean areSpaces()
-            {
-                return areSpaces;
-            }
             public Generation getGeneration()
             {
                 return g;
+            }
+            public int getSize()
+            {
+                return map.length;
             }
         }
     }
@@ -89,9 +83,17 @@ public class Generator
      * @param size
      * @return
      */
-    private static boolean[][] generate( Generation g, int size )
+    public static Generation.Properties generate( Generation g, int size )
     {
-        return generate( RAND, g, size );
+        return generate( g, size, 0, 0, 0, 0 );
+    }
+    public static Generation.Properties generate( Generation g, int size, int x, int y, int w, int h )
+    {
+        return generate( RAND, g, size, x, y, w, h );
+    }
+    private static Generation.Properties generate( Random rand, Generation g, int size )
+    {
+        return generate( rand, g, size, 0, 0, 0, 0 );
     }
     /**
      * Generates a map with a restricted rectangular area to remain as a space
@@ -103,15 +105,10 @@ public class Generator
      * @param h total distance of avoidance in y direction
      * @return
      */
-    public static boolean[][] generate( Generation g, int size, int x, int y, int w, int h )
+    public static Generation.Properties generate( Random rand, Generation g, int size, int x, int y, int w, int h )
     {
-        boolean[][] map = generate( g, size );
-        generateRoom( map, x - w / 2, y - h / 2, w, h, true );
-        return map;
-    }
-    private static boolean[][] generate( Random rand, Generation g, int size )
-    {
-        boolean[][] map = new boolean[size][size];
+        Generation.Properties prop = new Generation.Properties( g, size );
+        boolean[][] map = prop.getMap();
         switch( g )
         {
             case DEFAULT:
@@ -120,15 +117,16 @@ public class Generator
                 break;
             case MAZE:
                 fill( map, false );
-                generateRuin( rand, map );
+                generateRuinEdge( rand, map );
                 generateMaze( rand, map );
-                int min = size / 5;
-                int x = rand.nextInt( size );
-                int y = rand.nextInt( size );
-                int w = rand.nextInt( size / 4 ) + min;
-                int h = rand.nextInt( size / 4 ) + min;
-                generateRoom( map, x, y, w, h, true );
-                randomPathMid( rand, map, x + w / 2, y + w / 2 );
+                int size1 = map.length - 2;
+                int min = size1 / 4;
+                int x1 = rand.nextInt( size1 - min ) + 1;
+                int y1 = rand.nextInt( size1 - min ) + 1;
+                int w1 = rand.nextInt( size1 - x1 ) + min;
+                int h1 = rand.nextInt( size1 - y1 ) + min;
+                generateRoom( map, x1, y1, w1, h1, true );
+                randomPathMid( rand, map, x1 + w1 / 2, y1 + h1 / 2 );
                 break;
             case RUIN:
                 fill( map, true );
@@ -138,10 +136,65 @@ public class Generator
             default:
                 break;
         }
-        return map;
+        generateRoom( map, x - w / 2, y - h / 2, w, h, true );
+        findPoints( prop );
+        return prop;
     }
+//    private static boolean[][] generate( Random rand, Generation g, int size )
+//    {
+//        boolean[][] map = new boolean[size][size];
+//        switch( g )
+//        {
+//            case DEFAULT:
+//                fill( map, true );
+//                generateDefault( rand, map );
+//                break;
+//            case MAZE:
+//                fill( map, false );
+//                generateRuin( rand, map );
+//                generateMaze( rand, map );
+//                int min = size / 5;
+//                int x = rand.nextInt( size );
+//                int y = rand.nextInt( size );
+//                int w = rand.nextInt( size / 4 ) + min;
+//                int h = rand.nextInt( size / 4 ) + min;
+//                generateRoom( map, x, y, w, h, true );
+//                randomPathMid( rand, map, x + w / 2, y + w / 2 );
+//                break;
+//            case RUIN:
+//                fill( map, true );
+//                generateRuin( rand, map );
+//                generateDefault( rand, map );
+//                break;
+//            default:
+//                break;
+//        }
+//        return map;
+//    }
     
     // ------------------------ generation methods ------------------------ //
+    private static void findPoints( Generation.Properties prop )
+    {
+        List<Point> points = prop.getPoints();
+        boolean[][] map = prop.getMap();
+        for ( int i = 0; i < map.length; i++ )
+        {
+            for ( int j = 0; j < map[i].length; j++ )
+            {
+                if ( isValid( map, i, j ) )
+                    points.add( new Point( i, j ) );
+            }
+        }
+    }
+    private static boolean isValid( boolean[][] map, int x, int y )
+    {
+        return !inBounds( map, x, y ) || map[x][y] 
+                     && ( isValid( map, x + 1, y )
+                       || isValid( map, x, y + 1 ) 
+                       || isValid( map, x - 1, y )
+                       || isValid( map, x, y - 1 ) );
+    }
+    
     private static void fill( boolean[][] map, boolean fill )
     {
         generateRoom( map, 0, 0, map.length, map[0].length, fill );
@@ -230,15 +283,35 @@ public class Generator
      * Assumes map is a square. Randomly generates walls at the edge of the map
      * @param map
      */
+    private static void generateRuinEdge( Random rand, boolean[][] map )
+    {
+        generateRuin( rand, map, 0, 0, map.length, map[0].length );
+    }
     private static void generateRuin( Random rand, boolean[][] map )
     {
-        int length = map.length;
+        int size = map.length - 2;
+        int min = size / 4;
+        int x1 = rand.nextInt( size - min ) + 1;
+        int y1 = rand.nextInt( size - min ) + 1;
+        int w1 = rand.nextInt( size - x1 ) + min;
+        int h1 = rand.nextInt( size - y1 ) + min;
+        generateRuin( rand, map, x1, y1, w1, h1 );
+    }
+    private static void generateRuin( Random rand, boolean[][] map, int x, int y, int w, int h )
+    {
+        int length = Math.max( w, h );
         for ( int i = 0; i < length; i++ )
         {
-            map[i][0] = rand.nextBoolean();
-            map[0][i] = rand.nextBoolean();
-            map[i][length - 1] = rand.nextBoolean();
-            map[length - 1][i] = rand.nextBoolean();
+            if ( i < w )
+            {
+                map[x+i][y] = rand.nextBoolean();
+                map[x+i][y+h-1] = rand.nextBoolean();
+            }
+            if ( i < h )
+            {
+                map[x][y+i] = rand.nextBoolean();
+                map[x+w-1][y+i] = rand.nextBoolean();
+            }
         }
     }
     
@@ -281,6 +354,19 @@ public class Generator
             else if ( s.equals( "ruin" ) )
             {
                 Generator.generateRuin( rand, map );
+                System.out.println( "Generated ruin" );
+            }
+            else if ( s.equals( "ruinInput" ) )
+            {
+                System.out.println( "Input X: " );
+                int x = scanUser.nextInt();
+                System.out.println( "Input Y: " );
+                int y = scanUser.nextInt();
+                System.out.println( "Input width: " );
+                int w = scanUser.nextInt();
+                System.out.println( "Input height: " );
+                int h = scanUser.nextInt();
+                Generator.generateRuin( rand, map, x, y, w, h );
                 System.out.println( "Generated ruin" );
             }
             else if ( s.equals( "room" ) )
@@ -327,17 +413,17 @@ public class Generator
             }
             else if ( s.equals( "DEF" ) )
             {
-                map = Generator.generate( rand, Generation.DEFAULT, size );
+                map = Generator.generate( rand, Generation.DEFAULT, size ).getMap();
                 System.out.println( "Generated true default" );
             }
             else if ( s.equals( "MAZE" ) )
             {
-                map = Generator.generate( rand, Generation.MAZE, size );
+                map = Generator.generate( rand, Generation.MAZE, size ).getMap();
                 System.out.println( "Generated true Maze" );
             }
             else if ( s.equals( "RUIN" ) )
             {
-                map = Generator.generate( rand, Generation.RUIN, size );
+                map = Generator.generate( rand, Generation.RUIN, size ).getMap();
                 System.out.println( "Generated true Ruin" );
             }
         }

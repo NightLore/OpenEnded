@@ -4,29 +4,29 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import sprites.ImageSprite;
 import world.Generator.Generation;
 
-public class LargeTile
+public class LargeTile extends TileCoordinator
 {
     private BufferedImage[] floors;
     private BufferedImage[] blocks;
     private Tile[][] tiles;
-    private int x;
-    private int y;
-    private int size;
+    private Generation.Properties properties;
     public LargeTile( int x, int y, int frameSize )
     {
-        this.x = x;
-        this.y = y;
-        this.size = frameToTileSize( frameSize );
+        super( x, y, frameToTileSize( frameSize ) );
+        int size = this.getSize();
         this.tiles = new Tile[size][size];
     }
-    
+
+    @Override
     public void create()
     {
-        int adjust = getSize() / 2;
+        int size = this.getSize();
+        int adjust = Tile.toPixelSize( size ) / 2;
         for ( int i = 0; i < size; i++ )
         {
             for ( int j = 0; j < size; j++ )
@@ -36,12 +36,14 @@ public class LargeTile
                 tiles[i][j] = new Tile( tileX, tileY );
             }
         }
+        System.out.println(this );
     }
     
     /**
      * Randomly Generates this LargeTile based on Generator
      * @see world.Generator
      */
+    @Override
     public void generate()
     {
         generate( Generation.randomType() ); // TODO generating
@@ -50,7 +52,9 @@ public class LargeTile
     {
         if ( floors == null || blocks == null ) // TODO remove check when coding finished?
             System.err.println( "Biomes not initialized" );
-        boolean[][] map = Generator.generate( g, size, x, y, w, h );
+        int size = this.getSize();
+        properties = Generator.generate( g, size, x, y, w, h ); 
+        boolean[][] map = properties.getMap();
         for ( int i = 0; i < size; i++ )
         {
             for ( int j = 0; j < size; j++ )
@@ -89,6 +93,9 @@ public class LargeTile
     
     public void draw( Graphics2D g2d, Rectangle frame, boolean debug )
     {
+        int x = this.getX();
+        int y = this.getY();
+        int size = this.getSize();
         g2d.translate( x, y );
         frame.setLocation( toTileCoords( frame.getLocation() ) );
         if ( debug )
@@ -108,10 +115,10 @@ public class LargeTile
             }
             g2d.translate( -x, -y );
             int rad = 64;
-            int x = this.x - rad / 2;
-            int y = this.y - rad / 2;
+            int x1 = x - rad / 2;
+            int y1 = y - rad / 2;
             Rectangle r = getBounds();
-            g2d.drawOval( x, y, rad, rad );
+            g2d.drawOval( x1, y1, rad, rad );
             g2d.drawRect( r.x, r.y, r.width, r.height );
         }
         else
@@ -128,9 +135,11 @@ public class LargeTile
         }
     }
     
+    @Override
     public boolean isColliding( ImageSprite sprite )
     {
-        sprite.setPosition( toTileX( sprite.getX() ), toTileY( sprite.getY() ) ); // TODO
+        sprite.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY() ) ); // TODO
+        int size = this.getSize();
         int x = Tile.toTileSize( sprite.getX() ) + size / 2 - 1;
         int y = Tile.toTileSize( sprite.getY() ) + size / 2 - 1;
         int checkSize = 3;
@@ -147,46 +156,26 @@ public class LargeTile
         }
         return false;
     }
-    private boolean inTileBounds( int x, int y )
+    
+    public Point getSpawnableLocation()
     {
-        return x >= 0 && x < size && y >= 0 && y < size;
+        List<Point> points = properties.getPoints();
+        int index = Generator.randInt( points.size() );
+        return points.get( index );
     }
     
-    public int getSize()
+    public Generation.Properties getProperties()
     {
-        return Tile.toPixelSize( size );
-    }
-    
-    public void setPosition( Point p )
-    {
-        this.x = p.x;
-        this.y = p.y;
-    }
-    
-    public Point getPosition()
-    {
-        return new Point( x, y );
+        return properties;
     }
     
     public Rectangle getBounds()
     {
-        int pixelSize = this.getSize();
-        return new Rectangle( x - pixelSize / 2 - Tile.TILE_SIZE / 2, 
-                              y - pixelSize / 2 - Tile.TILE_SIZE / 2, 
+        int pixelSize = Tile.toPixelSize( this.getSize() );
+        Point p = getPosition();
+        return new Rectangle( p.x - pixelSize / 2 - Tile.TILE_SIZE / 2, 
+                              p.y - pixelSize / 2 - Tile.TILE_SIZE / 2, 
                               pixelSize, pixelSize );
-    }
-    
-    public Point toTileCoords( Point p )
-    {
-        return new Point( toTileX( p.x ), toTileY( p.y ) );
-    }
-    public int toTileX( int x )
-    {
-        return x - this.x;
-    }
-    public int toTileY( int y )
-    {
-        return y - this.y;
     }
     
     public static int frameToTileSize( int frameSize )
@@ -196,13 +185,5 @@ public class LargeTile
     public static int frameToTilePixelSize( int frameSize )
     {
         return Tile.toPixelSize( frameToTileSize( frameSize ) );
-    }
-    
-    // --------------------------- Debug Code -------------------------- //
-    
-    @Override
-    public String toString()
-    {
-        return "LargeTile["+x+","+y+";"+getSize()+"]";
     }
 }
