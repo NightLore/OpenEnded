@@ -128,6 +128,42 @@ public class GameScreen extends ScreenPanel implements ActionListener
         InputManager.reset();
     }
     
+    public void updateGame()
+    {
+        long beginTime, timeTaken, timeLeft;
+        beginTime = System.nanoTime();
+
+        switch (gameState)
+        {
+            case STARTING:
+
+                break;
+            case PLAYING:
+                gameTime += System.nanoTime() - lastTime;
+
+                game.updateGame( gameTime, mousePosition() );
+
+                lastTime = System.nanoTime();
+                break;
+            case PAUSED:
+                break;
+            case RESUMED:
+                break;
+            case VISUALIZING:
+                break;
+        }
+        repaint();
+
+        timeTaken = System.nanoTime() - beginTime;
+        timeLeft = (GAME_UPDATE_PERIOD - timeTaken) / milisecInNanosec;
+        if (timeLeft < 10) 
+            timeLeft = 10; //set a minimum
+        try {
+            //Provides the necessary delay and also yields control so that other thread can do work.
+            Thread.sleep(timeLeft);
+        } catch (InterruptedException ex) { }
+    }
+    
     public void gameLoop()
     {
 

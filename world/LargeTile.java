@@ -165,13 +165,15 @@ public class LargeTile extends TileCoordinator
         int count = 0;
         do {
             int index = Generator.randInt( points.size() );
-            p = new Point( points.get( index ) );
+            p = points.get( index );
             if ( !properties.getMap()[p.x][p.y] )
             {
                 properties.getPoints().remove( index );
                 points.remove( index );
                 continue;
             }
+            Tile t = tiles[p.x][p.y]; 
+            p = t.getPosition();
             p.setLocation( toThisCoords( Tile.toPixelSize( p.x ), Tile.toPixelSize( p.y ) ) );
             count++;
         } while ( frame.contains( p ) || count == 3 );
@@ -180,6 +182,8 @@ public class LargeTile extends TileCoordinator
             for ( int i = 0; i < points.size(); i++ )
             {
                 p = points.get( i );
+                p = tiles[p.x][p.y].getPosition();
+                p.setLocation( toThisCoords( Tile.toPixelSize( p.x ), Tile.toPixelSize( p.y ) ) );
                 if ( !frame.contains( p ) )
                     break;
             }

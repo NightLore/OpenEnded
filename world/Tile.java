@@ -3,6 +3,7 @@ package world;
 import game.CollidableAdapter;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -101,6 +102,20 @@ public class Tile extends CollidableAdapter
             }
         }
     }
+    
+    public Point getPosition()
+    {
+        return new Point( x, y );
+    }
+    public int getX()
+    {
+        return x;
+    }
+    public int getY()
+    {
+        return y;
+    }
+    
     
     private static ImageSprite newSprite( BufferedImage image, int x, int y )
     {

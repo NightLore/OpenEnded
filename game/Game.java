@@ -104,8 +104,7 @@ public class Game {
         {
             if ( !map.inMap( s ) )
             {
-                sprites.remove( s );
-                numEnemies--;
+                setSpriteSpawn( s );
                 break;
             }
         }
@@ -122,12 +121,16 @@ public class Game {
     private Sprite newSprite()
     {
         Sprite sprite = new Enemy( enemyImg );
+        sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
+        setSpriteSpawn( sprite );
+        return sprite;
+    }
+    private void setSpriteSpawn( Sprite sprite )
+    {
         do {
             Point p = map.getSpawnableLocation();
-            sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
             sprite.setPosition( p.x, p.y );
         } while ( sprite.isColliding( sprites ) );
-        return sprite;
     }
     
     /**
@@ -136,16 +139,19 @@ public class Game {
      * @param g2d Graphics2D
      * @param mousePosition current mouse position.
      */
-    public void draw( Graphics2D g2d, Point mousePosition )
+    public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
         if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
         {
-            
             Point pCenter = players.getCenter();
             int originX = window.getWidth() / 2 - pCenter.x;
             int originY = window.getHeight() / 2 - pCenter.y;
             g2d.translate( originX, originY );
             map.draw( g2d, debug );
+//            for ( int i = 0; i < sprites.size(); i++ )
+//            {
+//                sprites.get( i ).paint( g2d );
+//            }
             for( Sprite s : sprites )
             {
                 s.paint( g2d );
