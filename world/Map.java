@@ -320,11 +320,36 @@ public class Map extends TileCoordinator
     {
         int loc = Generator.randInt( 8 );
         if ( loc >= 4 ) loc++;
-        return tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation();
+        return this.toThisCoords( tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation() );
+    }
+    public boolean inMap( ImageSprite sprite )
+    {
+        Rectangle rect = ImageSprite.getBounds( sprite );
+        rect.setLocation( toTileCoords( rect.getLocation() ) );
+        int tile = findTile( rect )[0];
+        System.out.println( "found " + sprite + " in " + tile );
+        return tile > 0;
+    }
+    public int[] findTile( Rectangle rect ) // TODO check
+    {
+        int[] tile = new int[5];
+        for ( int i = 0; i < MAP_TILE_SIZE; i++ )
+        {
+            for ( int j = 0; j < MAP_TILE_SIZE; j++ )
+            {
+                Rectangle r = tiles[i][j].getBounds();
+                if ( r.intersects( rect ) )
+                {
+                    tile[0]++;
+                    tile[tile[0]] = i * MAP_TILE_SIZE + j;
+                }
+            }
+        }
+        return tile;
     }
     
     /**
-     * Return BufferedImage object of a picture file
+     * Return BufferedImage object of a picture file, starts at this project's path
      * @param fileName
      * @return buffered image
      */

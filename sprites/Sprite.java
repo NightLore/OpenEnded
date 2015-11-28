@@ -26,7 +26,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
         this.setCollidable( false );
     }
     
-    public void move( long gameTime, Map map )
+    public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
     {
         double dir = getDirection( gameTime );
         if ( dir == -1 ) return;
@@ -35,15 +35,27 @@ public abstract class Sprite extends ImageSprite implements Collidable
         int x = (int)Math.round( speed * Math.cos( dir ) ); // note: does not work because ints
         int y = (int)Math.round( speed * Math.sin( dir ) );
         translate( x, 0 );
-        if ( map.isColliding( this ) )
+        if ( map.isColliding( this ) || isColliding( sprites ) )
         {
             translate( -x, 0 );
         }
         translate( 0, y );
-        if ( map.isColliding( this ) )
+        if ( map.isColliding( this ) || isColliding( sprites ) )
         {
             translate( 0, -y );
         }
+    }
+    public boolean isColliding( SpriteGroup<? extends Sprite> sprites )
+    {
+        for ( Sprite s : sprites )
+        {
+            if ( s != this && this.collidesWith( s, false ) )
+            {
+                this.hitSprite( s );
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -60,6 +72,11 @@ public abstract class Sprite extends ImageSprite implements Collidable
     public abstract void seeSprite( Sprite sprite );
     
     public abstract int getSpeed();
+    
+    public boolean isDead()
+    {
+        return false; // TODO
+    }
     
     public void translate( int dx, int dy)
     {
@@ -107,6 +124,12 @@ public abstract class Sprite extends ImageSprite implements Collidable
             return toImage( scanIn.nextLine() );
         }
         // return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return getClass().toString().substring( 6 ) + "["+getX()+","+getY();
     }
 
 }

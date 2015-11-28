@@ -6,9 +6,9 @@ import gui.Window;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.image.BufferedImage;
 
+import sprites.Enemy;
 import sprites.Player;
 import sprites.Sprite;
 import sprites.SpriteGroup;
@@ -22,15 +22,19 @@ import world.Map;
  */
 public class Game {
 
-    private List<Sprite> sprites;
-    private SpriteGroup players;
+    private SpriteGroup<Sprite> sprites;
+    private SpriteGroup<Player> players;
     private Window window;
     private Map map;
     private boolean debug;
+    private BufferedImage enemyImg;
+    private int numEnemies;
+    private int maxEnemies;
 
     public Game( Window frame )
     {
         window = frame;
+        maxEnemies = 20;
         setDebug( false );
 //        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
         Thread threadForInitGame = new Thread() {
@@ -50,8 +54,8 @@ public class Game {
      */
     private void initialize()
     {
-        sprites = new ArrayList<Sprite>();
-        players = new SpriteGroup();
+        sprites = new SpriteGroup<Sprite>();
+        players = new SpriteGroup<Player>();
         Map.loadFileNames();
         Map.loadAssets();
     }
@@ -72,6 +76,7 @@ public class Game {
         map = new Map( p.x, p.y, window.getWidth(), window.getHeight() );
         map.create();
         map.generate();
+        enemyImg = Map.toImage( "/imgs/Mine.png" );
     }    
     
     
@@ -87,17 +92,43 @@ public class Game {
     /**
      * Update game logic.
      * 
-     * @param gameTime total time of game. // TODO see if need to change 
+     * @param gameTime total time of game.
      * @param mousePosition current mouse position.
      * @see gui.GameScreen#gameLoop
      */
     public void updateGame( long gameTime, Point mousePosition )
     {
         map.update( players.getCenter() ); // TODO
+        sprites.moveAll( gameTime, map );
         for ( Sprite s : sprites )
         {
-            s.move( gameTime, map );
+            if ( !map.inMap( s ) )
+            {
+                sprites.remove( s );
+                break;
+            }
         }
+        System.out.println( "Number: " + numEnemies + " Spawned: " + spawnEnemies() );
+    }
+    private int spawnEnemies()
+    {
+        int num = maxEnemies - numEnemies;
+        while ( numEnemies < maxEnemies )
+        {
+            sprites.add( newSprite() );
+            numEnemies++;
+        }
+        return num;
+    }
+    private Sprite newSprite()
+    {
+        Sprite sprite = new Enemy( enemyImg );
+        do {
+            Point p = map.getSpawnableLocation();
+            sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
+            sprite.setPosition( p.x, p.y );
+        } while ( sprite.isColliding( sprites ) );
+        return sprite;
     }
     
     /**

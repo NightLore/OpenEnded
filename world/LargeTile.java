@@ -36,7 +36,6 @@ public class LargeTile extends TileCoordinator
                 tiles[i][j] = new Tile( tileX, tileY );
             }
         }
-        System.out.println(this );
     }
     
     /**
@@ -161,7 +160,9 @@ public class LargeTile extends TileCoordinator
     {
         List<Point> points = properties.getPoints();
         int index = Generator.randInt( points.size() );
-        return points.get( index );
+        Point p = new Point( points.get( index ) );
+        p.setLocation( toThisCoordX( Tile.toPixelSize( p.x ) ), toThisCoordY( Tile.toPixelSize( p.y ) ) );
+        return p;
     }
     
     public Generation.Properties getProperties()

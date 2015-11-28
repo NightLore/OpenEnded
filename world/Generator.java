@@ -181,19 +181,19 @@ public class Generator
         {
             for ( int j = 0; j < map[i].length; j++ )
             {
-                if ( isValid( map, i, j ) )
+                if ( map[i][j]/*isValid( map, i, j )*/ )
                     points.add( new Point( i, j ) );
             }
         }
     }
-    private static boolean isValid( boolean[][] map, int x, int y )
-    {
-        return !inBounds( map, x, y ) || map[x][y] 
-                     && ( isValid( map, x + 1, y )
-                       || isValid( map, x, y + 1 ) 
-                       || isValid( map, x - 1, y )
-                       || isValid( map, x, y - 1 ) );
-    }
+//    private static boolean isValid( boolean[][] map, int x, int y )
+//    {
+//        return !inBounds( map, x, y ) || map[x][y] 
+//                     && ( isValid( map, x + 1, y )
+//                       || isValid( map, x, y + 1 ) 
+//                       || isValid( map, x - 1, y )
+//                       || isValid( map, x, y - 1 ) );
+//    }
     
     private static void fill( boolean[][] map, boolean fill )
     {
@@ -304,13 +304,17 @@ public class Generator
         {
             if ( i < w )
             {
-                map[x+i][y] = rand.nextBoolean();
-                map[x+i][y+h-1] = rand.nextBoolean();
+                if ( inBounds( map, x+i, y ) )
+                    map[x+i][y] = rand.nextBoolean();
+                if ( inBounds( map, x+i, y+h-1 ) )
+                    map[x+i][y+h-1] = rand.nextBoolean();
             }
-            if ( i < h )
+            if ( i < h && inBounds( map, x, y+i ) )
             {
-                map[x][y+i] = rand.nextBoolean();
-                map[x+w-1][y+i] = rand.nextBoolean();
+                if ( inBounds( map, x, y+i ) )
+                    map[x][y+i] = rand.nextBoolean();
+                if ( inBounds( map, x+w-1, y+i ) )
+                    map[x+w-1][y+i] = rand.nextBoolean();
             }
         }
     }

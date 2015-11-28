@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 import world.Map;
 
-public class SpriteGroup extends ArrayList<Sprite> implements Serializable
+public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements Serializable
 {
     private static final long serialVersionUID = 1L;
     
     public void moveAll( long gameTime, Map map )
     {
         for ( Sprite s : this ) {
-            s.move( gameTime, map );
+            s.move( gameTime, map, this );
         }
     }
     

@@ -7,21 +7,18 @@ import sprites.SpriteGroup;
 
 public class World
 {
-    SpriteGroup sprites;
+    SpriteGroup<Sprite> sprites;
     Map map;
     public World( Map map )
     {
-        sprites = new SpriteGroup();
+        sprites = new SpriteGroup<Sprite>();
         this.map = map;
     }
     
     public void update( long gameTime, Point center )
     {
         map.update( center ); // TODO
-        for ( Sprite s : sprites )
-        {
-            s.move( gameTime, map );
-        }
+        sprites.moveAll( gameTime, map );
     }
     
     public void addSprite( Sprite sprite )
