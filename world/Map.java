@@ -84,8 +84,8 @@ public class Map extends TileCoordinator
         super( x, y, LargeTile.frameToTilePixelSize( Math.max( frameWidth, frameHeight ) ) );
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
         int tSize = Tile.TILE_SIZE;
-        frame = new Rectangle( x - frameWidth / 2 - tSize, 
-                               y - frameHeight / 2 - tSize, 
+        frame = new Rectangle( x - frameWidth / 2 - tSize / 2, 
+                               y - frameHeight / 2 - tSize / 2, 
                                frameWidth + tSize, 
                                frameHeight + tSize );
     }
@@ -169,19 +169,16 @@ public class Map extends TileCoordinator
     {
         Rectangle rect = ImageSprite.getBounds( sprite );
         rect.setLocation( toTileCoords( rect.getLocation() ) );
-        for ( LargeTile[] row : tiles )
+        int size = MAP_TILE_SIZE;
+        int[] tile = this.findTile( rect );
+        int length = tile[0];
+        for ( int i = 1; i - 1 < length; i++ )
         {
-            for ( LargeTile t : row )
-            {
-                Rectangle r = t.getBounds();
-                if ( r.intersects( rect ) )
-                {
-                    ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
-                    s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) ); // TODO
-                    if ( t.isColliding( s ) )
-                        return true;
-                }
-            }
+            int j = tile[i];
+            ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
+            s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) );
+            if ( tiles[j/size][j%size].isColliding( s ) )
+                return true;
         }
         return false;
     }
@@ -318,16 +315,16 @@ public class Map extends TileCoordinator
 //    }
     public Point getSpawnableLocation()
     {
-        int loc = Generator.randInt( 8 );
-        if ( loc >= 4 ) loc++;
-        return this.toThisCoords( tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation() );
+        Rectangle r = new Rectangle( frame );
+        r.setLocation( toTileCoords( frame.getLocation() ) );
+        int loc = Generator.randInt( 9 );
+        return toThisCoords( tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation( r ) );
     }
     public boolean inMap( ImageSprite sprite )
     {
         Rectangle rect = ImageSprite.getBounds( sprite );
         rect.setLocation( toTileCoords( rect.getLocation() ) );
         int tile = findTile( rect )[0];
-        System.out.println( "found " + sprite + " in " + tile );
         return tile > 0;
     }
     public int[] findTile( Rectangle rect ) // TODO check

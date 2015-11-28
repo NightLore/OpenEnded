@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 import sprites.ImageSprite;
@@ -156,12 +157,33 @@ public class LargeTile extends TileCoordinator
         return false;
     }
     
-    public Point getSpawnableLocation()
+    public Point getSpawnableLocation( Rectangle frame )
     {
-        List<Point> points = properties.getPoints();
-        int index = Generator.randInt( points.size() );
-        Point p = new Point( points.get( index ) );
-        p.setLocation( toThisCoordX( Tile.toPixelSize( p.x ) ), toThisCoordY( Tile.toPixelSize( p.y ) ) );
+        frame.setLocation( toTileCoords( frame.getLocation() ) );
+        List<Point> points = new ArrayList<Point>( properties.getPoints() );
+        Point p;
+        int count = 0;
+        do {
+            int index = Generator.randInt( points.size() );
+            p = new Point( points.get( index ) );
+            if ( !properties.getMap()[p.x][p.y] )
+            {
+                properties.getPoints().remove( index );
+                points.remove( index );
+                continue;
+            }
+            p.setLocation( toThisCoords( Tile.toPixelSize( p.x ), Tile.toPixelSize( p.y ) ) );
+            count++;
+        } while ( frame.contains( p ) || count == 3 );
+        if ( frame.contains( p ) )
+        {
+            for ( int i = 0; i < points.size(); i++ )
+            {
+                p = points.get( i );
+                if ( !frame.contains( p ) )
+                    break;
+            }
+        }
         return p;
     }
     

@@ -129,7 +129,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
     @Override
     public String toString()
     {
-        return getClass().toString().substring( 6 ) + "["+getX()+","+getY();
+        return getClass().toString().substring( 6 ) + "["+getX()+","+getY()+"]";
     }
 
 }

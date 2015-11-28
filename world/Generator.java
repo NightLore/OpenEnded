@@ -140,60 +140,40 @@ public class Generator
         findPoints( prop );
         return prop;
     }
-//    private static boolean[][] generate( Random rand, Generation g, int size )
-//    {
-//        boolean[][] map = new boolean[size][size];
-//        switch( g )
-//        {
-//            case DEFAULT:
-//                fill( map, true );
-//                generateDefault( rand, map );
-//                break;
-//            case MAZE:
-//                fill( map, false );
-//                generateRuin( rand, map );
-//                generateMaze( rand, map );
-//                int min = size / 5;
-//                int x = rand.nextInt( size );
-//                int y = rand.nextInt( size );
-//                int w = rand.nextInt( size / 4 ) + min;
-//                int h = rand.nextInt( size / 4 ) + min;
-//                generateRoom( map, x, y, w, h, true );
-//                randomPathMid( rand, map, x + w / 2, y + w / 2 );
-//                break;
-//            case RUIN:
-//                fill( map, true );
-//                generateRuin( rand, map );
-//                generateDefault( rand, map );
-//                break;
-//            default:
-//                break;
-//        }
-//        return map;
-//    }
     
     // ------------------------ generation methods ------------------------ //
     private static void findPoints( Generation.Properties prop )
     {
         List<Point> points = prop.getPoints();
         boolean[][] map = prop.getMap();
+        boolean[][] copy;
         for ( int i = 0; i < map.length; i++ )
         {
             for ( int j = 0; j < map[i].length; j++ )
             {
-                if ( map[i][j]/*isValid( map, i, j )*/ )
+                copy = copyArray( map );
+                if ( isValid( copy, i, j ) )
                     points.add( new Point( i, j ) );
             }
         }
     }
-//    private static boolean isValid( boolean[][] map, int x, int y )
-//    {
-//        return !inBounds( map, x, y ) || map[x][y] 
-//                     && ( isValid( map, x + 1, y )
-//                       || isValid( map, x, y + 1 ) 
-//                       || isValid( map, x - 1, y )
-//                       || isValid( map, x, y - 1 ) );
-//    }
+    /**
+     * Returns true if current position is a space and "touches" edge of map
+     * @param map
+     * @param x
+     * @param y
+     * @return
+     */
+    private static boolean isValid( boolean[][] map, int x, int y )
+    {
+        if ( !inBounds( map, x, y ) ) return true;
+        boolean isSpace = map[x][y];
+        map[x][y] = false;
+        return isSpace && ( isValid( map, x + 1, y )
+                         || isValid( map, x, y + 1 )
+                         || isValid( map, x - 1, y )
+                         || isValid( map, x, y - 1 ) );
+    }
     
     private static void fill( boolean[][] map, boolean fill )
     {
@@ -317,6 +297,19 @@ public class Generator
                     map[x+w-1][y+i] = rand.nextBoolean();
             }
         }
+    }
+    
+    public static boolean[][] copyArray( boolean[][] array )
+    {
+        boolean[][] copy = new boolean[array.length][];
+        for(int i = 0; i < array.length; i++)
+        {
+            boolean[] aMatrix = array[i];
+            int aLength = aMatrix.length;
+            copy[i] = new boolean[aLength];
+            System.arraycopy( aMatrix, 0, copy[i], 0, aLength );
+        }
+        return copy;
     }
     
     // ---------------------------- Test methods --------------------------- //

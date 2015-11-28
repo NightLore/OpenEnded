@@ -105,20 +105,19 @@ public class Game {
             if ( !map.inMap( s ) )
             {
                 sprites.remove( s );
+                numEnemies--;
                 break;
             }
         }
-        System.out.println( "Number: " + numEnemies + " Spawned: " + spawnEnemies() );
+        spawnEnemies();
     }
-    private int spawnEnemies()
+    private void spawnEnemies()
     {
-        int num = maxEnemies - numEnemies;
         while ( numEnemies < maxEnemies )
         {
             sprites.add( newSprite() );
             numEnemies++;
         }
-        return num;
     }
     private Sprite newSprite()
     {

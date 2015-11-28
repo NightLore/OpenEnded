@@ -76,14 +76,22 @@ public abstract class TileCoordinator
 
     public Point toThisCoords( Point p )
     {
-        return new Point( toThisCoordX( p.x ), toThisCoordY( p.y ) );
+        return toThisCoords( p.x, p.y );
+    }
+    public Point toThisCoords( int x, int y )
+    {
+        return new Point( toThisCoordX( x ), toThisCoordY( y ) );
     }
     public int toThisCoordX( int x ) { return x + this.x; }
     public int toThisCoordY( int y ) { return y + this.y; }
 
     public Point toTileCoords( Point p )
     {
-        return new Point( toTileCoordX( p.x ), toTileCoordY( p.y ) );
+        return toTileCoords( p.x, p.y );
+    }
+    public Point toTileCoords( int x, int y )
+    {
+        return new Point( toTileCoordX( x ), toTileCoordY( y ) );
     }
     public int toTileCoordX( int x ) { return x - this.x; }
     public int toTileCoordY( int y ) { return y - this.y; }
