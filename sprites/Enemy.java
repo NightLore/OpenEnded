@@ -3,7 +3,9 @@ package sprites;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class Enemy extends Sprite
+import sprites.weapons.Weapon;
+
+public class Enemy extends FightingSprite
 {
     /**
      * 
@@ -52,6 +54,14 @@ public class Enemy extends Sprite
     }
 
 
+    @Override
+    public Weapon attack( int attack )
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
     @Override
     public int getSpeed()
     {

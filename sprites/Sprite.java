@@ -68,8 +68,6 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
 //    public abstract void hitWall( Rectangle wall );
     public abstract void hitSprite( Sprite sprite );
-//    public abstract void hitWeapon( Sprite weapon );
-    public abstract void seeSprite( Sprite sprite );
     
     public abstract int getSpeed();
     

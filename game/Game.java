@@ -27,14 +27,14 @@ public class Game {
     private Window window;
     private Map map;
     private boolean debug;
-    private BufferedImage enemyImg;
+    private BufferedImage enemyImg, projImg;
     private int numEnemies;
     private int maxEnemies;
 
     public Game( Window frame )
     {
         window = frame;
-        maxEnemies = 20;
+        maxEnemies = 40;
         setDebug( false );
 //        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
         Thread threadForInitGame = new Thread() {
@@ -66,7 +66,7 @@ public class Game {
     private void loadContent()
     {
         Player player;
-        player = new Player( "player.png" );
+        player = new Player( Map.toImage( "/imgs/player.png" ) );
         player.splitSprite( 2, 3 );
         player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
         player.setPosition( 0, 0 );
@@ -76,7 +76,8 @@ public class Game {
         map = new Map( p.x, p.y, window.getWidth(), window.getHeight() );
         map.create();
         map.generate();
-        enemyImg = Map.toImage( "/imgs/Mine.png" );
+        enemyImg = Map.toImage( "/imgs/redcircle.png" );
+        projImg = Map.toImage( "/imgs/smallcircle.png" );
     }    
     
     
@@ -104,7 +105,8 @@ public class Game {
         {
             if ( !map.inMap( s ) )
             {
-                setSpriteSpawn( s );
+                sprites.remove( s );
+                numEnemies--;
                 break;
             }
         }
@@ -114,13 +116,13 @@ public class Game {
     {
         while ( numEnemies < maxEnemies )
         {
-            sprites.add( newSprite() );
+            sprites.add( newSprite( enemyImg, Enemy.class ) );
             numEnemies++;
         }
     }
-    private Sprite newSprite()
+    private Sprite newSprite( BufferedImage img, Class<? extends Sprite> c )
     {
-        Sprite sprite = new Enemy( enemyImg );
+        Sprite sprite = new Enemy( img );
         sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
         setSpriteSpawn( sprite );
         return sprite;
@@ -148,14 +150,14 @@ public class Game {
             int originY = window.getHeight() / 2 - pCenter.y;
             g2d.translate( originX, originY );
             map.draw( g2d, debug );
-//            for ( int i = 0; i < sprites.size(); i++ )
-//            {
-//                sprites.get( i ).paint( g2d );
-//            }
-            for( Sprite s : sprites )
+            for ( int i = 0; i < sprites.size(); i++ )
             {
-                s.paint( g2d );
+                sprites.get( i ).paint( g2d );
             }
+//            for( Sprite s : sprites )
+//            {
+//                s.paint( g2d );
+//            }
             g2d.translate( -originX, -originY );
             g2d.setColor( Color.WHITE );
             g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );

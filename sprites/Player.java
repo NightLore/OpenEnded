@@ -5,7 +5,9 @@ import game.InputManager;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
-public class Player extends Sprite
+import sprites.weapons.Weapon;
+
+public class Player extends FightingSprite
 {
     /**
      * 
@@ -13,10 +15,6 @@ public class Player extends Sprite
     private static final long serialVersionUID = 1L;
     private int[] controls = new int[]{KeyEvent.VK_W, KeyEvent.VK_D, KeyEvent.VK_S, KeyEvent.VK_A };
     
-    public Player( String img )
-    {
-        super( img );
-    }
     public Player( BufferedImage img )
     {
         super( img );
@@ -58,6 +56,12 @@ public class Player extends Sprite
 
     @Override
     public void seeSprite( Sprite sprite ) {}
+
+    @Override
+    public Weapon attack( int attack )
+    {
+        return null;
+    }
     
     public int getSpeed()
     {
