@@ -12,6 +12,7 @@ import sprites.Enemy;
 import sprites.Player;
 import sprites.Sprite;
 import sprites.SpriteGroup;
+import sprites.Weapon;
 import world.Map;
 
 /**
@@ -21,6 +22,8 @@ import world.Map;
  * @author Nathan Man-ho Lui
  */
 public class Game {
+//    private HashMap<String,SpriteData> data = new HashMap<String,SpriteData>();
+//    private String[] choosable;
 
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
@@ -30,6 +33,7 @@ public class Game {
     private BufferedImage enemyImg, projImg;
     private int numEnemies;
     private int maxEnemies;
+    private Weapon[] defaultWeapons;
 
     public Game( Window frame )
     {
@@ -43,6 +47,7 @@ public class Game {
                 initialize(); // Sets variables and objects for the game.
                 loadContent(); // Load game files (images, sounds, ...)
                 GameScreen.gameState = GameScreen.GameState.VISUALIZING;
+                
             }
         };
         threadForInitGame.start();
@@ -65,8 +70,15 @@ public class Game {
      */
     private void loadContent()
     {
+        enemyImg = Map.toImage( "/imgs/redcircle.png" );
+        projImg = Map.toImage( "/imgs/smallcircle.png" );
+        Weapon w = new Weapon( projImg );
+        w.setRefPixel( w.getWidth() / 2, w.getHeight() / 2 );
+        defaultWeapons = new Weapon[2];
+        defaultWeapons[0] = w;
+        defaultWeapons[1] = w;
         Player player;
-        player = new Player( Map.toImage( "/imgs/player.png" ) );
+        player = new Player( Map.toImage( "/imgs/player.png" ), defaultWeapons );
         player.splitSprite( 2, 3 );
         player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
         player.setPosition( 0, 0 );
@@ -76,8 +88,6 @@ public class Game {
         map = new Map( p.x, p.y, window.getWidth(), window.getHeight() );
         map.create();
         map.generate();
-        enemyImg = Map.toImage( "/imgs/redcircle.png" );
-        projImg = Map.toImage( "/imgs/smallcircle.png" );
     }    
     
     
@@ -103,10 +113,11 @@ public class Game {
         sprites.moveAll( gameTime, map );
         for ( Sprite s : sprites )
         {
-            if ( !map.inMap( s ) )
+            if ( !map.inMap( s ) || s.isDead() )
             {
                 sprites.remove( s );
-                numEnemies--;
+                if ( s instanceof Enemy )
+                    numEnemies--;
                 break;
             }
         }
@@ -150,14 +161,7 @@ public class Game {
             int originY = window.getHeight() / 2 - pCenter.y;
             g2d.translate( originX, originY );
             map.draw( g2d, debug );
-            for ( int i = 0; i < sprites.size(); i++ )
-            {
-                sprites.get( i ).paint( g2d );
-            }
-//            for( Sprite s : sprites )
-//            {
-//                s.paint( g2d );
-//            }
+            sprites.paintAll( g2d );
             g2d.translate( -originX, -originY );
             g2d.setColor( Color.WHITE );
             g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );

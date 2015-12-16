@@ -15,15 +15,15 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
     
     public void moveAll( long gameTime, Map map )
     {
-        for ( Sprite s : this ) {
-            s.move( gameTime, map, this );
+        for ( int i = 0; i < size(); i++ ) {
+            this.get( i ).move( gameTime, map, this );
         }
     }
     
     public void paintAll( Graphics g )
     {
-        for ( Sprite s : this ) {
-            s.paint( g );
+        for ( int i = 0; i < size(); i++ ) {
+            this.get( i ).paint( g );
         }
     }
     

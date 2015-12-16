@@ -5,26 +5,22 @@ import game.InputManager;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
-import sprites.weapons.Weapon;
-
 public class Player extends FightingSprite
 {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    private int[] controls = new int[]{KeyEvent.VK_W, KeyEvent.VK_D, KeyEvent.VK_S, KeyEvent.VK_A };
+    private int[] controls = new int[]{KeyEvent.VK_W, KeyEvent.VK_D, 
+        KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_V, KeyEvent.VK_B };
+    private Weapon[] weapons;
     
-    public Player( BufferedImage img )
+    public Player( BufferedImage img, Weapon[] weapons )
     {
         super( img );
+        this.weapons = weapons;
     }
     
-//    @Override
-//    public void move( long gameTime, Map map )
-//    {
-//        super.move( gameTime, map );
-//    }
     
     @Override
     public double getDirection( long gameTime )
@@ -48,6 +44,14 @@ public class Player extends FightingSprite
         {
             dx--;
         }
+        if ( InputManager.keyboardKeyState( controls[4] ) )
+        {
+            setAttack( 0 );
+        }
+        if ( InputManager.keyboardKeyState( controls[5] ) )
+        {
+            setAttack( 1 ); // TODO note: if both attack buttons are pressed
+        }
         return ( dx == 0 && dy == 0 ) ? -1.0 : Math.toDegrees( Math.atan2( dy, dx ) );
     }
 
@@ -60,7 +64,27 @@ public class Player extends FightingSprite
     @Override
     public Weapon attack( int attack )
     {
-        return null;
+        Weapon weapon = null;
+        switch ( attack )
+        {
+            case 0:
+                weapon = new Weapon( this, weapons[attack] );
+                break;
+            case 1:
+                weapon = new Weapon( this, weapons[attack], directionFacing() );
+                break;
+        }
+        if ( weapon != null )
+            weapon.setPosition( getX(), getY() );
+        
+        return weapon;
+    }
+    
+    public void setControls( int[] newCtrls )
+    {
+        if ( newCtrls.length > controls.length )
+            controls = new int[newCtrls.length];
+        System.arraycopy( newCtrls, 0, controls, 0, newCtrls.length );
     }
     
     public int getSpeed()

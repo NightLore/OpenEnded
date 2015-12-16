@@ -3,8 +3,6 @@ package sprites;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import sprites.weapons.Weapon;
-
 public class Enemy extends FightingSprite
 {
     /**
