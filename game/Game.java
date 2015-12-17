@@ -24,7 +24,18 @@ import world.Map;
 public class Game {
 //    private HashMap<String,SpriteData> data = new HashMap<String,SpriteData>();
 //    private String[] choosable;
-
+    private static final Assets ASSETS = new Assets();
+    private static boolean hasLoaded = false;
+    private synchronized static void loadAssets()
+    {
+        if ( !hasLoaded )
+        {
+            ASSETS.loadFiles();
+            ASSETS.loadAssets();
+            hasLoaded = true;
+        }
+    }
+    
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
     private Window window;
@@ -61,8 +72,9 @@ public class Game {
     {
         sprites = new SpriteGroup<Sprite>();
         players = new SpriteGroup<Player>();
-        Map.loadFileNames();
-        Map.loadAssets();
+        Game.loadAssets();
+//        Map.loadFileNames();
+//        Map.loadAssets();
     }
     
     /**
@@ -70,22 +82,23 @@ public class Game {
      */
     private void loadContent()
     {
-        enemyImg = Map.toImage( "/imgs/redcircle.png" );
-        projImg = Map.toImage( "/imgs/smallcircle.png" );
+        while ( !hasLoaded ); // hold until assets loaded
+        enemyImg = ASSETS.getSkin( Assets.REDCIRCLE );
+        projImg = ASSETS.getSkin( Assets.SMALLCIRCLE );
         Weapon w = new Weapon( projImg );
         w.setRefPixel( w.getWidth() / 2, w.getHeight() / 2 );
         defaultWeapons = new Weapon[2];
         defaultWeapons[0] = w;
         defaultWeapons[1] = w;
         Player player;
-        player = new Player( Map.toImage( "/imgs/player.png" ), defaultWeapons );
+        player = new Player( ASSETS.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
         player.splitSprite( 2, 3 );
         player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
         player.setPosition( 0, 0 );
         sprites.add( player );
         players.add( player );
         Point p = players.getCenter();
-        map = new Map( p.x, p.y, window.getWidth(), window.getHeight() );
+        map = new Map( ASSETS, p.x, p.y, window.getWidth(), window.getHeight() );
         map.create();
         map.generate();
     }    

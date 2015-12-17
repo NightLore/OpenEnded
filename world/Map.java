@@ -1,10 +1,11 @@
 package world;
 
+import game.Assets;
+
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.EnumMap;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -23,63 +24,15 @@ import world.Generator.Generation;
  */
 public class Map extends TileCoordinator
 {
-    public enum Biome {
-        PLAINS //, FOREST, SNOW, ROCKY, DESERT, 
-        ;
-        public static Biome randomType()
-        {
-            return biomes[Generator.randInt( NUMBIOMES )];
-//            return biomes.get( Generator.randInt( NUMTYPES ) );
-        } 
-    }
-//    public static final List<Biome> biomes = Collections.unmodifiableList(Arrays.asList(Biome.values()));
-    private static final Biome[] biomes = Biome.values();
-    private static final int NUMBIOMES = biomes.length;
     public static final int MAP_TILE_SIZE = 3;
-    
-    private static EnumMap<Biome, String[]> FLOORS;
-    private static EnumMap<Biome, String[]> BLOCKS;
-    public static void loadFileNames()
-    {
-        FLOORS = new EnumMap<Biome, String[]>( Biome.class );
-        BLOCKS = new EnumMap<Biome, String[]>( Biome.class );
-        FLOORS.put( Biome.PLAINS, new String[]{ "background.png" } );
-        BLOCKS.put( Biome.PLAINS, new String[]{ "DarkGreen.png" } );
-    }
-    
-    private static EnumMap<Biome, BufferedImage[]> floors;
-    private static EnumMap<Biome, BufferedImage[]> blocks;
-    
-    /**
-     * Loads all biome images
-     */
-    public static void loadAssets()
-    {
-        floors = new EnumMap<Biome,BufferedImage[]>( Biome.class );
-        blocks = new EnumMap<Biome,BufferedImage[]>( Biome.class );
-        for ( Biome b : biomes )
-        {
-            String[] fFiles = FLOORS.get( b );
-            String[] bFiles = BLOCKS.get( b );
-            int fLength = fFiles.length;
-            int bLength = bFiles.length;
-            BufferedImage[] floor = new BufferedImage[fLength];
-            BufferedImage[] block = new BufferedImage[bLength];
-            for ( int i = 0; i < fLength; i++ ) 
-                floor[i] = toImage( "/imgs/" + fFiles[i] );// TODO image packages
-            for ( int i = 0; i < bLength; i++ ) 
-                block[i] = toImage( "/imgs/" + bFiles[i] );
-            floors.put( b, floor );
-            blocks.put( b, block );
-        }
-    }
     
     // ------------------------------- Class --------------------------- //
     
+    private Assets assets;
     private LargeTile[][] tiles;
     private Rectangle frame;
     
-    public Map( int x, int y, int frameWidth, int frameHeight )
+    public Map( Assets assets, int x, int y, int frameWidth, int frameHeight )
     {
         super( x, y, LargeTile.frameToTilePixelSize( Math.max( frameWidth, frameHeight ) ) );
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
@@ -88,6 +41,7 @@ public class Map extends TileCoordinator
                                y - frameHeight / 2 - tSize / 2, 
                                frameWidth + tSize, 
                                frameHeight + tSize );
+        this.assets = assets;
     }
     
     /**
@@ -104,7 +58,8 @@ public class Map extends TileCoordinator
                 int tileX = i * size - size;
                 int tileY = j * size - size;
                 tiles[i][j] = new LargeTile( tileX, tileY, size );
-                tiles[i][j].changeBiome( floors.get( Biome.randomType() ), blocks.get( Biome.randomType() ) );
+                tiles[i][j].changeBiome( assets.getFloor( Generator.randInt( Assets.NUMBIOMES ) ), 
+                                         assets.getBlock( Generator.randInt( Assets.NUMBIOMES ) ) );
                 tiles[i][j].create();
             }
         }

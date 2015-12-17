@@ -8,12 +8,19 @@ import javax.imageio.ImageIO;
 
 public class Assets
 {
+    // NOTE: Switch back to enums for type safety once game is situated
+    public static final int PLAINS = 0;
+    public static final int NUMBIOMES = 1;
     private String[] biomes;
     private HashMap<String, String[]> floorFiles;
     private HashMap<String, String[]> blockFiles;
     private HashMap<String, BufferedImage[]> floors;
     private HashMap<String, BufferedImage[]> blocks;
     
+    public static final int GREYCIRCLE = 0;
+    public static final int REDCIRCLE = 1;
+    public static final int SMALLCIRCLE = 2;
+    public static final int NUMSKINS = 3;
     private String[] charSkins;
     private HashMap<String, String> charFiles;
     private HashMap<String, BufferedImage> skins;
@@ -46,7 +53,7 @@ public class Assets
         for ( String biome : biomes )
         {
             String[] fFiles = floorFiles.get( biome );
-            String[] bFiles = floorFiles.get( biome );
+            String[] bFiles = blockFiles.get( biome );
             int fLength = fFiles.length;
             int bLength = bFiles.length;
             BufferedImage[] floor = new BufferedImage[fLength];
@@ -67,6 +74,21 @@ public class Assets
         {
             skins.put( s, toImage( "/imgs/" + charFiles.get( s ) ) );
         }
+    }
+    
+    public BufferedImage[] getFloor( int floor )
+    {
+        return this.floors.get( biomes[floor] );
+    }
+    
+    public BufferedImage[] getBlock( int block )
+    {
+        return this.blocks.get( biomes[block] );
+    }
+    
+    public BufferedImage getSkin( int skin )
+    {
+        return this.skins.get( this.charSkins[skin] );
     }
     
     /**
