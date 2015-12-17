@@ -38,7 +38,7 @@ public class Weapon extends Sprite
     @Override
     public boolean additionalCollisions( Sprite s )
     {
-        System.out.println( s + "; " + mySprite );
+//        System.out.println( s + "; " + mySprite );
         return s != mySprite;
     }
 
@@ -51,10 +51,15 @@ public class Weapon extends Sprite
     @Override
     public void hitSprite( Sprite sprite )
     {
-        System.out.println( this + "hit Sprite: " + sprite );
-        if ( sprite instanceof Weapon )
-            takeDamage( 0 );
+//        System.out.println( this + "hit Sprite: " + sprite );
+        sprite.takeDamage( 5 );
+        dying();
+    }
 
+    @Override
+    public void hitWall( int dir )
+    {
+        dying();
     }
     
     @Override
@@ -62,11 +67,16 @@ public class Weapon extends Sprite
     {
         dying();
     }
+    
+    public Sprite getSprite()
+    {
+        return mySprite;
+    }
 
     @Override
     public int getSpeed()
     {
-        return 5;
+        return 6;
     }
 
 }

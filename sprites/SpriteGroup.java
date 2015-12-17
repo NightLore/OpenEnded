@@ -16,21 +16,24 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
     public void moveAll( long gameTime, Map map )
     {
         for ( int i = 0; i < size(); i++ ) {
-            this.get( i ).move( gameTime, map, this );
+            if ( !this.get( i ).isDead() )
+                this.get( i ).move( gameTime, map, this );
         }
     }
     
     public void paintAll( Graphics g )
     {
         for ( int i = 0; i < size(); i++ ) {
-            this.get( i ).paint( g );
+            if ( !this.get( i ).isDead() )
+                this.get( i ).paint( g );
         }
     }
     
     public void continueAnimation()
     {
-        for ( Sprite s : this ) {
-            s.continueAnimation();
+        for ( int i = 0; i < size(); i++ ) {
+            if ( !this.get( i ).isDead() )
+                this.get( i ).continueAnimation();
         }
     }
     

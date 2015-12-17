@@ -16,10 +16,11 @@ public abstract class FightingSprite extends Sprite
     
     private int delay;
 
+    private int hp = 10;
     public FightingSprite( BufferedImage img )
     {
         super( img );
-        delay = 20;
+        delay = 500;// in milliseconds
     }
 
     /**
@@ -29,8 +30,10 @@ public abstract class FightingSprite extends Sprite
     public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
     {
         super.move( gameTime, map, sprites );
-        System.out.println( "dt: " + (gameTime - attackTime) );
-        if ( attack >= 0 && gameTime - attackTime > delay * 1000000000L ) // TODO note: comparing long with int
+        if ( attackTime == 0 )
+            attackTime = gameTime;
+//        System.out.println( "Time: " + gameTime + "; dt: " + (gameTime - attackTime) );
+        if ( attack >= 0 && gameTime  > attackTime + delay * 1000000L ) // TODO note: comparing long with int
         {
             sprites.add( attack( attack ) );
             attack = -1;
@@ -44,8 +47,13 @@ public abstract class FightingSprite extends Sprite
         return true;
     }
 
-    // public abstract void hitWeapon( Sprite weapon );
-    public abstract void seeSprite( Sprite sprite );
+    @Override
+    public void hitSprite( Sprite sprite ) {}
+
+    public void seeSprite( Sprite sprite ) {}
+
+    @Override
+    public void hitWall( int dir ) {}
 
     /**
      * Returns a weapon based on the attack type
@@ -57,7 +65,9 @@ public abstract class FightingSprite extends Sprite
     @Override
     public void takeDamage( int damage )
     {
-        
+        hp -= damage;
+        if ( hp <= 0 )
+            dying();
     }
     
     public void setAttack( int attack )

@@ -44,6 +44,7 @@ public class Player extends FightingSprite
         {
             dx--;
         }
+        setAttack( -1 );
         if ( InputManager.keyboardKeyState( controls[4] ) )
         {
             setAttack( 0 );
@@ -52,14 +53,8 @@ public class Player extends FightingSprite
         {
             setAttack( 1 ); // TODO note: if both attack buttons are pressed
         }
-        return ( dx == 0 && dy == 0 ) ? -1.0 : Math.toDegrees( Math.atan2( dy, dx ) );
+        return ( dx == 0 && dy == 0 ) ? -1.0 : (Math.toDegrees( Math.atan2( dy, dx ))+360)%360;
     }
-
-    @Override
-    public void hitSprite( Sprite sprite ) {}
-
-    @Override
-    public void seeSprite( Sprite sprite ) {}
 
     @Override
     public Weapon attack( int attack )
@@ -78,6 +73,12 @@ public class Player extends FightingSprite
             weapon.setPosition( getX(), getY() );
         
         return weapon;
+    }
+
+    @Override
+    public boolean additionalCollisions( Sprite s )
+    {
+        return s instanceof Weapon ? ((Weapon)s).getSprite() != this : true;
     }
     
     public void setControls( int[] newCtrls )

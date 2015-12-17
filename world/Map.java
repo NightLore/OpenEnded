@@ -11,6 +11,7 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 import sprites.ImageSprite;
+import sprites.Sprite;
 import world.Generator.Generation;
 
 /**
@@ -133,7 +134,10 @@ public class Map extends TileCoordinator
             ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
             s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) );
             if ( tiles[j/size][j%size].isColliding( s ) )
+            {
+                ((Sprite)sprite).hitWall( 0 ); // TODO get Direction of wall
                 return true;
+            }
         }
         return false;
     }

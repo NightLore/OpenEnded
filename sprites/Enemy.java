@@ -53,6 +53,13 @@ public class Enemy extends FightingSprite
 
 
     @Override
+    public void hitWall( int dir )
+    {
+        
+    }
+
+
+    @Override
     public Weapon attack( int attack )
     {
         // TODO Auto-generated method stub

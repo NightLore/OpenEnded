@@ -15,6 +15,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
      */
     private static final long serialVersionUID = 1L;
     
+    // NOTE: going back to enums may be better for type safety
     public static final int NORTH = 90;
     public static final int EAST = 0;
     public static final int SOUTH = 270;
@@ -26,7 +27,6 @@ public abstract class Sprite extends ImageSprite implements Collidable
     public Sprite( String imgFile )
     {
         this( makeTransparent( toImage( "/imgs/" + imgFile ), java.awt.Color.WHITE ) );
-        dead = false;
     }
 
     public Sprite( BufferedImage img )
@@ -34,6 +34,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
         super( img );
         this.setCollidable( false );
         dirFacing = SOUTH;
+        dead = false;
     }
     
     public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
@@ -79,23 +80,24 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public void setDirFacing( int dir )
     {
-        if ( dir < 0 ) return;
-        else if ( dir < 45 || dir > 315 ) dirFacing = EAST;
-        else if ( dir == 45 ) {
+        if ( dir < 0 ) return; // note: can turn into a loop (may be easier with enums)
+        else if ( dir < EAST + 45 || dir > SOUTH + 45 ) dirFacing = EAST;
+        else if ( dir == EAST + 45 ) {
             if ( dirFacing != EAST && dirFacing != NORTH ) dirFacing = ( dirFacing == SOUTH ) ? EAST : NORTH;
         }
-        else if ( dir < 135 ) dirFacing = NORTH;
-        else if ( dir == 135 ) {
+        else if ( dir < NORTH + 45 ) dirFacing = NORTH;
+        else if ( dir == NORTH + 45 ) {
             if ( dirFacing != WEST && dirFacing != NORTH ) dirFacing = ( dirFacing == SOUTH ) ? WEST : NORTH;
         }
-        else if ( dir < 225 ) dirFacing = WEST;
-        else if ( dir == 225 ) {
+        else if ( dir < WEST + 45 ) dirFacing = WEST;
+        else if ( dir == WEST + 45 ) {
             if ( dirFacing != WEST && dirFacing != SOUTH ) dirFacing = ( dirFacing == NORTH ) ? WEST : SOUTH;
         }
-        else if ( dir < 315 ) dirFacing = SOUTH;
-        else if ( dir == 315 ) {
+        else if ( dir < SOUTH + 45 ) dirFacing = SOUTH;
+        else if ( dir == SOUTH + 45 ) {
             if ( dirFacing != EAST && dirFacing != SOUTH ) dirFacing = ( dirFacing == NORTH ) ? EAST : SOUTH;
         }
+        System.out.println( this + " direction: " + dirFacing );
     }
     
     public int directionFacing()
@@ -111,7 +113,15 @@ public abstract class Sprite extends ImageSprite implements Collidable
      */
     public abstract double getDirection( long gameTime );
     
-//    public abstract void hitWall( Rectangle wall );
+    /**
+     * Method called when sprite hits the wall
+     * @param dir direction that the wall is (will be: NORTH, EAST, SOUTH, WEST)
+     */
+    public abstract void hitWall( int dir );
+    /**
+     * Method called when this hits any sprite including Weapon, Enemy, Player
+     * @param sprite any sprite in game
+     */
     public abstract void hitSprite( Sprite sprite );
     
     public abstract void takeDamage( int damage );
