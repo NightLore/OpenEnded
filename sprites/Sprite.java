@@ -22,8 +22,8 @@ public abstract class Sprite extends ImageSprite implements Collidable
     public static final int WEST = 180;
     
     private boolean canCollide;
-    private boolean dead;
-    private int dirFacing;
+
+    private SpriteData data;
     public Sprite( String imgFile )
     {
         this( makeTransparent( toImage( "/imgs/" + imgFile ), java.awt.Color.WHITE ) );
@@ -33,8 +33,8 @@ public abstract class Sprite extends ImageSprite implements Collidable
     {
         super( img );
         this.setCollidable( false );
-        dirFacing = SOUTH;
-        dead = false;
+        data = new SpriteData();
+        data.setDirFacing( SOUTH );
     }
     
     public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
@@ -80,6 +80,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public void setDirFacing( int dir )
     {
+        int dirFacing = data.getDirFacing();
         if ( dir < 0 ) return; // note: can turn into a loop (may be easier with enums)
         else if ( dir < EAST + 45 || dir > SOUTH + 45 ) dirFacing = EAST;
         else if ( dir == EAST + 45 ) {
@@ -97,12 +98,12 @@ public abstract class Sprite extends ImageSprite implements Collidable
         else if ( dir == SOUTH + 45 ) {
             if ( dirFacing != EAST && dirFacing != SOUTH ) dirFacing = ( dirFacing == NORTH ) ? EAST : SOUTH;
         }
-        System.out.println( this + " direction: " + dirFacing );
+        data.setDirFacing( dirFacing );
     }
     
-    public int directionFacing()
+    public SpriteData getSpriteData()
     {
-        return dirFacing;
+        return data;
     }
     
     /**
@@ -130,11 +131,11 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public boolean isDead()
     {
-        return dead; // TODO
+        return data.isDead(); // TODO
     }
     public void dying()
     {
-        dead = true;
+        data.dies();
     }
     
     public void translate( int dx, int dy)

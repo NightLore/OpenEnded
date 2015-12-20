@@ -1,5 +1,6 @@
 package sprites;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import world.Map;
@@ -15,12 +16,18 @@ public abstract class FightingSprite extends Sprite
     private long attackTime;
     
     private int delay;
-
-    private int hp = 10;
+    
     public FightingSprite( BufferedImage img )
     {
         super( img );
         delay = 500;// in milliseconds
+    }
+    
+    @Override
+    public void paint( Graphics g )
+    {
+        super.paint( g );
+        this.getSpriteData().drawHp( g, this, false );
     }
 
     /**
@@ -65,9 +72,7 @@ public abstract class FightingSprite extends Sprite
     @Override
     public void takeDamage( int damage )
     {
-        hp -= damage;
-        if ( hp <= 0 )
-            dying();
+        this.getSpriteData().decreaseHp( damage );
     }
     
     public void setAttack( int attack )

@@ -23,7 +23,7 @@ public class Weapon extends Sprite
         this( s, w, -1 );
     }
     
-    public Weapon( Sprite s, Weapon w, int dir )
+    public Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
     {
         this( w.getImage() );
         setCollidable( w.canCollide() );
@@ -52,7 +52,8 @@ public class Weapon extends Sprite
     public void hitSprite( Sprite sprite )
     {
 //        System.out.println( this + "hit Sprite: " + sprite );
-        sprite.takeDamage( 5 );
+        if ( !isDead() )
+            sprite.takeDamage( this.getSpriteData().getAtk() );
         dying();
     }
 

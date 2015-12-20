@@ -6,6 +6,7 @@ import gui.Window;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import sprites.Enemy;
@@ -95,6 +96,14 @@ public class Game {
         player.splitSprite( 2, 3 );
         player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
         player.setPosition( 0, 0 );
+        sprites.add( player );
+        players.add( player );
+        player = new Player( ASSETS.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
+        player.splitSprite( 2, 3 );
+        player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
+        player.setPosition( 100, 0 );
+        player.setControls( KeyEvent.VK_UP, KeyEvent.VK_RIGHT, 
+                KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD );
         sprites.add( player );
         players.add( player );
         Point p = players.getCenter();

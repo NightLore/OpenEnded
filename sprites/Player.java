@@ -66,7 +66,7 @@ public class Player extends FightingSprite
                 weapon = new Weapon( this, weapons[attack] );
                 break;
             case 1:
-                weapon = new Weapon( this, weapons[attack], directionFacing() );
+                weapon = new Weapon( this, weapons[attack], getSpriteData().getDirFacing() );
                 break;
         }
         if ( weapon != null )
@@ -81,7 +81,7 @@ public class Player extends FightingSprite
         return s instanceof Weapon ? ((Weapon)s).getSprite() != this : true;
     }
     
-    public void setControls( int[] newCtrls )
+    public void setControls( int... newCtrls )
     {
         if ( newCtrls.length > controls.length )
             controls = new int[newCtrls.length];

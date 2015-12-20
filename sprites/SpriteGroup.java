@@ -13,11 +13,40 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
 {
     private static final long serialVersionUID = 1L;
     
+    /**
+     * Overrides the ArrayList's remove(int) method to replace the removed 
+     * element with the last element
+     * 
+     * @see java.util.ArrayList#remove(int)
+     */
+    @Override
+    public Sprite remove( int i )
+    {
+        Sprite s = super.remove( size() - 1 );
+        if ( i < size() - 1 )
+            s = this.set( i, s );
+        return s;
+    }
+    
+    @Override
+    public boolean remove( Object obj )
+    {
+        int i = this.indexOf( obj );
+        if ( i >= 0 )
+        {
+            this.remove( i );
+            return true;
+        }
+        return false;
+    }
+    
     public void moveAll( long gameTime, Map map )
     {
         for ( int i = 0; i < size(); i++ ) {
             if ( !this.get( i ).isDead() )
                 this.get( i ).move( gameTime, map, this );
+            else
+                this.remove( i );
         }
     }
     
@@ -58,8 +87,12 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
             int x = 0;
             int y = 0;
             for ( Sprite s : this ) {
-                x += s.getX();
-                y += s.getY();
+                if ( !s.isDead() )
+                {
+                    x += s.getX();
+                    y += s.getY();
+                }
+                else size--;
             }
             x /= size;
             y /= size;
