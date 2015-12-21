@@ -19,34 +19,32 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
      * 
      * @see java.util.ArrayList#remove(int)
      */
-    @Override
-    public Sprite remove( int i )
-    {
-        Sprite s = super.remove( size() - 1 );
-        if ( i < size() - 1 )
-            s = this.set( i, s );
-        return s;
-    }
+//    @Override
+//    public synchronized Sprite remove( int i )
+//    {
+//        Sprite s = super.remove( size() - 1 );
+//        if ( i < size() - 1 )
+//            s = this.set( i, s );
+//        return s;
+//    }
     
-    @Override
-    public boolean remove( Object obj )
-    {
-        int i = this.indexOf( obj );
-        if ( i >= 0 )
-        {
-            this.remove( i );
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public synchronized boolean remove( Object obj ) // TODO broken, thread issue? or...needs testing
+//    {
+//        int i = this.indexOf( obj );
+//        if ( i >= 0 )
+//        {
+//            this.remove( i );
+//            return true;
+//        }
+//        return false;
+//    }
     
     public void moveAll( long gameTime, Map map )
     {
         for ( int i = 0; i < size(); i++ ) {
             if ( !this.get( i ).isDead() )
                 this.get( i ).move( gameTime, map, this );
-            else
-                this.remove( i );
         }
     }
     
@@ -82,8 +80,7 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
     
     public Point getCenter()
     {
-        int size = this.size();
-        if ( size > 0 ) {
+        if ( this.size() > 0 ) {
             int x = 0;
             int y = 0;
             for ( Sprite s : this ) {
@@ -92,10 +89,10 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
                     x += s.getX();
                     y += s.getY();
                 }
-                else size--;
             }
-            x /= size;
-            y /= size;
+//            if ( size <= 0 ) size = 1; // multi-thread problem
+            x /= this.size();
+            y /= this.size();
             return new Point( x, y );
         }
         return null;

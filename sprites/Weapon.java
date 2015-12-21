@@ -36,9 +36,12 @@ public class Weapon extends Sprite
     }
 
     @Override
-    public boolean additionalCollisions( Sprite s )
+    public boolean additionalCollisions( Sprite sprite )
     {
 //        System.out.println( s + "; " + mySprite );
+        Sprite s = sprite;
+        if ( sprite instanceof Weapon )
+            s = ((Weapon)sprite).mySprite;
         return s != mySprite;
     }
 

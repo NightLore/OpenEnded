@@ -140,6 +140,8 @@ public class Game {
                 sprites.remove( s );
                 if ( s instanceof Enemy )
                     numEnemies--;
+                else if ( s instanceof Player )
+                    players.remove( s );
                 break;
             }
         }
