@@ -1,7 +1,5 @@
 package gui;
 
-import gui.Window.Panel;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -22,7 +20,7 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
     
-    public MainMenuScreen( Window frame, Panel panel )
+    public MainMenuScreen( Window frame, String panel )
     {
         super( frame, panel, "GrassyBackground.png" );
         Dimension buttonSize = frame.buttonSize;
@@ -30,8 +28,8 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         
         JPanel titlePanel = new JPanel();
         JPanel buttonPanel = new JPanel();
-        JLabel title = new JLabel( window.getGameName() );
-        JLabel version = new JLabel( "                " + window.getVersion() );
+        JLabel title = new JLabel( frame.getGameName() );
+        JLabel version = new JLabel( "                " + frame.getVersion() );
         JButton playButton = new JButton( "Play Game" );
         JButton stgsButton = new JButton( "Settings" );
         JButton backButton = new JButton( "Back" );
@@ -100,14 +98,14 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        Panel p = null;
+        String p = null;
         
-        if ( e.getActionCommand().equals( "Play Game" ) )      p = Panel.LISTGAME;
-        else if ( e.getActionCommand().equals( "Load Game" ) ) p = Panel.LOADGAME;
-        else if ( e.getActionCommand().equals( "Settings" ) )  p = Panel.SETTINGS;
-        else if ( e.getActionCommand().equals( "Back" ) )      p = Panel.INITIAL;
+        if ( e.getActionCommand().equals( "Play Game" ) )      p = "LISTGAME";
+        else if ( e.getActionCommand().equals( "Load Game" ) ) p = "LOADGAME";
+        else if ( e.getActionCommand().equals( "Settings" ) )  p = "SETTINGS";
+        else if ( e.getActionCommand().equals( "Back" ) )      p = "INITIAL";
         else if ( e.getActionCommand().equals( "Exit Game" ) ) System.exit( 0 );
         
-        if ( p != null ) window.switchTo( screen, p );
+        if ( p != null ) carder.switchTo( screen, p );
     }
 }

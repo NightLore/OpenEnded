@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -10,7 +11,6 @@ import javax.swing.JButton;
 
 import game.Game;
 import game.InputManager;
-import gui.Window.Panel;
 
 public class GameScreen extends ScreenPanel implements ActionListener
 {
@@ -61,7 +61,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
 
     private Game game;
     private InputManager input;
-    public GameScreen( Window frame, Panel panel )
+    public GameScreen( Cards frame, String panel )
     {
         super( frame, panel );
         this.setDoubleBuffered( true );
@@ -84,10 +84,12 @@ public class GameScreen extends ScreenPanel implements ActionListener
         // Adds the mouse listener to JPanel to receive mouse events from this component.
         this.addMouseListener( input );
         
-        JButton backButton = new JButton( "Back" );
-        backButton.addActionListener( this );
+//        JButton backButton = new JButton( "Back" );
+//        backButton.addActionListener( this );
 //        backButton.setAlignmentX( RIGHT_ALIGNMENT ); // TODO
-        this.add( backButton );
+//        this.add( backButton );
+        this.setLayout( new BorderLayout() );
+        this.add( new GamePanel( carder, game ), BorderLayout.CENTER );
         Thread game = new Thread()
         {
             @Override
@@ -240,7 +242,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
         gameTime = 0;
         lastTime = System.nanoTime();
         
-        game = new Game( window );
+        game = new Game( carder );
     }
     
     /**
@@ -304,7 +306,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
     {
         if ( e.getActionCommand().equals( "Back" ) )
         {
-            window.switchTo( screen, Panel.LISTGAME );
+            carder.switchTo( screen, "LISTGAME" );
         }
     }
        

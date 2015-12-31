@@ -1,7 +1,7 @@
 package game;
 
+import gui.Cards;
 import gui.GameScreen;
-import gui.Window;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -39,7 +39,7 @@ public class Game {
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
-    private Window window;
+    private Cards window;
     private Map map;
     private boolean debug;
     private BufferedImage enemyImg, projImg;
@@ -47,7 +47,7 @@ public class Game {
     private int maxEnemies;
     private Weapon[] defaultWeapons;
 
-    public Game( Window frame )
+    public Game( Cards frame )
     {
         window = frame;
         maxEnemies = 40;
@@ -178,7 +178,7 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-        if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
+//        if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
         {
             Point pCenter = players.getCenter();
             int originX = window.getWidth() / 2 - pCenter.x;

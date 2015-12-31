@@ -1,7 +1,5 @@
 package gui;
 
-import gui.Window.Panel;
-
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,7 +18,7 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
      */
     private static final long serialVersionUID = 1L;
 
-    public InitialScreen( Window frame, Panel panel )
+    public InitialScreen( Window frame, String panel )
     {
         super( frame, panel, "GrassyBackground.png" );
         this.addKeyListener( this );
@@ -29,7 +27,7 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
         
         JPanel menuTitlePanel = new JPanel();
         menuTitlePanel.setOpaque( false );
-        JLabel title = new JLabel( frame.getName() );
+        JLabel title = new JLabel( frame.getGameName() );
         JLabel start = new JLabel( "PRESS ANY KEY TO CONTINUE" );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
@@ -47,7 +45,7 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
         this.add( Box.createVerticalGlue() );
         this.add( Box.createVerticalGlue() );
     }
-    public void start() { window.switchTo( screen, Panel.MAINMENU ); }
+    public void start() { carder.switchTo( screen, "MAINMENU" ); }
     @Override
     public void mouseClicked( MouseEvent e ) {}
     @Override

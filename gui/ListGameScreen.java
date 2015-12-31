@@ -1,7 +1,5 @@
 package gui;
 
-import gui.Window.Panel;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +15,7 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
 
-    public ListGameScreen( Window frame, Panel panel )
+    public ListGameScreen( Window frame, String panel )
     {
         super( frame, panel, "GrassyBackground.png" );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
@@ -57,12 +55,12 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        Panel p = null;
-        if ( e.getActionCommand().equals( "Story Mode" ) ) p = Panel.STORYGAME;
-        else if ( e.getActionCommand().equals( "Endless Mode" ) ) p = Panel.FREEGAME;
-        else if ( e.getActionCommand().equals( "Load Game" ) ) p = Panel.LOADGAME;
-        else if ( e.getActionCommand().equals( "Back" ) ) p = Panel.MAINMENU;
+        String p = null;
+        if ( e.getActionCommand().equals( "Story Mode" ) ) p = "STORYGAME";
+        else if ( e.getActionCommand().equals( "Endless Mode" ) ) p = "FREEGAME";
+        else if ( e.getActionCommand().equals( "Load Game" ) ) p = "LOADGAME";
+        else if ( e.getActionCommand().equals( "Back" ) ) p = "MAINMENU";
 
-        if ( p != null ) window.switchTo( screen, p );
+        if ( p != null ) carder.switchTo( screen, p );
     }
 }

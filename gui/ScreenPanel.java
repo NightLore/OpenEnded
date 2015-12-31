@@ -1,7 +1,5 @@
 package gui;
 
-import gui.Window.Panel;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -21,20 +19,20 @@ public class ScreenPanel extends JPanel implements Screen
      */
     private static final long serialVersionUID = 1L;
 
-    protected Window window;
-    protected Panel screen;
+    protected Cards carder;
+    protected String screen;
     private Image background;
     
     
-    public ScreenPanel( Window frame, Panel panel )
+    public ScreenPanel( Cards frame, String panel )
     {
-        window = frame;
+        carder = frame;
         screen = panel;
         this.setBackground( Color.BLACK );
         this.setPreferredSize( new Dimension( frame.getWidth(), frame.getHeight() ) );
     }
     
-    public ScreenPanel( Window frame, Panel panel, String fileName )
+    public ScreenPanel( Cards frame, String panel, String fileName )
     {
         this( frame, panel );
         fileName =  "/imgs/" + fileName; // Package images are found in

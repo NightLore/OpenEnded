@@ -1,7 +1,5 @@
 package gui;
 
-import gui.Window.Panel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,7 +12,7 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
 
-    public LoadGameScreen( Window frame, Panel panel )
+    public LoadGameScreen( Cards frame, String panel )
     {
         super( frame, panel );
         JButton backButton = new JButton( "Back" );
@@ -27,7 +25,7 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
     {
         if ( e.getActionCommand().equals( "Back" ) )
         {
-            window.switchTo( screen, Panel.LISTGAME );
+            carder.switchTo( screen, "LISTGAME" );
         }
     }
 }
