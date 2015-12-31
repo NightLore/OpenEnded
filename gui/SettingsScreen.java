@@ -1,5 +1,7 @@
 package gui;
 
+import game.Settings;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,40 +26,40 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     
     private String back;
     
-    private int numPlayers;
-    private int numNPCs;
-    private int numEnemies;
+    private Settings settings;
+    private Settings tempSettings;
     
-    private boolean debug;
-    public SettingsScreen( Cards frame, String panel, String back )
+    public SettingsScreen( Cards frame, String panel, String back, Settings settings )
     {
         super( frame, panel );
         this.setLayout( new BorderLayout() );
         this.setBackground( Color.BLACK );
         this.back = back;
         
-        loadNumbers();
+        this.settings = settings;
+        this.tempSettings = new Settings( settings );
         
         JPanel titlePanel = new JPanel();
         JLabel title = new JLabel( "SETTINGS" );
         JPanel centerPanel = new JPanel();
         JPanel playerPanel = new JPanel();
         JLabel playerLabel = new JLabel( "Number of Players: " );
-        JSlider playerSlider = new JSlider( JSlider.HORIZONTAL, 1, 4, numPlayers );
-        JLabel numPlayLabel = new JLabel( "" + numPlayers );
+        JSlider playerSlider = new JSlider( JSlider.HORIZONTAL, 1, 4, settings.numPlayers );
+        JLabel numPlayLabel = new JLabel( "" + settings.numPlayers );
         JPanel npcPanel = new JPanel();
         JLabel npcLabel = new JLabel( "Number of NPCs: " );
-        JSlider npcSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, numNPCs );
-        JLabel numNpcLabel = new JLabel( "" + numNPCs );
+        JSlider npcSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
+        JLabel numNpcLabel = new JLabel( "" + settings.numNPCs );
         JPanel enemyPanel = new JPanel();
         JLabel enemyLabel = new JLabel( "Number of Enemies: " );
-        JSlider enemySlider = new JSlider( JSlider.HORIZONTAL, 0, 100, numEnemies );
-        JLabel numEnmyLabel = new JLabel( "" + numEnemies );
+        JSlider enemySlider = new JSlider( JSlider.HORIZONTAL, 0, 100, settings.numEnemies );
+        JLabel numEnmyLabel = new JLabel( "" + settings.numEnemies );
         JPanel debugPanel = new JPanel();
         JLabel debugLabel = new JLabel( "Toggle Debug: " );
-        JButton debugButton = new JButton( "" + debug );
+        JButton debugButton = new JButton( "" + settings.debug );
         JPanel backPanel = new JPanel();
-        JButton backButton = new JButton( "Back" );
+        JButton confirmButton = new JButton( "Ok" );
+        JButton cancelButton = new JButton( "Cancel" );
 
         titlePanel.setOpaque( false );
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
@@ -85,10 +87,11 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         
         debugPanel.setOpaque( false );
         debugLabel.setForeground( Color.WHITE );
-        backPanel.setLayout( new BorderLayout() );
         backPanel.setOpaque( false );
-        backButton.addActionListener( this );
-        backButton.setPreferredSize( new Dimension( 100, 50 ) );
+        confirmButton.addActionListener( this );
+        confirmButton.setPreferredSize( new Dimension( 100, 50 ) );
+        cancelButton.addActionListener( this );
+        cancelButton.setPreferredSize( new Dimension( 100, 50 ) );
         
         titlePanel.add( title );
         centerPanel.add( playerPanel );
@@ -106,7 +109,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         centerPanel.add( debugPanel );
         debugPanel.add( debugLabel );
         debugPanel.add( debugButton );
-        backPanel.add( backButton, BorderLayout.WEST );
+        backPanel.add( confirmButton );
+        backPanel.add( cancelButton );
         this.add( titlePanel, BorderLayout.NORTH );
         this.add( centerPanel, BorderLayout.CENTER );
         this.add( backPanel, BorderLayout.SOUTH );
@@ -115,8 +119,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             @Override
             public void actionPerformed( ActionEvent arg0 )
             {
-                debug = !debug;
-                debugButton.setText( "" + debug );
+                tempSettings.debug = !tempSettings.debug;
+                debugButton.setText( "" + tempSettings.debug );
             }
         } );
         
@@ -126,8 +130,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             {
                 JSlider slider = (JSlider)e.getSource();
                 // if ( !slider.getValueIsAdjusting() )
-                numPlayers = slider.getValue();
-                numPlayLabel.setText( "" + numPlayers );
+                tempSettings.numPlayers = slider.getValue();
+                numPlayLabel.setText( "" + tempSettings.numPlayers );
             }
         } );
         npcSlider.addChangeListener( new ChangeListener() {
@@ -136,8 +140,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             {
                 JSlider slider = (JSlider)e.getSource();
                 // if ( !slider.getValueIsAdjusting() )
-                numNPCs = slider.getValue();
-                numNpcLabel.setText( "" + numNPCs );
+                tempSettings.numNPCs = slider.getValue();
+                numNpcLabel.setText( "" + tempSettings.numNPCs );
             }
         } );
         enemySlider.addChangeListener( new ChangeListener() {
@@ -146,25 +150,23 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             {
                 JSlider slider = (JSlider)e.getSource();
                 // if ( !slider.getValueIsAdjusting() )
-                numEnemies = slider.getValue();
-                numEnmyLabel.setText( "" + numEnemies );
+                tempSettings.numEnemies = slider.getValue();
+                numEnmyLabel.setText( "" + tempSettings.numEnemies );
             }
         } );
-    }
-    
-    public void loadNumbers()
-    {
-        numPlayers = 1;
-        numNPCs = 5;
-        numEnemies = 40;
     }
 
     @Override
     public void actionPerformed( ActionEvent e )
     {
         String action = e.getActionCommand();
-        if ( action.equals( "Back" ) )
+        if ( action.equals( "Cancel" ) )
         {
+            carder.switchTo( screen, back );
+        }
+        else if ( action.equals( "Ok" ) )
+        {
+            settings.copy( tempSettings );
             carder.switchTo( screen, back );
         }
     }

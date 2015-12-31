@@ -1,56 +1,39 @@
 package game;
 
+/**
+ *  A holder class for the Game settings
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Dec 31, 2015
+ */
 public class Settings
 {
-    private int sound, music, numEnemies, numPlayers, numNPCs;
-    private boolean debug;
-    public int getSound()
+    // note: with getters and setters, can be replaced with array
+    public int sound, music, numEnemies, numPlayers, numNPCs;
+    public boolean debug;
+    
+    public Settings()
     {
-        return sound;
-    }
-    public void setSound( int sound )
-    {
-        this.sound = sound;
-    }
-    public int getMusic()
-    {
-        return music;
-    }
-    public void setMusic( int music )
-    {
-        this.music = music;
-    }
-    public int getNumPlayers()
-    {
-        return numPlayers;
-    }
-    public void setNumPlayers( int numPlayers )
-    {
-        this.numPlayers = numPlayers;
-    }
-    public int getNumNPCs()
-    {
-        return numNPCs;
-    }
-    public void setNumNPCs( int numNPCs )
-    {
-        this.numNPCs = numNPCs;
-    }
-    public int getNumEnemies()
-    {
-        return numEnemies;
-    }
-    public void setNumEnemies( int numEnemies )
-    {
-        this.numEnemies = numEnemies;
-    }
-    public boolean isDebug()
-    {
-        return debug;
-    }
-    public void setDebug( boolean debug )
-    {
-        this.debug = debug;
+        sound = 100;
+        music = 100;
+        numEnemies = 40;
+        numPlayers = 1;
+        numNPCs = 4;
+        debug = false;
     }
     
+    public Settings( Settings settings )
+    {
+        this.copy( settings );
+    }
+    
+    public void copy( Settings settings ) // basically same as clone()
+    {
+        this.sound = settings.sound;
+        this.music = settings.music;
+        this.numEnemies = settings.numEnemies;
+        this.numPlayers = settings.numPlayers;
+        this.numNPCs = settings.numNPCs;
+        this.debug = settings.debug;
+    }
 }

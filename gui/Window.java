@@ -1,5 +1,7 @@
 package gui;
 
+import game.Settings;
+
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
     private JPanel main;
     private CardLayout cards;
     private HashMap<String, Screen> screens;
+    private Settings settings;
 
     public Window()
     {
@@ -37,14 +40,15 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
         main = new JPanel();
         cards = new CardLayout();
         main.setLayout( cards );
+        settings = new Settings(); // TODO load settings
         
         ScreenPanel initial = new InitialScreen( this, "INITIAL" );
         ScreenPanel mainMenu = new MainMenuScreen( this, "MAINMENU" );
-        ScreenPanel settings = new SettingsScreen( this, "SETTINGS", "MAINMENU" );
+        ScreenPanel settings = new SettingsScreen( this, "SETTINGS", "MAINMENU", this.settings );
         ScreenPanel listGame = new ListGameScreen( this, "LISTGAME" );
-        ScreenPanel storyGame = new GameScreen( this, "STORYGAME" );
+        ScreenPanel storyGame = new GameScreen( this, "STORYGAME", this.settings );
         ScreenPanel loadGame = new LoadGameScreen( this, "LOADGAME" );
-        ScreenPanel freeGame = new GameScreen( this, "FREEGAME" );
+        ScreenPanel freeGame = new GameScreen( this, "FREEGAME", this.settings );
         
         screens.put( "INITIAL", initial );
         screens.put( "MAINMENU", mainMenu );

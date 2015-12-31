@@ -7,10 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-
 import game.Game;
 import game.InputManager;
+import game.Settings;
 
 public class GameScreen extends ScreenPanel implements ActionListener
 {
@@ -61,7 +60,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
 
     private Game game;
     private InputManager input;
-    public GameScreen( Cards frame, String panel )
+    public GameScreen( Cards frame, String panel, Settings settings )
     {
         super( frame, panel );
         this.setDoubleBuffered( true );
@@ -89,7 +88,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
 //        backButton.setAlignmentX( RIGHT_ALIGNMENT ); // TODO
 //        this.add( backButton );
         this.setLayout( new BorderLayout() );
-        this.add( new GamePanel( carder, game ), BorderLayout.CENTER );
+        this.add( new GamePanel( this, settings ), BorderLayout.CENTER );
         Thread game = new Thread()
         {
             @Override
@@ -310,5 +309,10 @@ public class GameScreen extends ScreenPanel implements ActionListener
         }
     }
        
+    public void returnToMainMenu()
+    {
+        // TODO destroy current game session
+        carder.switchTo( screen, "MAINMENU" );
+    }
     
 }
