@@ -43,10 +43,10 @@ public class GameScreen extends ScreenPanel implements ActionListener
     public static enum GameState{
         STARTING, PLAYING, PAUSED, RESUMED, VISUALIZING
     }
-    /**
-     * Current state of the game
-     */
-    public static GameState gameState;
+//    /**
+//     * Current state of the game
+//     */
+//    public static GameState gameState;
     
     /**
      * Elapsed game time in nanoseconds.
@@ -59,6 +59,8 @@ public class GameScreen extends ScreenPanel implements ActionListener
      * 
      */
     private static final long serialVersionUID = 1L;
+    
+    public boolean inGame;
 
     private Game game;
     private InputManager input;
@@ -69,9 +71,6 @@ public class GameScreen extends ScreenPanel implements ActionListener
     public GameScreen( Cards frame, String panel, Settings settings, Assets assets )
     {
         super( frame, panel );
-        this.setDoubleBuffered( true );
-        this.setFocusable( true );
-        gameState = GameState.STARTING;
         input = new InputManager( this );
         this.settings = settings;
         this.assets = assets;
@@ -98,24 +97,12 @@ public class GameScreen extends ScreenPanel implements ActionListener
             @Override
             public void actionPerformed( ActionEvent arg0 )
             {
-                switch (gameState)
-                {
-                    case STARTING:
-
-                        break;
-                    case PLAYING:
-                        gameTime += System.nanoTime() - lastTime;
-
-                        game.updateGame( gameTime, mousePosition() );
-
-                        lastTime = System.nanoTime();
-                        break;
-                    case PAUSED:
-                        break;
-                    case RESUMED:
-                        break;
-                    case VISUALIZING:
-                        break;
+                if ( inGame ) {
+                    if ( InputManager.keyboardKeyState( KeyEvent.VK_ESCAPE ) )
+                        ui.switchTo( "PAUSE" );
+                    gameTime += System.nanoTime() - lastTime;
+                    game.updateGame( gameTime, mousePosition() );
+                    lastTime = System.nanoTime();
                 }
                 repaint();
             }
@@ -127,7 +114,6 @@ public class GameScreen extends ScreenPanel implements ActionListener
     {
         this.requestFocusInWindow();
         this.newGame();
-        gameState = GameState.PLAYING;
         updater.start();
         ui.switchTo( "GAME" );
     }
@@ -136,7 +122,6 @@ public class GameScreen extends ScreenPanel implements ActionListener
     public void cover()
     {
         updater.stop();
-        gameState = GameState.PAUSED;
         InputManager.reset();
         ui.switchTo( "LOAD" );
     }

@@ -29,6 +29,7 @@ public class ScreenPanel extends JPanel implements Screen
         carder = frame;
         screen = panel;
         this.setBackground( Color.BLACK );
+        this.setFocusable( true );
         this.setPreferredSize( new Dimension( frame.getWidth(), frame.getHeight() ) );
     }
     

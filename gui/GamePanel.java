@@ -127,38 +127,43 @@ public class GamePanel extends JPanel implements Cards, ActionListener
     @Override
     public void switchTo( String from, String to )
     {
-        this.cards.show( this, to );
+        if ( to.equalsIgnoreCase( "Resume" ) ) {
+            to = "GAME";
+        }
+//        else if ( action.equalsIgnoreCase( "Inventory" ) ) {
+//            action = "ITEM";
+//        }
+//        else if ( action.equalsIgnoreCase( "Settings" ) ) {
+//            action = "SETTINGS";
+//        }
+//        else if ( to.equalsIgnoreCase( "Pause" ) ) {
+//            action = "PAUSE";
+//        }
+        else if ( to.equalsIgnoreCase( "Return to Main Menu" ) ) {
+            to = "EXIT";
+        }
+        else if ( to.equalsIgnoreCase( "Yes" ) ) {
+            game.returnToMainMenu(); // TODO quit game
+            return;
+        }
+        else if ( to.equalsIgnoreCase( "No" ) ) {
+            to = "PAUSE";
+        }
+        game.inGame = to.equalsIgnoreCase( "GAME" );
+        this.cards.show( this, to.toUpperCase() );
         currentPane = to;
+    }
+    
+    public void togglePause()
+    {
+        String panel = currentPane.equalsIgnoreCase( "PAUSE" ) ? "GAME" : "PAUSE";
+        switchTo( panel );
     }
 
     @Override
     public void actionPerformed( ActionEvent e )
     {
         String action = e.getActionCommand();
-        if ( action.equals( "Resume" ) ) {
-            action = "GAME";
-            GameScreen.gameState = GameScreen.GameState.PLAYING;
-        }
-//        else if ( action.equals( "Inventory" ) ) {
-//            action = "ITEM";
-//        }
-        else if ( action.equals( "Settings" ) ) {
-            // action = "SETTINGS";
-        }
-        else if ( action.equals( "Return to Main Menu" ) ) {
-            action = "EXIT";
-        }
-        else if ( action.equals( "Pause" ) ) {
-            // action = "PAUSE";
-            GameScreen.gameState = GameScreen.GameState.PAUSED;
-        }
-        else if ( action.equals( "Yes" ) ) {
-            game.returnToMainMenu(); // TODO quit game
-            return;
-        }
-        else if ( action.equals( "No" ) ) {
-            action = "PAUSE";
-        }
         this.switchTo( action.toUpperCase() );
     }
     
