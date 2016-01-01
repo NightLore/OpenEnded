@@ -1,5 +1,6 @@
 package gui;
 
+import game.Assets;
 import game.Settings;
 
 import java.awt.CardLayout;
@@ -19,6 +20,13 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
     
     private static final Dimension windowSize = new Dimension( 1280, 720 );
     public final Dimension buttonSize = new Dimension( windowSize.width, windowSize.height / 20 );
+    
+    private Assets assets;
+    private void loadAssets()
+    {
+        assets.loadFiles();
+        assets.loadAssets();
+    }
     
     private JPanel main;
     private CardLayout cards;
@@ -41,14 +49,16 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
         cards = new CardLayout();
         main.setLayout( cards );
         settings = new Settings(); // TODO load settings
+        assets = new Assets();
+        loadAssets();
         
         ScreenPanel initial = new InitialScreen( this, "INITIAL" );
         ScreenPanel mainMenu = new MainMenuScreen( this, "MAINMENU" );
         ScreenPanel settings = new SettingsScreen( this, "SETTINGS", "MAINMENU", this.settings );
         ScreenPanel listGame = new ListGameScreen( this, "LISTGAME" );
-        ScreenPanel storyGame = new GameScreen( this, "STORYGAME", this.settings );
+        ScreenPanel storyGame = new GameScreen( this, "STORYGAME", this.settings, assets );
         ScreenPanel loadGame = new LoadGameScreen( this, "LOADGAME" );
-        ScreenPanel freeGame = new GameScreen( this, "FREEGAME", this.settings );
+        ScreenPanel freeGame = new GameScreen( this, "FREEGAME", this.settings, assets );
         
         screens.put( "INITIAL", initial );
         screens.put( "MAINMENU", mainMenu );
@@ -86,7 +96,7 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
     
     public String getVersion()
     {
-        return "V0.15";
+        return "V0.16";
     }
 
     public static void main( String[] args ) {
