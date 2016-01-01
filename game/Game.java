@@ -5,7 +5,6 @@ import gui.Cards;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import sprites.Enemy;
@@ -24,6 +23,7 @@ import world.Map;
 public class Game {
 //    private HashMap<String,SpriteData> data = new HashMap<String,SpriteData>();
 //    private String[] choosable;
+    public static final int SPAWN_OFFSET = 128;
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
@@ -61,7 +61,6 @@ public class Game {
      */
     private void loadContent()
     {
-//        while ( !hasLoaded ); // hold until assets loaded
         enemyImg = assets.getSkin( Assets.REDCIRCLE );
         projImg = assets.getSkin( Assets.SMALLCIRCLE );
         Weapon w = new Weapon( projImg );
@@ -69,21 +68,7 @@ public class Game {
         defaultWeapons = new Weapon[2];
         defaultWeapons[0] = w;
         defaultWeapons[1] = w;
-        Player player;
-        player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
-        player.splitSprite( 2, 3 );
-        player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
-        player.setPosition( 0, 0 );
-        sprites.add( player );
-        players.add( player );
-        player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
-        player.splitSprite( 2, 3 );
-        player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
-        player.setPosition( 100, 0 );
-        player.setControls( KeyEvent.VK_UP, KeyEvent.VK_RIGHT, 
-                KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD );
-        sprites.add( player );
-        players.add( player );
+        spawnPlayers();
         Point p = players.getCenter();
         map = new Map( assets, p.x, p.y, window.getWidth(), window.getHeight() );
         map.create();
@@ -99,6 +84,7 @@ public class Game {
      */
     public void updateGame( long gameTime, Point mousePosition )
     {
+        spawnPlayers();
         map.update( players.getCenter() ); // TODO
         sprites.moveAll( gameTime, map );
         for ( Sprite s : sprites )
@@ -114,6 +100,25 @@ public class Game {
             }
         }
         spawnEnemies();
+    }
+    private void spawnPlayers()
+    {
+        while ( players.size() < settings.numPlayers )
+        {
+            Point p = players.getCenter();
+            if ( p == null ) p = new Point();
+            Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
+            player.splitSprite( 2, 3 );
+            player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
+            player.setPosition( p.x + SPAWN_OFFSET, p.y + SPAWN_OFFSET );
+            player.setDefaultControls( players.size() );
+            sprites.add( player );
+            players.add( player );
+        }
+        while ( players.size() > settings.numPlayers )
+        {
+            sprites.remove( players.remove( players.size() - 1 ) );
+        }
     }
     private void spawnEnemies()
     {
@@ -146,17 +151,14 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-//        if ( GameScreen.gameState == GameScreen.GameState.PLAYING )
-        {
-            Point pCenter = players.getCenter();
-            int originX = window.getWidth() / 2 - pCenter.x;
-            int originY = window.getHeight() / 2 - pCenter.y;
-            g2d.translate( originX, originY );
-            map.draw( g2d, settings.debug );
-            sprites.paintAll( g2d );
-            g2d.translate( -originX, -originY );
-            g2d.setColor( Color.WHITE );
-            g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );
-        }
+        Point pCenter = players.getCenter();
+        int originX = window.getWidth() / 2 - pCenter.x;
+        int originY = window.getHeight() / 2 - pCenter.y;
+        g2d.translate( originX, originY );
+        map.draw( g2d, settings.debug );
+        sprites.paintAll( g2d );
+        g2d.translate( -originX, -originY );
+        g2d.setColor( Color.WHITE );
+        g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );
     }
 }

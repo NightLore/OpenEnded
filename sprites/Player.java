@@ -11,13 +11,34 @@ public class Player extends FightingSprite
      * 
      */
     private static final long serialVersionUID = 1L;
-    private int[] controls = new int[]{KeyEvent.VK_W, KeyEvent.VK_D, 
+    
+    public static final int WASD = 0;
+    public static final int ARROWKEYS = 1;
+    public static final int IJKL = 2;
+    public static final int NUMPADKEYS = 3;
+    public static final int NUMDEFAULT = 4;
+    
+    public static final int[] WASDVB = new int[]{KeyEvent.VK_W, KeyEvent.VK_D, 
         KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_V, KeyEvent.VK_B };
+    
+    public static final int[] ARROWS = new int[]{KeyEvent.VK_UP, KeyEvent.VK_RIGHT, 
+        KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD };
+    
+    public static final int[] IJKLTY = new int[]{KeyEvent.VK_I, KeyEvent.VK_L, 
+        KeyEvent.VK_K, KeyEvent.VK_J, KeyEvent.VK_T, KeyEvent.VK_Y };
+    
+    public static final int[] NUMPAD = new int[]{KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD6, 
+        KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD4, KeyEvent.VK_MULTIPLY, KeyEvent.VK_SUBTRACT };
+
+    private static final int[][] defaultCtrls = new int[][]{ WASDVB, ARROWS, IJKLTY, NUMPAD };
+    
+    private int[] controls;
     private Weapon[] weapons;
     
     public Player( BufferedImage img, Weapon[] weapons )
     {
         super( img );
+        this.setDefaultControls( 0 );
         this.weapons = weapons;
     }
     
@@ -83,9 +104,14 @@ public class Player extends FightingSprite
     
     public void setControls( int... newCtrls )
     {
-        if ( newCtrls.length > controls.length )
+        if ( controls == null || newCtrls.length > controls.length )
             controls = new int[newCtrls.length];
         System.arraycopy( newCtrls, 0, controls, 0, newCtrls.length );
+    }
+    
+    public void setDefaultControls( int control )
+    {
+        this.setControls( defaultCtrls[control] );
     }
     
     public int getSpeed()
