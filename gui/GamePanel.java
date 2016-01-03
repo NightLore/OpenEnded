@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         this.setLayout( this.cards );
 
         JPanel loadPanel = new JPanel();
+        JLabel loadLabel = new JLabel( "Loading..." );
 
         JPanel gamePanel = new JPanel();
             JPanel gamePausePanel = new JPanel();
@@ -57,6 +58,14 @@ public class GamePanel extends JPanel implements Cards, ActionListener
             JPanel yesNoPanel = new JPanel();
             JButton yesButton = new JButton( "Yes" );
             JButton noButton = new JButton( "No" );
+            
+        JPanel gameOverPanel = new JPanel();
+        JLabel gameOverLabel = new JLabel( "GAME OVER" );
+            JPanel returnPanel = new JPanel();
+            JButton mainMenuButton = new JButton( "Return to Main Menu" );
+
+        loadPanel.setBackground( new Color( 0, 0, 0, 192 ) );
+        loadLabel.setForeground( Color.WHITE );
         
         gamePanel.setLayout( new BorderLayout() );
         gamePanel.setOpaque( false );
@@ -92,6 +101,18 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         
         settingsPanel.setBackground( new Color( 0, 0, 0, 192 ) );
         
+        gameOverPanel.setLayout( new BoxLayout( gameOverPanel, BoxLayout.Y_AXIS ) );
+        gameOverPanel.setBackground( new Color( 0, 0, 0, 192 ) );
+        gameOverLabel.setForeground( Color.WHITE );
+        exitFont = gameOverLabel.getFont();
+        exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 );
+        gameOverLabel.setFont( exitFont );
+        gameOverLabel.setAlignmentX( CENTER_ALIGNMENT );
+            returnPanel.setOpaque( false );
+            mainMenuButton.setActionCommand( "Yes" );
+            mainMenuButton.addActionListener( this );
+        
+        loadPanel.add( loadLabel );
         pausePanel.add( Box.createVerticalGlue() );
         pausePanel.add( resumeButton );
         pausePanel.add( Box.createVerticalGlue() );
@@ -109,12 +130,16 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         areYouSurePanel.add( Box.createVerticalGlue() );
             yesNoPanel.add( yesButton );
             yesNoPanel.add( noButton );
+        gameOverPanel.add( gameOverLabel );
+        gameOverPanel.add( returnPanel );
+            returnPanel.add( mainMenuButton );
         this.add( loadPanel, "LOAD" );
         this.add( gamePanel, "GAME" );
         this.add( itemPanel, "ITEM" );
         this.add( pausePanel, "PAUSE" );
         this.add( settingsPanel, "SETTINGS" );
         this.add( areYouSurePanel, "EXIT" );
+        this.add( gameOverPanel, "OVER" );
         
         this.switchTo( "GAME" );
     }
@@ -149,7 +174,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         else if ( to.equalsIgnoreCase( "No" ) ) {
             to = "PAUSE";
         }
-        game.inGame = to.equalsIgnoreCase( "GAME" );
+        game.inGame = to.equalsIgnoreCase( "GAME" ) || to.equalsIgnoreCase( "OVER" );
         this.cards.show( this, to.toUpperCase() );
         currentPane = to;
     }

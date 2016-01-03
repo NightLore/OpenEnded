@@ -1,6 +1,6 @@
 package game;
 
-import gui.Cards;
+import gui.GameScreen;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -27,16 +27,18 @@ public class Game {
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
-    private Cards window;
+    private GameScreen window;
     private Map map;
     private BufferedImage enemyImg, projImg;
     private int numEnemies;
     private Weapon[] defaultWeapons;
+    private boolean gameOver;
+    private Point center;
     
     private Assets assets;
     private Settings settings;
 
-    public Game( Cards frame, Settings settings, Assets assets )
+    public Game( GameScreen frame, Settings settings, Assets assets )
     {
         window = frame;
         this.settings = settings;
@@ -69,8 +71,8 @@ public class Game {
         defaultWeapons[0] = w;
         defaultWeapons[1] = w;
         spawnPlayers();
-        Point p = players.getCenter();
-        map = new Map( assets, p.x, p.y, window.getWidth(), window.getHeight() );
+        center = players.getCenter();
+        map = new Map( assets, center.x, center.y, window.getWidth(), window.getHeight() );
         map.create();
         map.generate();
     }
@@ -85,7 +87,10 @@ public class Game {
     public void updateGame( long gameTime, Point mousePosition )
     {
         spawnPlayers();
-        map.update( players.getCenter() ); // TODO
+        Point pCenter = players.getCenter();
+        if ( pCenter != null )
+            center = pCenter;
+        map.update( center ); // TODO
         sprites.moveAll( gameTime, map );
         for ( Sprite s : sprites )
         {
@@ -95,7 +100,14 @@ public class Game {
                 if ( s instanceof Enemy )
                     numEnemies--;
                 else if ( s instanceof Player )
+                {
+                    if ( players.size() == 1 )
+                    {
+                        window.gameOver();
+                        gameOver = true;
+                    }
                     players.remove( s );
+                }
                 break;
             }
         }
@@ -103,6 +115,7 @@ public class Game {
     }
     private void spawnPlayers()
     {
+        if ( gameOver ) return;
         while ( players.size() < settings.numPlayers )
         {
             Point p = players.getCenter();
@@ -151,14 +164,13 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-        Point pCenter = players.getCenter();
-        int originX = window.getWidth() / 2 - pCenter.x;
-        int originY = window.getHeight() / 2 - pCenter.y;
+        int originX = window.getWidth() / 2 - center.x;
+        int originY = window.getHeight() / 2 - center.y;
         g2d.translate( originX, originY );
         map.draw( g2d, settings.debug );
         sprites.paintAll( g2d );
         g2d.translate( -originX, -originY );
         g2d.setColor( Color.WHITE );
-        g2d.drawString( pCenter.x + ", " + pCenter.y, 0, window.getHeight() - 50 );
+        g2d.drawString( center.x + ", " + center.y, 0, window.getHeight() - 50 );
     }
 }

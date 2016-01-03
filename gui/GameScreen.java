@@ -14,7 +14,7 @@ import game.Game;
 import game.InputManager;
 import game.Settings;
 
-public class GameScreen extends ScreenPanel implements ActionListener
+public class GameScreen extends ScreenPanel // implements ActionListener
 {
     /**
      * Time of one second in milliseconds.
@@ -135,7 +135,7 @@ public class GameScreen extends ScreenPanel implements ActionListener
         gameTime = 0;
         lastTime = System.nanoTime();
         
-        game = new Game( carder, settings, assets );
+        game = new Game( this, settings, assets );
     }
     
     
@@ -178,14 +178,10 @@ public class GameScreen extends ScreenPanel implements ActionListener
     {
         game.draw( g, mousePosition() );
     }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
+    
+    public void gameOver()
     {
-        if ( e.getActionCommand().equals( "Back" ) )
-        {
-            carder.switchTo( screen, "LISTGAME" );
-        }
+        ui.switchTo( "OVER" );
     }
        
     public void returnToMainMenu()
