@@ -5,10 +5,6 @@ import game.Assets;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.Scanner;
-
-import javax.imageio.ImageIO;
 
 import sprites.ImageSprite;
 import sprites.Sprite;
@@ -33,15 +29,14 @@ public class Map extends TileCoordinator
     private LargeTile[][] tiles;
     private Rectangle frame;
     
-    public Map( Assets assets, int x, int y, int frameWidth, int frameHeight )
+    public Map( Assets assets, Point center, int frameWidth, int frameHeight )
     {
-        super( x, y, LargeTile.frameToTilePixelSize( Math.max( frameWidth, frameHeight ) ) );
+        super( center.x, center.y, LargeTile.frameToTilePixelSize( Math.max( frameWidth, frameHeight ) ) ); // round size to nearest TILE_SIZE
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
         int tSize = Tile.TILE_SIZE;
-        frame = new Rectangle( x - frameWidth / 2 - tSize / 2, 
-                               y - frameHeight / 2 - tSize / 2, 
-                               frameWidth + tSize, 
-                               frameHeight + tSize );
+        frame = new Rectangle();
+        frame.setSize( frameWidth + tSize, frameHeight + tSize );
+        this.updateFrame( center );
         this.assets = assets;
     }
     
@@ -111,7 +106,7 @@ public class Map extends TileCoordinator
         {
             for ( LargeTile t : row )
             {
-                Rectangle bounds = new Rectangle( frame );
+                Rectangle bounds = getFrame();
                 bounds.setLocation( toTileCoords( frame.getLocation() ) );
                 if ( bounds.intersects( t.getBounds() ) )
                     t.draw( g2d, bounds, debug );
@@ -153,7 +148,7 @@ public class Map extends TileCoordinator
      */
     public void update( Point center ) // TODO update
     {
-        frame.setLocation( center.x - frame.width / 2, center.y - frame.height / 2 );
+        this.updateFrame( center );
         int dx = toTileCoordX( center.x );
         int dy = toTileCoordY( center.y );
         int size = this.getSize();
@@ -274,7 +269,7 @@ public class Map extends TileCoordinator
 //    }
     public Point getSpawnableLocation()
     {
-        Rectangle r = new Rectangle( frame );
+        Rectangle r = getFrame();
         r.setLocation( toTileCoords( frame.getLocation() ) );
         int loc = Generator.randInt( 9 );
         return toThisCoords( tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation( r ) );
@@ -304,25 +299,20 @@ public class Map extends TileCoordinator
         return tile;
     }
     
-    /**
-     * Return BufferedImage object of a picture file, starts at this project's path
-     * @param fileName
-     * @return buffered image
-     */
-    public static BufferedImage toImage( String fileName )
+    private void updateFrame( Point center )
     {
-//        URL url = Map.class.getResource( fileName );
-//        System.out.println( url );
-        try { 
-            return ImageIO.read( Map.class.getResource( fileName ) );
-        } catch ( java.io.IOException e ) { 
-            System.out.println( "Cannot find: " + fileName );
-            e.printStackTrace(); 
-            @SuppressWarnings("resource")
-            Scanner scanIn = new Scanner( System.in );
-            System.out.print( "Input file: " );
-            return toImage( scanIn.nextLine() );
-        }
+        updateFrame( center.x, center.y );
+    }
+    
+    private void updateFrame( int x, int y )
+    {
+        frame.setLocation( x - frame.width / 2 - Tile.TILE_SIZE / 2, 
+                           y - frame.height / 2 - Tile.TILE_SIZE / 2 );
+    }
+    
+    public Rectangle getFrame()
+    {
+        return new Rectangle( frame );
     }
     
 //    public static void main( String[] args )

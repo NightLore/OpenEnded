@@ -28,7 +28,8 @@ public class Game {
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
-    private Cards window;
+    private int width;
+    private int height;
     private GameScreen screen;
     private Map map;
     private BufferedImage enemyImg, projImg;
@@ -42,7 +43,8 @@ public class Game {
 
     public Game( Cards frame, GameScreen screen, Settings settings, Assets assets )
     {
-        this.window = frame;
+        this.width = frame.getWidth();
+        this.height = frame.getHeight();
         this.screen = screen;
         this.settings = settings;
         this.assets = assets;
@@ -75,7 +77,7 @@ public class Game {
         defaultWeapons[1] = w;
         spawnPlayers();
         center = players.getCenter();
-        map = new Map( assets, center.x, center.y, window.getWidth(), window.getHeight() );
+        map = new Map( assets, center, width, height );
         map.create();
         map.generate();
     }
@@ -167,13 +169,13 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-        int originX = window.getWidth() / 2 - center.x;
-        int originY = window.getHeight() / 2 - center.y;
+        int originX = screen.getWidth() / 2 - center.x;
+        int originY = screen.getHeight() / 2 - center.y;
         g2d.translate( originX, originY );
         map.draw( g2d, settings.debug );
-        sprites.paintAll( g2d );
+        sprites.paintAll( g2d, map.getFrame() );
         g2d.translate( -originX, -originY );
         g2d.setColor( Color.WHITE );
-        g2d.drawString( center.x + ", " + center.y, 0, window.getHeight() - 50 );
+        g2d.drawString( center.x + ", " + center.y, 0, screen.getHeight() - 50 );
     }
 }

@@ -4,6 +4,7 @@ import gui.Window;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -47,22 +48,14 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
                 this.get( i ).move( gameTime, map, this );
         }
     }
-    
-    public void paintAll( Graphics g )
+
+    public void paintAll( Graphics g, Rectangle frame )
     {
         for ( int i = 0; i < size(); i++ ) {
-            if ( !this.get( i ).isDead() )
+            if ( !this.get( i ).isDead() && frame.intersects( Sprite.getBounds( this.get( i ) ) ) )
                 this.get( i ).paint( g );
         }
     }
-
-//    public void paintAll( Graphics g, Rectangle frame )
-//    {
-//        for ( int i = 0; i < size(); i++ ) {
-//            if ( !this.get( i ).isDead() && frame.intersects( Sprite.getBounds( this.get( i ) ) ) )
-//                this.get( i ).paint( g );
-//        }
-//    }
     
     public void continueAnimation()
     {
