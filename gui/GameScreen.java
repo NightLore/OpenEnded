@@ -135,7 +135,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         gameTime = 0;
         lastTime = System.nanoTime();
         
-        game = new Game( this, settings, assets );
+        game = new Game( carder, this, settings, assets );
     }
     
     

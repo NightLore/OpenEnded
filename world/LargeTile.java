@@ -109,8 +109,10 @@ public class LargeTile extends TileCoordinator
                     Rectangle r = t.getBounds();
 //                    System.out.println( "DrawCompare:"+r+";"+frame);
                     if ( r.intersects( frame ) )
+                    {
                         t.draw( g2d );
-                    g2d.drawString( "(" + i + "," + j + ")", r.x + 5, r.y + r.height - 5 );
+                        g2d.drawString( "(" + i + "," + j + ")", r.x + 5, r.y + r.height - 5 );
+                    }
                 }
             }
             g2d.translate( -x, -y );

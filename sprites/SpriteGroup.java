@@ -55,6 +55,14 @@ public class SpriteGroup<S extends Sprite> extends ArrayList<Sprite> implements 
                 this.get( i ).paint( g );
         }
     }
+
+//    public void paintAll( Graphics g, Rectangle frame )
+//    {
+//        for ( int i = 0; i < size(); i++ ) {
+//            if ( !this.get( i ).isDead() && frame.intersects( Sprite.getBounds( this.get( i ) ) ) )
+//                this.get( i ).paint( g );
+//        }
+//    }
     
     public void continueAnimation()
     {

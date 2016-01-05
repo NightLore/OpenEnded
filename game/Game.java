@@ -1,5 +1,6 @@
 package game;
 
+import gui.Cards;
 import gui.GameScreen;
 
 import java.awt.Color;
@@ -27,7 +28,8 @@ public class Game {
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
-    private GameScreen window;
+    private Cards window;
+    private GameScreen screen;
     private Map map;
     private BufferedImage enemyImg, projImg;
     private int numEnemies;
@@ -38,9 +40,10 @@ public class Game {
     private Assets assets;
     private Settings settings;
 
-    public Game( GameScreen frame, Settings settings, Assets assets )
+    public Game( Cards frame, GameScreen screen, Settings settings, Assets assets )
     {
-        window = frame;
+        this.window = frame;
+        this.screen = screen;
         this.settings = settings;
         this.assets = assets;
         // note: if too intensive use SwingWorker
@@ -103,7 +106,7 @@ public class Game {
                 {
                     if ( players.size() == 1 )
                     {
-                        window.gameOver();
+                        screen.gameOver();
                         gameOver = true;
                     }
                     players.remove( s );
