@@ -2,12 +2,13 @@ package world;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Random;
 
 import sprites.ImageSprite;
 
 public abstract class TileCoordinator
 {
-    public static final int SIZE = 3;
+    protected static final Random RAND = new Random();
     
     private int x;
     private int y;

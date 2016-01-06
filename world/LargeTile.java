@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import sprites.ImageSprite;
 import world.Generator.Generation;
@@ -107,7 +105,6 @@ public class LargeTile extends TileCoordinator
                 {
                     Tile t = tiles[i][j];
                     Rectangle r = t.getBounds();
-//                    System.out.println( "DrawCompare:"+r+";"+frame);
                     if ( r.intersects( frame ) )
                     {
                         t.draw( g2d );
@@ -145,7 +142,6 @@ public class LargeTile extends TileCoordinator
         int x = Tile.toTileSize( sprite.getX() ) + size / 2 - 1;
         int y = Tile.toTileSize( sprite.getY() ) + size / 2 - 1;
         int checkSize = 3;
-//        System.out.println( "Locating...(" + x + ", " + y + ")" );
         for ( int i = 0; i < checkSize; i++ )
         {
             for ( int j = 0; j < checkSize; j++ )
@@ -159,43 +155,14 @@ public class LargeTile extends TileCoordinator
         return false;
     }
     
-    public Point getSpawnableLocation( Rectangle frame )
-    {
-        frame.setLocation( toTileCoords( frame.getLocation() ) );
-        List<Point> points = new ArrayList<Point>( properties.getPoints() );
-        Point p;
-        int count = 0;
-        do {
-            int index = Generator.randInt( points.size() );
-            p = points.get( index );
-            if ( !properties.getMap()[p.x][p.y] )
-            {
-                properties.getPoints().remove( index );
-                points.remove( index );
-                continue;
-            }
-            Tile t = tiles[p.x][p.y]; 
-            p = t.getPosition();
-            p.setLocation( toThisCoords( Tile.toPixelSize( p.x ), Tile.toPixelSize( p.y ) ) );
-            count++;
-        } while ( frame.contains( p ) || count == 3 );
-        if ( frame.contains( p ) )
-        {
-            for ( int i = 0; i < points.size(); i++ )
-            {
-                p = points.get( i );
-                p = tiles[p.x][p.y].getPosition();
-                p.setLocation( toThisCoords( Tile.toPixelSize( p.x ), Tile.toPixelSize( p.y ) ) );
-                if ( !frame.contains( p ) )
-                    break;
-            }
-        }
-        return p;
-    }
-    
     public Generation.Properties getProperties()
     {
         return properties;
+    }
+    
+    public boolean intersects( Rectangle rect )
+    {
+        return this.getBounds().intersects( rect );
     }
     
     public Rectangle getBounds()

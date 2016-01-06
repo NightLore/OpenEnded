@@ -44,6 +44,11 @@ public class Tile extends CollidableAdapter
         return canCollide() && block.collidesWith( sprite, pixelPerfect );
     }
     
+    public boolean intersects( Rectangle r )
+    {
+        return this.getBounds().intersects( r );
+    }
+    
     /**
      * Sets this Tiles Images
      * @param floor

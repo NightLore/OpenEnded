@@ -108,11 +108,13 @@ public class Map extends TileCoordinator
             {
                 Rectangle bounds = getFrame();
                 bounds.setLocation( toTileCoords( frame.getLocation() ) );
-                if ( bounds.intersects( t.getBounds() ) )
+                if ( t.intersects( bounds ) )
                     t.draw( g2d, bounds, debug );
             }
         }
         g2d.translate( -x, -y );
+        if ( debug )
+            g2d.drawRect( frame.x, frame.y, frame.width, frame.height );
     }
     
     @Override
@@ -267,13 +269,7 @@ public class Map extends TileCoordinator
 //            temp.generate();
 //        }
 //    }
-    public Point getSpawnableLocation()
-    {
-        Rectangle r = getFrame();
-        r.setLocation( toTileCoords( frame.getLocation() ) );
-        int loc = Generator.randInt( 9 );
-        return toThisCoords( tiles[loc/MAP_TILE_SIZE][loc%MAP_TILE_SIZE].getSpawnableLocation( r ) );
-    }
+    
     public boolean inMap( ImageSprite sprite )
     {
         Rectangle rect = ImageSprite.getBounds( sprite );
@@ -283,13 +279,12 @@ public class Map extends TileCoordinator
     }
     public int[] findTile( Rectangle rect ) // TODO check
     {
-        int[] tile = new int[5];
+        int[] tile = new int[7];
         for ( int i = 0; i < MAP_TILE_SIZE; i++ )
         {
             for ( int j = 0; j < MAP_TILE_SIZE; j++ )
             {
-                Rectangle r = tiles[i][j].getBounds();
-                if ( r.intersects( rect ) )
+                if ( tiles[i][j].intersects( rect ) )
                 {
                     tile[0]++;
                     tile[tile[0]] = i * MAP_TILE_SIZE + j;
@@ -313,6 +308,11 @@ public class Map extends TileCoordinator
     public Rectangle getFrame()
     {
         return new Rectangle( frame );
+    }
+    
+    public static int randInt( int bound )
+    {
+        return RAND.nextInt( bound );
     }
     
 //    public static void main( String[] args )

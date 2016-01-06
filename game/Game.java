@@ -6,7 +6,10 @@ import gui.GameScreen;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import sprites.Enemy;
 import sprites.Player;
@@ -14,6 +17,7 @@ import sprites.Sprite;
 import sprites.SpriteGroup;
 import sprites.Weapon;
 import world.Map;
+import world.Tile;
 
 /**
  * Actual game.
@@ -28,8 +32,7 @@ public class Game {
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
-    private int width;
-    private int height;
+    private Cards carder;
     private GameScreen screen;
     private Map map;
     private BufferedImage enemyImg, projImg;
@@ -43,8 +46,7 @@ public class Game {
 
     public Game( Cards frame, GameScreen screen, Settings settings, Assets assets )
     {
-        this.width = frame.getWidth();
-        this.height = frame.getHeight();
+        this.carder = frame;
         this.screen = screen;
         this.settings = settings;
         this.assets = assets;
@@ -77,7 +79,7 @@ public class Game {
         defaultWeapons[1] = w;
         spawnPlayers();
         center = players.getCenter();
-        map = new Map( assets, center, width, height );
+        map = new Map( assets, center, carder.getWidth(), carder.getHeight() );
         map.create();
         map.generate();
     }
@@ -140,10 +142,21 @@ public class Game {
     }
     private void spawnEnemies()
     {
-        while ( numEnemies < settings.numEnemies )
+        if ( numEnemies < settings.numEnemies )
         {
             sprites.add( newSprite( enemyImg, Enemy.class ) );
             numEnemies++;
+            System.out.println( "Enemy Spawned: " + numEnemies );
+        }
+        for ( int i = 0; numEnemies > settings.numEnemies && i < sprites.size(); i++ )
+        {
+            if ( sprites.get( i ) instanceof Enemy )
+            {
+                sprites.remove( i );
+                numEnemies--;
+                System.out.println( "Enemy Spawned: " + numEnemies );
+                break;
+            }
         }
     }
     private Sprite newSprite( BufferedImage img, Class<? extends Sprite> c )
@@ -155,10 +168,29 @@ public class Game {
     }
     private void setSpriteSpawn( Sprite sprite )
     {
+        List<Point> points = new ArrayList<Point>();
+        Rectangle frame = map.getFrame();
+        int x1 = frame.x - Tile.TILE_SIZE;
+        int y1 = frame.y - Tile.TILE_SIZE;
+        int w = frame.width + Tile.TILE_SIZE;
+        int h = frame.height + Tile.TILE_SIZE;
+        int x2 = x1 + w + Tile.TILE_SIZE;
+        int y2 = y1 + h + Tile.TILE_SIZE;
+        for ( int i = 0; i < w; i++ )
+        {
+            points.add( new Point( i + x1, y1 ) );
+            points.add( new Point( i+Tile.TILE_SIZE+x1, y2 ) );
+        }
+        for ( int i = 0; i < h; i++ )
+        {
+            points.add( new Point( x1, i+Tile.TILE_SIZE+y1 ) );
+            points.add( new Point( x2, i+y1 ) );
+        }
+        Point p;
         do {
-            Point p = map.getSpawnableLocation();
+            p = points.remove( Map.randInt( points.size() ) );
             sprite.setPosition( p.x, p.y );
-        } while ( sprite.isColliding( sprites ) );
+        } while ( sprite.isColliding( sprites ) || map.isColliding( sprite ) );
     }
     
     /**
@@ -169,13 +201,13 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-        int originX = screen.getWidth() / 2 - center.x;
-        int originY = screen.getHeight() / 2 - center.y;
+        int originX = carder.getWidth() / 2 - center.x;
+        int originY = carder.getHeight() / 2 - center.y;
         g2d.translate( originX, originY );
         map.draw( g2d, settings.debug );
         sprites.paintAll( g2d, map.getFrame() );
         g2d.translate( -originX, -originY );
         g2d.setColor( Color.WHITE );
-        g2d.drawString( center.x + ", " + center.y, 0, screen.getHeight() - 50 );
+        g2d.drawString( center.x + ", " + center.y, 0, carder.getHeight() - 50 );
     }
 }
