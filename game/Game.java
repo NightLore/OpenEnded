@@ -77,11 +77,11 @@ public class Game {
         defaultWeapons = new Weapon[2];
         defaultWeapons[0] = w;
         defaultWeapons[1] = w;
-        spawnPlayers();
-        center = players.getCenter();
-        map = new Map( assets, center, carder.getWidth(), carder.getHeight() );
+        map = new Map( assets, new Point(), carder.getWidth(), carder.getHeight() );
         map.create();
         map.generate();
+        spawnPlayers();
+        center = players.getCenter();
     }
     
     /**
@@ -101,7 +101,7 @@ public class Game {
         sprites.moveAll( gameTime, map );
         for ( Sprite s : sprites )
         {
-            if ( !map.inMap( s ) || s.isDead() )
+            if ( shouldDespawn( s ) )
             {
                 sprites.remove( s );
                 if ( s instanceof Enemy )
@@ -120,17 +120,19 @@ public class Game {
         }
         spawnEnemies();
     }
+    private boolean shouldDespawn( Sprite s )
+    {
+        return !map.inMap( s ) || s.isDead();
+    }
     private void spawnPlayers()
     {
         if ( gameOver ) return;
         while ( players.size() < settings.numPlayers )
         {
-            Point p = players.getCenter();
-            if ( p == null ) p = new Point();
             Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
             player.splitSprite( 2, 3 );
             player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
-            player.setPosition( p.x + SPAWN_OFFSET, p.y + SPAWN_OFFSET );
+            setPlayerSpawn( player );
             player.setDefaultControls( players.size() );
             sprites.add( player );
             players.add( player );
@@ -140,13 +142,31 @@ public class Game {
             sprites.remove( players.remove( players.size() - 1 ) );
         }
     }
+    private void setPlayerSpawn( Sprite sprite )
+    {
+        boolean adjustX = true;
+        int offset = Tile.TILE_SIZE;
+        Point p = players.getCenter();
+        if ( p == null ) p = new Point();
+        do {
+            sprite.setPosition( p.x, p.y );
+            if ( adjustX ) // note: better replaced with array of "predetermined" locations
+            {
+                p.x += offset;
+            }
+            else
+            {
+                p.y += offset;
+            }
+            adjustX = !adjustX;
+        } while ( isSpawnColliding( sprite ) );
+    }
     private void spawnEnemies()
     {
         if ( numEnemies < settings.numEnemies )
         {
             sprites.add( newSprite( enemyImg, Enemy.class ) );
             numEnemies++;
-            System.out.println( "Enemy Spawned: " + numEnemies );
         }
         for ( int i = 0; numEnemies > settings.numEnemies && i < sprites.size(); i++ )
         {
@@ -154,14 +174,13 @@ public class Game {
             {
                 sprites.remove( i );
                 numEnemies--;
-                System.out.println( "Enemy Spawned: " + numEnemies );
                 break;
             }
         }
     }
     private Sprite newSprite( BufferedImage img, Class<? extends Sprite> c )
     {
-        Sprite sprite = new Enemy( img );
+        Sprite sprite = new Enemy( img, defaultWeapons );
         sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
         setSpriteSpawn( sprite );
         return sprite;
@@ -170,27 +189,33 @@ public class Game {
     {
         List<Point> points = new ArrayList<Point>();
         Rectangle frame = map.getFrame();
-        int x1 = frame.x - Tile.TILE_SIZE;
-        int y1 = frame.y - Tile.TILE_SIZE;
-        int w = frame.width + Tile.TILE_SIZE;
-        int h = frame.height + Tile.TILE_SIZE;
-        int x2 = x1 + w + Tile.TILE_SIZE;
-        int y2 = y1 + h + Tile.TILE_SIZE;
+        int offset = Tile.TILE_SIZE;
+        int x1 = frame.x - offset;
+        int y1 = frame.y - offset;
+        int w = frame.width + offset;
+        int h = frame.height + offset;
+        int x2 = x1 + w + offset;
+        int y2 = y1 + h + offset;
         for ( int i = 0; i < w; i++ )
         {
             points.add( new Point( i + x1, y1 ) );
-            points.add( new Point( i+Tile.TILE_SIZE+x1, y2 ) );
+            points.add( new Point( i+offset+x1, y2 ) );
         }
         for ( int i = 0; i < h; i++ )
         {
-            points.add( new Point( x1, i+Tile.TILE_SIZE+y1 ) );
+            points.add( new Point( x1, i+offset+y1 ) );
             points.add( new Point( x2, i+y1 ) );
         }
         Point p;
         do {
             p = points.remove( Map.randInt( points.size() ) );
             sprite.setPosition( p.x, p.y );
-        } while ( sprite.isColliding( sprites ) || map.isColliding( sprite ) );
+        } while ( isSpawnColliding( sprite ) );
+    }
+    
+    private boolean isSpawnColliding( Sprite sprite )
+    {
+        return sprite.isColliding( sprites, false ) || map.isColliding( sprite ); // TODO note: may hit and lose hp, etc
     }
     
     /**

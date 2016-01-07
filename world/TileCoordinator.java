@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Random;
 
-import sprites.ImageSprite;
+import sprites.Sprite;
 
 public abstract class TileCoordinator
 {
@@ -22,7 +22,7 @@ public abstract class TileCoordinator
     }
     
     public abstract void create();
-    public abstract boolean isColliding( ImageSprite sprite );
+    public abstract boolean isColliding( Sprite sprite );
     /**
      * Randomly Generates this Coordinator based on Generator
      * @see world.Generator

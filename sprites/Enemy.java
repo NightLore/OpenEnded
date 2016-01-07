@@ -10,16 +10,20 @@ public class Enemy extends FightingSprite
      */
     private static final long serialVersionUID = 1L;
     private static final Random RANDOM = new Random();
+    private static final int AGGRODISTANCE = 500;
+    private static final int DEAGGRODISTANCE = 1000;
     
     private long wait;
     private long prevTime;
     private double dir;
     private int chanceMove;
+    private Sprite target;
 
-    public Enemy( BufferedImage img )
+    public Enemy( BufferedImage img, Weapon[] weapons )
     {
-        super( img );
+        super( img, weapons );
         chanceMove = 75;
+        this.weapons = weapons;
 //        prevTime = 0; // note: may need to be initialized
 //        wait = 0;
     }
@@ -35,20 +39,44 @@ public class Enemy extends FightingSprite
             wait = RANDOM.nextInt();
             prevTime = gameTime;
         }
+        if ( target != null )
+        {
+            if ( Math.abs( this.distance( target ) ) > DEAGGRODISTANCE )
+            {
+                target = null;
+            }
+            setAttack( 1 );
+        }
         return dir;
+    }
+    
+    @Override
+    public boolean additionalCollisions( Sprite sprite ) // temporary for seeSprite until works out code
+    {
+        seeSprite( sprite );
+        return super.additionalCollisions( sprite );
     }
 
 
     @Override
     public void hitSprite( Sprite sprite )
     {
-
+        if ( sprite instanceof Player )
+        {
+            target = sprite;
+        }
     }
 
     @Override
     public void seeSprite( Sprite sprite ) 
     {
-        
+        double distance = this.distance( sprite );
+//        System.out.println( this + "__" + distance + "_" + sprite + AGGRODISTANCE + "_" + Math.abs( distance ) );
+        if ( sprite instanceof Player && Math.abs( distance ) < AGGRODISTANCE )
+        {
+//            System.out.println( "ATTACK!!!!!!!!" );
+            target = sprite;
+        }
     }
 
 
@@ -57,13 +85,17 @@ public class Enemy extends FightingSprite
     {
         
     }
-
-
+    
     @Override
-    public Weapon attack( int attack )
+    public Weapon attack1()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new Weapon( this, weapons[0] );
+    }
+    
+    @Override
+    public Weapon attack2()
+    {
+        return new Weapon( this, weapons[1], this.direction( target ) );
     }
     
     

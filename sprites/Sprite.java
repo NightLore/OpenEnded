@@ -2,6 +2,8 @@ package sprites;
 
 import game.Collidable;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
@@ -14,6 +16,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
      * 
      */
     private static final long serialVersionUID = 1L;
+    public static boolean PIXEL_PERFECT = false;
     
     // NOTE: going back to enums may be better for type safety
     public static final int NORTH = 90;
@@ -47,32 +50,42 @@ public abstract class Sprite extends ImageSprite implements Collidable
         int x = (int)Math.round( speed * Math.cos( dir ) ); // note: does not work because ints
         int y = (int)Math.round( speed * Math.sin( dir ) );
         translate( x, 0 );
-        if ( map.isColliding( this ) || isColliding( sprites ) )
+        if ( map.isColliding( this ) || isColliding( sprites, true ) )
         {
             translate( -x, 0 );
         }
         translate( 0, y );
-        if ( map.isColliding( this ) || isColliding( sprites ) )
+        if ( map.isColliding( this ) || isColliding( sprites, true ) )
         {
             translate( 0, -y );
         }
     }
-    public boolean isColliding( SpriteGroup<? extends Sprite> sprites )
+    public boolean isColliding( SpriteGroup<? extends Sprite> sprites, boolean inform )
     {
         for ( Sprite s : sprites )
         {
-            if ( s != this && this.collidesWith( s, false ) && additionalCollisions( s ) )
+            if ( s != this && this.collidesWith( s ) && additionalCollisions( s ) )
             {
-                this.hitSprite( s );
-                s.hitSprite( this );
+                if ( inform )
+                {
+                    this.hitSprite( s );
+                    s.hitSprite( this );
+                }
                 return true;
             }
         }
         return false;
     }
+    
+    public boolean collidesWith( ImageSprite s )
+    {
+        return super.collidesWith( s, PIXEL_PERFECT );
+    }
     /**
      * Return true if all additional collision conditions are satisfied. If true,
      * this sprite will collide with the sprite in the parameter
+     * 
+     * False means that this sprite is not to be collided with
      * @param s Sprite that is visually colliding with this sprite
      * @return
      */
@@ -129,6 +142,13 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public abstract int getSpeed();
     
+    @Override
+    public void splitSprite( int cols, int rows )
+    {
+        if ( cols <= 1 && rows <= 1 ) return;
+        super.splitSprite( cols, rows );
+    }
+    
     public boolean isDead()
     {
         return data.isDead(); // TODO
@@ -163,6 +183,23 @@ public abstract class Sprite extends ImageSprite implements Collidable
     public void setCollidable( boolean canCollide )
     {
         this.canCollide = canCollide;
+    }
+    
+    public Rectangle getBounds()
+    {
+        return Sprite.getBounds( this );
+    }
+    
+    public double distance( Sprite sprite )
+    {
+        return new Point( this.getX(), this.getY() ).distance( sprite.getX(), sprite.getY() );
+    }
+    
+    public int direction( Sprite sprite )
+    {
+        int x = sprite.getX() - this.getX();
+        int y = sprite.getY() - this.getY();
+        return (int)Math.toDegrees( Math.atan2( y, x ) );
     }
     
     /**

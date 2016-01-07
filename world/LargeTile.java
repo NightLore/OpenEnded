@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import sprites.ImageSprite;
+import sprites.Sprite;
 import world.Generator.Generation;
 
 public class LargeTile extends TileCoordinator
@@ -135,7 +135,7 @@ public class LargeTile extends TileCoordinator
     }
     
     @Override
-    public boolean isColliding( ImageSprite sprite )
+    public boolean isColliding( Sprite sprite )
     {
         sprite.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY() ) ); // TODO
         int size = this.getSize();

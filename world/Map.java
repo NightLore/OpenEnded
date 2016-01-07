@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import sprites.ImageSprite;
 import sprites.Sprite;
 import world.Generator.Generation;
 
@@ -118,9 +117,9 @@ public class Map extends TileCoordinator
     }
     
     @Override
-    public boolean isColliding( ImageSprite sprite )
+    public boolean isColliding( Sprite sprite )
     {
-        Rectangle rect = ImageSprite.getBounds( sprite );
+        Rectangle rect = sprite.getBounds();
         rect.setLocation( toTileCoords( rect.getLocation() ) );
         int size = MAP_TILE_SIZE;
         int[] tile = this.findTile( rect );
@@ -128,7 +127,7 @@ public class Map extends TileCoordinator
         for ( int i = 1; i - 1 < length; i++ )
         {
             int j = tile[i];
-            ImageSprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
+            Sprite s = Tile.newSprite( sprite.getImage(), sprite.getX(), sprite.getY(), true );
             s.setPosition( toTileCoordX( sprite.getX() ), toTileCoordY( sprite.getY()) );
             if ( tiles[j/size][j%size].isColliding( s ) )
             {
@@ -270,9 +269,9 @@ public class Map extends TileCoordinator
 //        }
 //    }
     
-    public boolean inMap( ImageSprite sprite )
+    public boolean inMap( Sprite sprite )
     {
-        Rectangle rect = ImageSprite.getBounds( sprite );
+        Rectangle rect = sprite.getBounds();
         rect.setLocation( toTileCoords( rect.getLocation() ) );
         int tile = findTile( rect )[0];
         return tile > 0;

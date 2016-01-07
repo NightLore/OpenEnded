@@ -7,14 +7,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import sprites.ImageSprite;
+import sprites.Sprite;
 
 public class Tile extends CollidableAdapter
 {
     public static final int TILE_SIZE = 64;
     
-    private ImageSprite floor;
-    private ImageSprite block;
+    private TileSprite floor;
+    private TileSprite block;
     
     private int x;
     private int y;
@@ -35,13 +35,9 @@ public class Tile extends CollidableAdapter
             block.paint( g2d );
     }
     
-    public boolean isColliding( ImageSprite sprite )
+    public boolean isColliding( Sprite sprite )
     {
-        return isColliding( sprite, false );
-    }
-    public boolean isColliding( ImageSprite sprite, boolean pixelPerfect )
-    {
-        return canCollide() && block.collidesWith( sprite, pixelPerfect );
+        return canCollide() && block.collidesWith( sprite );
     }
     
     public boolean intersects( Rectangle r )
@@ -122,13 +118,13 @@ public class Tile extends CollidableAdapter
     }
     
     
-    private static ImageSprite newSprite( BufferedImage image, int x, int y )
+    private static TileSprite newSprite( BufferedImage image, int x, int y )
     {
         return newSprite( image, x, y, false );
     }
-    public static ImageSprite newSprite( BufferedImage image, int x, int y, boolean half )
+    public static TileSprite newSprite( BufferedImage image, int x, int y, boolean half )
     {
-        ImageSprite sprite = new ImageSprite( image );
+        TileSprite sprite = new TileSprite( image );
         int refX = ( half ? image.getWidth() : TILE_SIZE ) / 2;
         int refY = ( half ? image.getHeight() : TILE_SIZE ) / 2;
         sprite.setRefPixel( refX, refY );
@@ -151,7 +147,7 @@ public class Tile extends CollidableAdapter
     
     public Rectangle getBounds()
     {
-        return ImageSprite.getBounds( floor );
+        return floor.getBounds();
     }
     
     /**

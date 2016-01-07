@@ -13,14 +13,14 @@ public abstract class FightingSprite extends Sprite
      */
     private static final long serialVersionUID = 1L;
     private int attack = -1;
-    private long attackTime;
+    protected Weapon[] weapons;
+    private int[] delay = new int[]{ 500, 500 }; // in milliseconds
+    private long[] attackTime = new long[delay.length];
     
-    private int delay;
-    
-    public FightingSprite( BufferedImage img )
+    public FightingSprite( BufferedImage img, Weapon[] weapons )
     {
         super( img );
-        delay = 500;// in milliseconds
+        this.weapons = weapons;
     }
     
     @Override
@@ -37,21 +37,24 @@ public abstract class FightingSprite extends Sprite
     public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
     {
         super.move( gameTime, map, sprites );
-        if ( attackTime == 0 )
-            attackTime = gameTime;
-//        System.out.println( "Time: " + gameTime + "; dt: " + (gameTime - attackTime) );
-        if ( attack >= 0 && gameTime  > attackTime + delay * 1000000L ) // TODO note: comparing long with int
+        for ( int i = 0; i < attackTime.length; i++ )
         {
-            sprites.add( attack( attack ) );
+            if ( attackTime[i] == 0 )
+                attackTime[i] = gameTime;
+        }
+        if ( attack >= 0 ) // TODO note: comparing long with int
+        {
+            Weapon w = attack( gameTime, attack );
+            if ( w != null )
+                sprites.add( w );
             attack = -1;
-            attackTime = gameTime;
         }
     }
 
     @Override
     public boolean additionalCollisions( Sprite s )
     {
-        return true;
+        return s instanceof Weapon ? ((Weapon)s).getSprite() != this : true;
     }
 
     @Override
@@ -67,7 +70,35 @@ public abstract class FightingSprite extends Sprite
      * @param attack int representing type of attack (must be >= 0)
      * @return if attack type is >= 0 then return corresponding weapon else return null
      */
-    public abstract Weapon attack( int attack );
+    public Weapon attack( long gameTime, int attack )
+    {
+        Weapon weapon = null;
+        switch ( attack )
+        {
+            case 0:
+                if ( gameTime > attackTime[attack] + delay[attack] * 1000000L )
+                {
+                    weapon = attack1();
+                    attackTime[attack] = gameTime;
+                }
+                break;
+            case 1:
+                if ( gameTime > attackTime[attack] + delay[attack] * 1000000L )
+                {
+                    weapon = attack2();
+                    attackTime[attack] = gameTime;
+                }
+                break;
+        }
+        if ( weapon != null )
+            weapon.setPosition( getX(), getY() );
+        
+        return weapon;
+    }
+    
+    public abstract Weapon attack1();
+    
+    public abstract Weapon attack2();
 
     @Override
     public void takeDamage( int damage )

@@ -33,13 +33,11 @@ public class Player extends FightingSprite
     private static final int[][] defaultCtrls = new int[][]{ WASDVB, ARROWS, IJKLTY, NUMPAD };
     
     private int[] controls;
-    private Weapon[] weapons;
     
     public Player( BufferedImage img, Weapon[] weapons )
     {
-        super( img );
+        super( img, weapons );
         this.setDefaultControls( 0 );
-        this.weapons = weapons;
     }
     
     
@@ -78,28 +76,16 @@ public class Player extends FightingSprite
     }
 
     @Override
-    public Weapon attack( int attack )
+    public Weapon attack1()
     {
-        Weapon weapon = null;
-        switch ( attack )
-        {
-            case 0:
-                weapon = new Weapon( this, weapons[attack] );
-                break;
-            case 1:
-                weapon = new Weapon( this, weapons[attack], getSpriteData().getDirFacing() );
-                break;
-        }
-        if ( weapon != null )
-            weapon.setPosition( getX(), getY() );
-        
-        return weapon;
+        return new Weapon( this, weapons[0] );
     }
 
+
     @Override
-    public boolean additionalCollisions( Sprite s )
+    public Weapon attack2()
     {
-        return s instanceof Weapon ? ((Weapon)s).getSprite() != this : true;
+        return new Weapon( this, weapons[1], getSpriteData().getDirFacing() );
     }
     
     public void setControls( int... newCtrls )
@@ -118,5 +104,4 @@ public class Player extends FightingSprite
     {
         return 5;
     }
-    
 }

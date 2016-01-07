@@ -29,8 +29,7 @@ public class Weapon extends Sprite
         setCollidable( w.canCollide() );
         setRefPixel( w.getRefX(), w.getRefY() );
         setPosition( w.getX(), w.getY() );
-        if ( w.getCols() != 0 && w.getRows() != 0 )
-            splitSprite( w.getCols(), w.getRows() );
+        splitSprite( w.getCols(), w.getRows() );
         direction = dir;
         mySprite = s;
     }
@@ -38,7 +37,6 @@ public class Weapon extends Sprite
     @Override
     public boolean additionalCollisions( Sprite sprite )
     {
-//        System.out.println( s + "; " + mySprite );
         Sprite s = sprite;
         if ( sprite instanceof Weapon )
             s = ((Weapon)sprite).mySprite;
@@ -54,7 +52,6 @@ public class Weapon extends Sprite
     @Override
     public void hitSprite( Sprite sprite )
     {
-//        System.out.println( this + "hit Sprite: " + sprite );
         if ( !isDead() )
             sprite.takeDamage( this.getSpriteData().getAtk() );
         dying();
