@@ -12,20 +12,22 @@ public class Weapon extends Sprite
 
     private int direction;
     private Sprite mySprite;
+    private boolean friendlyFire;
 
-    public Weapon( BufferedImage img )
+    public Weapon( BufferedImage img, boolean friendlyFire )
     {
         super( img );
+        this.friendlyFire = friendlyFire;
     }
     
-    public Weapon( Sprite s, Weapon w )
+    public Weapon( Sprite s, Weapon w, boolean friendlyFire )
     {
-        this( s, w, -1 );
+        this( s, w, friendlyFire, -1 );
     }
     
-    public Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
+    public Weapon( Sprite s, Weapon w, boolean friendlyFire, int dir ) // TODO copy SpriteData
     {
-        this( w.getImage() );
+        this( w.getImage(), friendlyFire );
         setCollidable( w.canCollide() );
         setRefPixel( w.getRefX(), w.getRefY() );
         setPosition( w.getX(), w.getY() );
@@ -40,7 +42,7 @@ public class Weapon extends Sprite
         Sprite s = sprite;
         if ( sprite instanceof Weapon )
             s = ((Weapon)sprite).mySprite;
-        return s != mySprite;
+        return friendlyFire ? s != mySprite : !((FightingSprite)mySprite).isSameTeam( s );
     }
 
     @Override

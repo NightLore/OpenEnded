@@ -96,7 +96,7 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
     
     public String getVersion()
     {
-        return "V0.16";
+        return "V0.17";
     }
 
     public static void main( String[] args ) {

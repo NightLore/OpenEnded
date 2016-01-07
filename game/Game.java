@@ -72,7 +72,7 @@ public class Game {
     {
         enemyImg = assets.getSkin( Assets.REDCIRCLE );
         projImg = assets.getSkin( Assets.SMALLCIRCLE );
-        Weapon w = new Weapon( projImg );
+        Weapon w = new Weapon( projImg, false );
         w.setRefPixel( w.getWidth() / 2, w.getHeight() / 2 );
         defaultWeapons = new Weapon[2];
         defaultWeapons[0] = w;

@@ -11,6 +11,7 @@ public class Player extends FightingSprite
      * 
      */
     private static final long serialVersionUID = 1L;
+    public static final boolean FRIENDLY_FIRE = true;
     
     public static final int WASD = 0;
     public static final int ARROWKEYS = 1;
@@ -36,10 +37,15 @@ public class Player extends FightingSprite
     
     public Player( BufferedImage img, Weapon[] weapons )
     {
-        super( img, weapons );
+        super( img, weapons, "PLAYER" );
         this.setDefaultControls( 0 );
     }
     
+    @Override
+    protected int drawDir()
+    {
+        return this.getSpriteData().getDirFacing();
+    }
     
     @Override
     public double getDirection( long gameTime )
@@ -78,14 +84,14 @@ public class Player extends FightingSprite
     @Override
     public Weapon attack1()
     {
-        return new Weapon( this, weapons[0] );
+        return new Weapon( this, weapons[0], FRIENDLY_FIRE );
     }
 
 
     @Override
     public Weapon attack2()
     {
-        return new Weapon( this, weapons[1], getSpriteData().getDirFacing() );
+        return new Weapon( this, weapons[1], FRIENDLY_FIRE, getSpriteData().getDirFacing() );
     }
     
     public void setControls( int... newCtrls )

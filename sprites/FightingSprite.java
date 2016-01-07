@@ -1,5 +1,6 @@
 package sprites;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -14,13 +15,15 @@ public abstract class FightingSprite extends Sprite
     private static final long serialVersionUID = 1L;
     private int attack = -1;
     protected Weapon[] weapons;
-    private int[] delay = new int[]{ 500, 500 }; // in milliseconds
+    protected int[] delay = new int[]{ 500, 500 }; // in milliseconds
     private long[] attackTime = new long[delay.length];
+    private String team;
     
-    public FightingSprite( BufferedImage img, Weapon[] weapons )
+    public FightingSprite( BufferedImage img, Weapon[] weapons, String team )
     {
         super( img );
         this.weapons = weapons;
+        this.setTeam( team );
     }
     
     @Override
@@ -28,7 +31,19 @@ public abstract class FightingSprite extends Sprite
     {
         super.paint( g );
         this.getSpriteData().drawHp( g, this, false );
+        int r = this.getWidth() / 2;
+        int d = this.drawDir();
+        if ( d >= 0 )
+        {
+            int x1 = this.getX();
+            int y1 = this.getY();
+            int x2 = x1 + (int)Math.round( r*Math.cos( Math.toRadians( d ) ) );
+            int y2 = y1 + (int)Math.round( r*Math.sin( Math.toRadians( d ) ) );
+            g.setColor( Color.MAGENTA );
+            g.drawLine( x1, y1, x2, y2 );
+        }
     }
+    protected abstract int drawDir();
 
     /**
      * @see sprites.Sprite#move(long, world.Map, sprites.SpriteGroup)
@@ -49,12 +64,21 @@ public abstract class FightingSprite extends Sprite
                 sprites.add( w );
             attack = -1;
         }
+        for ( Sprite sprite : sprites )
+        {
+            if ( sprite instanceof FightingSprite )
+                for ( Sprite s : sprites )
+                {
+                    if ( s instanceof FightingSprite )
+                        ( (FightingSprite)sprite ).seeSprite( s );
+                }
+        }
     }
 
     @Override
     public boolean additionalCollisions( Sprite s )
     {
-        return s instanceof Weapon ? ((Weapon)s).getSprite() != this : true;
+        return !( s instanceof Weapon );
     }
 
     @Override
@@ -109,5 +133,29 @@ public abstract class FightingSprite extends Sprite
     public void setAttack( int attack )
     {
         this.attack = attack;
+    }
+    
+    public void setTeam( String team )
+    {
+        this.team = team;
+    }
+    
+    public String getTeam()
+    {
+        return this.team;
+    }
+    
+    public boolean isSameTeam( Sprite sprite )
+    {
+        String team = "";
+        if ( sprite instanceof FightingSprite )
+        {
+            team = ((FightingSprite)sprite).team;
+        }
+        else if ( sprite instanceof Weapon )
+        {
+            return isSameTeam( ((Weapon)sprite).getSprite() );
+        }
+        return this.team.equals( team );
     }
 }

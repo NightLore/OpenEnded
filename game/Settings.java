@@ -16,7 +16,7 @@ public class Settings
     {
         sound = 100;
         music = 100;
-        numEnemies = 40;
+        numEnemies = 20;
         numPlayers = 1;
         numNPCs = 4;
         debug = false;
