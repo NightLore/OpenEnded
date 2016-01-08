@@ -18,6 +18,7 @@ public class Weapon extends Sprite
     {
         super( img );
         this.friendlyFire = friendlyFire;
+        this.setSpeed( 6 );
     }
     
     public Weapon( Sprite s, Weapon w, boolean friendlyFire )
@@ -75,11 +76,4 @@ public class Weapon extends Sprite
     {
         return mySprite;
     }
-
-    @Override
-    public int getSpeed()
-    {
-        return 6;
-    }
-
 }

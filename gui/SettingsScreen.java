@@ -29,11 +29,14 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     private Settings settings;
     private Settings tempSettings;
     
+    private JSlider playerSlider, npcSlider, enemySlider;
+    private JButton pFriendlyFireButton, eFriendlyFireButton, debugButton;
+    private JLabel numPlayLabel, numNpcLabel, numEnmyLabel;
+    
     public SettingsScreen( Cards frame, String panel, String back, Settings settings )
     {
         super( frame, panel );
         this.setLayout( new BorderLayout() );
-        this.setBackground( Color.BLACK );
         this.back = back;
         
         this.settings = settings;
@@ -41,22 +44,31 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         
         JPanel titlePanel = new JPanel();
         JLabel title = new JLabel( "SETTINGS" );
+        
         JPanel centerPanel = new JPanel();
+        
         JPanel playerPanel = new JPanel();
         JLabel playerLabel = new JLabel( "Number of Players: " );
-        JSlider playerSlider = new JSlider( JSlider.HORIZONTAL, 1, 4, settings.numPlayers );
-        JLabel numPlayLabel = new JLabel( "" + settings.numPlayers );
+        playerSlider = new JSlider( JSlider.HORIZONTAL, 1, 4, settings.numPlayers );
+        numPlayLabel = new JLabel( "" + settings.numPlayers );
+        
         JPanel npcPanel = new JPanel();
         JLabel npcLabel = new JLabel( "Number of NPCs: " );
-        JSlider npcSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
-        JLabel numNpcLabel = new JLabel( "" + settings.numNPCs );
+        npcSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
+        numNpcLabel = new JLabel( "" + settings.numNPCs );
+        
         JPanel enemyPanel = new JPanel();
         JLabel enemyLabel = new JLabel( "Number of Enemies: " );
-        JSlider enemySlider = new JSlider( JSlider.HORIZONTAL, 0, 100, settings.numEnemies );
-        JLabel numEnmyLabel = new JLabel( "" + settings.numEnemies );
+        enemySlider = new JSlider( JSlider.HORIZONTAL, 0, 100, settings.numEnemies );
+        numEnmyLabel = new JLabel( "" + settings.numEnemies );
+        
+        JPanel friendlyFirePanel = new JPanel();
+        JLabel friendlyFireLabel = new JLabel( "Friendly Fire: " );
+        pFriendlyFireButton = new JButton( "Player: " + toWord( settings.playerFriendlyFire ) );
+        eFriendlyFireButton = new JButton ( "Enemy: " + toWord( settings.enemyFriendlyFire ) );
+        
         JPanel debugPanel = new JPanel();
-        JLabel debugLabel = new JLabel( "Toggle Debug: " );
-        JButton debugButton = new JButton( "" + settings.debug );
+        debugButton = new JButton( "Toggle Debug: " + toWord( settings.debug ) );
         JPanel backPanel = new JPanel();
         JButton confirmButton = new JButton( "Ok" );
         JButton cancelButton = new JButton( "Cancel" );
@@ -85,8 +97,10 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         enemySlider.setMajorTickSpacing( 5 );
         numEnmyLabel.setForeground( Color.WHITE );
         
+        friendlyFirePanel.setOpaque( false );
+        friendlyFireLabel.setForeground(  Color.WHITE );
+        
         debugPanel.setOpaque( false );
-        debugLabel.setForeground( Color.WHITE );
         backPanel.setOpaque( false );
         confirmButton.addActionListener( this );
         confirmButton.setPreferredSize( new Dimension( 100, 50 ) );
@@ -106,8 +120,11 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         enemyPanel.add( enemyLabel );
         enemyPanel.add( enemySlider );
         enemyPanel.add( numEnmyLabel );
+        centerPanel.add( friendlyFirePanel );
+        friendlyFirePanel.add( friendlyFireLabel );
+        friendlyFirePanel.add( pFriendlyFireButton );
+        friendlyFirePanel.add( eFriendlyFireButton );
         centerPanel.add( debugPanel );
-        debugPanel.add( debugLabel );
         debugPanel.add( debugButton );
         backPanel.add( confirmButton );
         backPanel.add( cancelButton );
@@ -120,7 +137,23 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             public void actionPerformed( ActionEvent arg0 )
             {
                 tempSettings.debug = !tempSettings.debug;
-                debugButton.setText( "" + tempSettings.debug );
+                debugButton.setText( "Toggle Debug: " + toWord( tempSettings.debug ) );
+            }
+        } );
+        pFriendlyFireButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent arg0 )
+            {
+                tempSettings.playerFriendlyFire = !tempSettings.playerFriendlyFire;
+                pFriendlyFireButton.setText( "Player: " + toWord( tempSettings.playerFriendlyFire ) );
+            }
+        } );
+        eFriendlyFireButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent arg0 )
+            {
+                tempSettings.enemyFriendlyFire = !tempSettings.enemyFriendlyFire;
+                eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
             }
         } );
         
@@ -155,6 +188,18 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             }
         } );
     }
+    
+    @Override
+    public void shown()
+    {
+        this.tempSettings.copy( settings );
+        debugButton.setText( "Toggle Debug: " + toWord( tempSettings.debug ) );
+        pFriendlyFireButton.setText( "Player: " + toWord( tempSettings.playerFriendlyFire ) );
+        eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
+        numPlayLabel.setText( "" + tempSettings.numPlayers );
+        numNpcLabel.setText( "" + tempSettings.numNPCs );
+        numEnmyLabel.setText( "" + tempSettings.numEnemies );
+    }
 
     @Override
     public void actionPerformed( ActionEvent e )
@@ -169,5 +214,10 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             settings.copy( tempSettings );
             carder.switchTo( screen, back );
         }
+    }
+    
+    private String toWord( boolean b )
+    {
+        return b ? "On" : "Off";
     }
 }

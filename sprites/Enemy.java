@@ -10,7 +10,7 @@ public class Enemy extends FightingSprite
      */
     private static final long serialVersionUID = 1L;
     private static final Random RANDOM = new Random();
-    public static final boolean FRIENDLY_FIRE = false;
+    public static boolean FRIENDLY_FIRE = false;
     private static final int AGGRODISTANCE = 250;
     private static final int DEAGGRODISTANCE = 500;
     
@@ -28,6 +28,7 @@ public class Enemy extends FightingSprite
 //        prevTime = 0; // note: may need to be initialized
 //        wait = 0;
         delay[1] = 1000;
+        this.setSpeed( 3 );
     }
 
     @Override
@@ -105,12 +106,4 @@ public class Enemy extends FightingSprite
     {
         return new Weapon( this, weapons[1], FRIENDLY_FIRE, this.direction( target ) );
     }
-    
-    
-    @Override
-    public int getSpeed()
-    {
-        return 3;
-    }
-
 }

@@ -27,6 +27,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
     private CardLayout cards;
     private GameScreen game;
     private String currentPane; // note: not actually used
+    private SettingsScreen settingsPanel;
     
     public GamePanel( GameScreen game, Settings settings )
     {
@@ -51,7 +52,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
             JButton settingsButton = new JButton( "Settings" );
             JButton returnButton = new JButton( "Return to Main Menu" );
 
-        JPanel settingsPanel = new SettingsScreen( this, "SETTINGS", "PAUSE", settings );
+        settingsPanel = new SettingsScreen( this, "SETTINGS", "PAUSE", settings );
         
         JPanel areYouSurePanel = new JPanel();
         JLabel areYouSureLabel = new JLabel( "Are You Sure You Want To Quit?" );
@@ -155,14 +156,16 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         if ( to.equalsIgnoreCase( "Resume" ) ) {
             to = "GAME";
         }
-//        else if ( action.equalsIgnoreCase( "Inventory" ) ) {
-//            action = "ITEM";
+//        else if ( to.equalsIgnoreCase( "Inventory" ) ) {
+//            to = "ITEM";
 //        }
-//        else if ( action.equalsIgnoreCase( "Settings" ) ) {
-//            action = "SETTINGS";
-//        }
+        else if ( to.equalsIgnoreCase( "Settings" ) ) {
+            game.settingsUpdate();
+            settingsPanel.shown();
+//            to = "SETTINGS";
+        }
 //        else if ( to.equalsIgnoreCase( "Pause" ) ) {
-//            action = "PAUSE";
+//            to = "PAUSE";
 //        }
         else if ( to.equalsIgnoreCase( "Return to Main Menu" ) ) {
             to = "EXIT";

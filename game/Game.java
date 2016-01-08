@@ -84,6 +84,12 @@ public class Game {
         center = players.getCenter();
     }
     
+    public void updateSettings()
+    {
+        Player.FRIENDLY_FIRE = settings.playerFriendlyFire;
+        Enemy.FRIENDLY_FIRE = settings.enemyFriendlyFire;
+    }
+    
     /**
      * Update game logic.
      * 
@@ -113,6 +119,7 @@ public class Game {
                         screen.gameOver();
                         gameOver = true;
                     }
+                    else settings.numPlayers--;
                     players.remove( s );
                 }
                 break;

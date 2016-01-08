@@ -10,7 +10,7 @@ public class Settings
 {
     // note: with getters and setters, can be replaced with array
     public int sound, music, numEnemies, numPlayers, numNPCs;
-    public boolean debug;
+    public boolean debug, playerFriendlyFire, enemyFriendlyFire;
     
     public Settings()
     {
@@ -20,6 +20,8 @@ public class Settings
         numPlayers = 1;
         numNPCs = 4;
         debug = false;
+        playerFriendlyFire = true;
+        enemyFriendlyFire = false;
     }
     
     public Settings( Settings settings )
@@ -35,5 +37,7 @@ public class Settings
         this.numPlayers = settings.numPlayers;
         this.numNPCs = settings.numNPCs;
         this.debug = settings.debug;
+        this.playerFriendlyFire = settings.playerFriendlyFire;
+        this.enemyFriendlyFire = settings.enemyFriendlyFire;
     }
 }

@@ -64,27 +64,16 @@ public abstract class FightingSprite extends Sprite
                 sprites.add( w );
             attack = -1;
         }
-        for ( Sprite sprite : sprites )
-        {
-            if ( sprite instanceof FightingSprite )
-                for ( Sprite s : sprites )
-                {
-                    if ( s instanceof FightingSprite )
-                        ( (FightingSprite)sprite ).seeSprite( s );
-                }
-        }
     }
 
     @Override
     public boolean additionalCollisions( Sprite s )
     {
-        return !( s instanceof Weapon );
+        return s instanceof Weapon ? ((Weapon)s).additionalCollisions( this ) : true;
     }
 
     @Override
     public void hitSprite( Sprite sprite ) {}
-
-    public void seeSprite( Sprite sprite ) {}
 
     @Override
     public void hitWall( int dir ) {}

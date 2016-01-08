@@ -27,6 +27,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
     private boolean canCollide;
 
     private SpriteData data;
+    private int speed;
     public Sprite( String imgFile )
     {
         this( makeTransparent( toImage( "/imgs/" + imgFile ), java.awt.Color.WHITE ) );
@@ -42,6 +43,14 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
     {
+        for ( Sprite sprite : sprites )
+        {
+            for ( Sprite s : sprites )
+            {
+                if ( s instanceof FightingSprite )
+                    sprite.seeSprite( s );
+            }
+        }
         double dir = getDirection( gameTime );
         if ( dir == -1 ) return;
         this.setDirFacing( (int)dir );
@@ -137,10 +146,9 @@ public abstract class Sprite extends ImageSprite implements Collidable
      * @param sprite any sprite in game
      */
     public abstract void hitSprite( Sprite sprite );
+    public void seeSprite( Sprite sprite ) {}
     
     public abstract void takeDamage( int damage );
-    
-    public abstract int getSpeed();
     
     @Override
     public void splitSprite( int cols, int rows )
@@ -171,6 +179,16 @@ public abstract class Sprite extends ImageSprite implements Collidable
     public void translateY( int dy )
     {
         translate( 0, dy );
+    }
+    
+    public int getSpeed()
+    {
+        return speed;
+    }
+
+    public void setSpeed( int speed )
+    {
+        this.speed = speed;
     }
 
     @Override
@@ -228,5 +246,4 @@ public abstract class Sprite extends ImageSprite implements Collidable
     {
         return getClass().toString().substring( 6 ) + "["+getX()+","+getY()+"]";
     }
-
 }

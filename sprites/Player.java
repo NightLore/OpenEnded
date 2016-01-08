@@ -11,7 +11,7 @@ public class Player extends FightingSprite
      * 
      */
     private static final long serialVersionUID = 1L;
-    public static final boolean FRIENDLY_FIRE = true;
+    public static boolean FRIENDLY_FIRE = true;
     
     public static final int WASD = 0;
     public static final int ARROWKEYS = 1;
@@ -39,6 +39,7 @@ public class Player extends FightingSprite
     {
         super( img, weapons, "PLAYER" );
         this.setDefaultControls( 0 );
+        this.setSpeed( 5 );
     }
     
     @Override
@@ -104,10 +105,5 @@ public class Player extends FightingSprite
     public void setDefaultControls( int control )
     {
         this.setControls( defaultCtrls[control] );
-    }
-    
-    public int getSpeed()
-    {
-        return 5;
     }
 }

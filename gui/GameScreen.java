@@ -179,6 +179,11 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         game.draw( g, mousePosition() );
     }
     
+    public void settingsUpdate()
+    {
+        game.updateSettings();
+    }
+    
     public void gameOver()
     {
         ui.switchTo( "OVER" );
