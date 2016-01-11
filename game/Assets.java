@@ -6,6 +6,15 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+/**
+ *  Manages all the assets of the game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Dec 15, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class Assets
 {
     // NOTE: Switch back to enums for type safety once game is situated

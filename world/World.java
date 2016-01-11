@@ -5,6 +5,15 @@ import java.awt.Point;
 import sprites.Sprite;
 import sprites.SpriteGroup;
 
+/**
+ *  Class intended to manage interactions in the game (not implemented)
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 22, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class World
 {
     SpriteGroup<Sprite> sprites;

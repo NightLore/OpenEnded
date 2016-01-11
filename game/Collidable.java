@@ -1,5 +1,14 @@
 package game;
 
+/**
+ *  Conceptual interface for classes that can collide
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public interface Collidable
 {
     /**

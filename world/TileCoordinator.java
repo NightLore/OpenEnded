@@ -6,6 +6,15 @@ import java.util.Random;
 
 import sprites.Sprite;
 
+/**
+ *  Holds all manageable similar code between LargeTile and Map
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 27, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public abstract class TileCoordinator
 {
     protected static final Random RAND = new Random();

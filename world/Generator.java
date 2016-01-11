@@ -1,8 +1,5 @@
 package world;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -32,24 +29,24 @@ public class Generator
         }
         public static class Properties
         {
-            private List<Point> points;
+//            private List<Point> points;
             private boolean[][] map;
             private Generation g;
             public Properties( Generation g, int size )
             {
                 this.g = g;
                 this.map = new boolean[size][size];
-                this.points = new ArrayList<Point>();
+//                this.points = new ArrayList<Point>();
             }
             
             public boolean[][] getMap()
             {
                 return map;
             }
-            public List<Point> getPoints()
-            {
-                return points;
-            }
+//            public List<Point> getPoints()
+//            {
+//                return points;
+//            }
             public Generation getGeneration()
             {
                 return g;
@@ -137,43 +134,43 @@ public class Generator
                 break;
         }
         generateRoom( map, x - w / 2, y - h / 2, w, h, true );
-        findPoints( prop );
+//        findPoints( prop );
         return prop;
     }
     
     // ------------------------ generation methods ------------------------ //
-    private static void findPoints( Generation.Properties prop )
-    {
-        List<Point> points = prop.getPoints();
-        boolean[][] map = prop.getMap();
-        boolean[][] copy;
-        for ( int i = 0; i < map.length; i++ )
-        {
-            for ( int j = 0; j < map[i].length; j++ )
-            {
-                copy = copyArray( map );
-                if ( isValid( copy, i, j ) )
-                    points.add( new Point( i, j ) );
-            }
-        }
-    }
-    /**
-     * Returns true if current position is a space and "touches" edge of map
-     * @param map
-     * @param x
-     * @param y
-     * @return
-     */
-    private static boolean isValid( boolean[][] map, int x, int y )
-    {
-        if ( !inBounds( map, x, y ) ) return true;
-        boolean isSpace = map[x][y];
-        map[x][y] = false;
-        return isSpace && ( isValid( map, x + 1, y )
-                         || isValid( map, x, y + 1 )
-                         || isValid( map, x - 1, y )
-                         || isValid( map, x, y - 1 ) );
-    }
+//    private static void findPoints( Generation.Properties prop )
+//    {
+//        List<Point> points = prop.getPoints();
+//        boolean[][] map = prop.getMap();
+//        boolean[][] copy;
+//        for ( int i = 0; i < map.length; i++ )
+//        {
+//            for ( int j = 0; j < map[i].length; j++ )
+//            {
+//                copy = copyArray( map );
+//                if ( isValid( copy, i, j ) )
+//                    points.add( new Point( i, j ) );
+//            }
+//        }
+//    }
+//    /**
+//     * Returns true if current position is a space and "touches" edge of map
+//     * @param map
+//     * @param x
+//     * @param y
+//     * @return
+//     */
+//    private static boolean isValid( boolean[][] map, int x, int y )
+//    {
+//        if ( !inBounds( map, x, y ) ) return true;
+//        boolean isSpace = map[x][y];
+//        map[x][y] = false;
+//        return isSpace && ( isValid( map, x + 1, y )
+//                         || isValid( map, x, y + 1 )
+//                         || isValid( map, x - 1, y )
+//                         || isValid( map, x, y - 1 ) );
+//    }
     
     private static void fill( boolean[][] map, boolean fill )
     {

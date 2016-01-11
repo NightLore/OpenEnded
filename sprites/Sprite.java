@@ -2,6 +2,8 @@ package sprites;
 
 import game.Collidable;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -9,6 +11,16 @@ import java.util.Scanner;
 
 import world.Map;
 
+/**
+ *  Abstract class for all sprites, also used as a modifier for the ImageSprite 
+ *  class
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public abstract class Sprite extends ImageSprite implements Collidable
 {
 
@@ -37,8 +49,27 @@ public abstract class Sprite extends ImageSprite implements Collidable
     {
         super( img );
         this.setCollidable( false );
+        this.setRefPixel( getWidth() / 2, getHeight() / 2 );
         data = new SpriteData();
         data.setDirFacing( SOUTH );
+    }
+
+    @Deprecated
+    @Override
+    public void paint( Graphics g )
+    {
+        paint( g, false );
+    }
+    
+    public void paint( Graphics g, boolean debug )
+    {
+        super.paint( g );
+        if ( debug )
+        {
+            Rectangle rect = this.getBounds();
+            g.setColor( Color.WHITE );
+            g.drawRect( rect.x, rect.y, rect.width, rect.height );
+        }
     }
     
     public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
@@ -150,11 +181,14 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public abstract void takeDamage( int damage );
     
+    public abstract boolean friendlyFire();
+    
     @Override
     public void splitSprite( int cols, int rows )
     {
         if ( cols <= 1 && rows <= 1 ) return;
         super.splitSprite( cols, rows );
+        this.setRefPixel( getWidth() / 2, getHeight() / 2 );
     }
     
     public boolean isDead()
@@ -203,6 +237,11 @@ public abstract class Sprite extends ImageSprite implements Collidable
         this.canCollide = canCollide;
     }
     
+    public Point getPosition()
+    {
+        return new Point( this.getX(), this.getY() );
+    }
+    
     public Rectangle getBounds()
     {
         return Sprite.getBounds( this );
@@ -210,7 +249,12 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     public double distance( Sprite sprite )
     {
-        return new Point( this.getX(), this.getY() ).distance( sprite.getX(), sprite.getY() );
+        return this.distance( sprite.getPosition() );
+    }
+    
+    public double distance( Point p )
+    {
+        return this.getPosition().distance( p );
     }
     
     public int direction( Sprite sprite )

@@ -5,13 +5,22 @@ import game.InputManager;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+/**
+ *  Player class takes input based on an int array in order to determine how to 
+ *  move
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *
+ *  @author  Sources: none
+ */
 public class Player extends FightingSprite
 {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    public static boolean FRIENDLY_FIRE = true;
+    public static boolean FRIENDLY_FIRE = false;
     
     public static final int WASD = 0;
     public static final int ARROWKEYS = 1;
@@ -85,14 +94,14 @@ public class Player extends FightingSprite
     @Override
     public Weapon attack1()
     {
-        return new Weapon( this, weapons[0], FRIENDLY_FIRE );
+        return new Weapon( this, weapons[0] );
     }
 
 
     @Override
     public Weapon attack2()
     {
-        return new Weapon( this, weapons[1], FRIENDLY_FIRE, getSpriteData().getDirFacing() );
+        return new Weapon( this, weapons[1], getSpriteData().getDirFacing() );
     }
     
     public void setControls( int... newCtrls )
@@ -105,5 +114,11 @@ public class Player extends FightingSprite
     public void setDefaultControls( int control )
     {
         this.setControls( defaultCtrls[control] );
+    }
+
+    @Override
+    public boolean friendlyFire()
+    {
+        return Player.FRIENDLY_FIRE;
     }
 }

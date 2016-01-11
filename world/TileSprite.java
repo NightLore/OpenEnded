@@ -4,6 +4,15 @@ import java.awt.image.BufferedImage;
 
 import sprites.Sprite;
 
+/**
+ *  Sprite used by Tile to manage the Image and minor collisions
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Jan 6, 2016
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class TileSprite extends Sprite
 {
 
@@ -49,6 +58,13 @@ public class TileSprite extends Sprite
     public int getSpeed()
     {
         return 0;
+    }
+
+
+    @Override
+    public boolean friendlyFire()
+    {
+        return false;
     }
 
 }

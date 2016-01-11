@@ -37,12 +37,12 @@ public class GameScreen extends ScreenPanel // implements ActionListener
      * Pause between updates. It is in nanoseconds.
      */
     private final int GAME_UPDATE_PERIOD = secInMillisec / GAME_FPS;
-    /**
-     * Possible states of the game
-     */
-    public static enum GameState{
-        STARTING, PLAYING, PAUSED, RESUMED, VISUALIZING
-    }
+//    /**
+//     * Possible states of the game
+//     */
+//    public static enum GameState{
+//        STARTING, PLAYING, PAUSED, RESUMED, VISUALIZING
+//    }
 //    /**
 //     * Current state of the game
 //     */
@@ -135,7 +135,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         gameTime = 0;
         lastTime = System.nanoTime();
         
-        game = new Game( carder, this, settings, assets );
+        game = new Game( this, settings, assets );
     }
     
     
@@ -192,7 +192,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     public void returnToMainMenu()
     {
         // TODO destroy current game session
-        carder.switchTo( screen, "MAINMENU" );
+        carder.switchTo( screen, "INITIAL" );
     }
     
 }

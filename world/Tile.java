@@ -9,6 +9,15 @@ import java.awt.image.BufferedImage;
 
 import sprites.Sprite;
 
+/**
+ *  Represents a Tile on the map, manages wall collision
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class Tile extends CollidableAdapter
 {
     public static final int TILE_SIZE = 64;
@@ -28,11 +37,11 @@ public class Tile extends CollidableAdapter
      * Draws this Tile
      * @param g2d
      */
-    public void draw( Graphics2D g2d )
+    public void draw( Graphics2D g2d, boolean debug )
     {
-        floor.paint( g2d );
+        floor.paint( g2d, debug );
         if ( block != null )
-            block.paint( g2d );
+            block.paint( g2d, debug );
     }
     
     public boolean isColliding( Sprite sprite )

@@ -10,6 +10,15 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ *  Main JFrame of the game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Oct 28, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class Window extends JFrame implements Cards// implements KeyListener, MouseListener
 {
 
@@ -37,8 +46,9 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
     {
         this.setTitle( getGameName() + " " + getVersion() );
         this.setName( getGameName() );
-        this.setSize( windowSize );
-        this.setMinimumSize( windowSize );
+        this.getContentPane().setPreferredSize( windowSize );
+        this.pack();
+//        this.setMinimumSize( windowSize );
         this.setLocationRelativeTo( null );
         this.setDefaultCloseOperation( EXIT_ON_CLOSE );
 //        this.setResizable( false );

@@ -1,6 +1,5 @@
 package game;
 
-import gui.Cards;
 import gui.GameScreen;
 
 import java.awt.Color;
@@ -20,10 +19,12 @@ import world.Map;
 import world.Tile;
 
 /**
- * Actual game.
+ * Game Manager class
  * 
- * @author www.gametutorial.net for the framework
  * @author Nathan Man-ho Lui
+ * @version Oct 28, 2015
+ * 
+ * @author Sources: www.gametutorial.net for the framework, modified greatly
  */
 public class Game {
 //    private HashMap<String,SpriteData> data = new HashMap<String,SpriteData>();
@@ -32,7 +33,6 @@ public class Game {
     
     private SpriteGroup<Sprite> sprites;
     private SpriteGroup<Player> players;
-    private Cards carder;
     private GameScreen screen;
     private Map map;
     private BufferedImage enemyImg, projImg;
@@ -44,9 +44,8 @@ public class Game {
     private Assets assets;
     private Settings settings;
 
-    public Game( Cards frame, GameScreen screen, Settings settings, Assets assets )
+    public Game( GameScreen screen, Settings settings, Assets assets )
     {
-        this.carder = frame;
         this.screen = screen;
         this.settings = settings;
         this.assets = assets;
@@ -72,16 +71,16 @@ public class Game {
     {
         enemyImg = assets.getSkin( Assets.REDCIRCLE );
         projImg = assets.getSkin( Assets.SMALLCIRCLE );
-        Weapon w = new Weapon( projImg, false );
-        w.setRefPixel( w.getWidth() / 2, w.getHeight() / 2 );
+        Weapon w = new Weapon( projImg );
         defaultWeapons = new Weapon[2];
         defaultWeapons[0] = w;
         defaultWeapons[1] = w;
-        map = new Map( assets, new Point(), carder.getWidth(), carder.getHeight() );
+        map = new Map( assets, new Point(), screen.getWidth(), screen.getHeight() );
         map.create();
         map.generate();
         spawnPlayers();
         center = players.getCenter();
+        map.setPosition( center );
     }
     
     public void updateSettings()
@@ -138,7 +137,6 @@ public class Game {
         {
             Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
             player.splitSprite( 2, 3 );
-            player.setRefPixel( player.getWidth() / 2, player.getHeight() / 2 );
             setPlayerSpawn( player );
             player.setDefaultControls( players.size() );
             sprites.add( player );
@@ -233,13 +231,25 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-        int originX = carder.getWidth() / 2 - center.x;
-        int originY = carder.getHeight() / 2 - center.y;
+        int originX = screen.getWidth() / 2 - center.x;
+        int originY = screen.getHeight() / 2 - center.y;
         g2d.translate( originX, originY );
         map.draw( g2d, settings.debug );
-        sprites.paintAll( g2d, map.getFrame() );
+        sprites.paintAll( g2d, map.getFrame(), settings.debug );
+        if ( settings.debug )
+        {
+            g2d.setColor( new Color( 200, 100, 0 ) );
+            for ( Sprite s : players )
+            {
+                Point sPoint = s.getPosition();
+                int halfX = Math.min( center.x, sPoint.x ) + Math.abs( center.x - sPoint.x ) / 2;
+                int halfY = Math.min( center.y, sPoint.y ) + Math.abs( center.y - sPoint.y ) / 2;
+                g2d.drawLine( center.x, center.y, sPoint.x, sPoint.y );
+                g2d.drawString( "" + (int)(s.distance( center ) * 100) / 100.0, halfX, halfY );
+            }
+        }
         g2d.translate( -originX, -originY );
         g2d.setColor( Color.WHITE );
-        g2d.drawString( center.x + ", " + center.y, 0, carder.getHeight() - 50 );
+        g2d.drawString( center.x + ", " + center.y, 0, screen.getHeight() - 5 );
     }
 }

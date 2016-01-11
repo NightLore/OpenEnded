@@ -11,6 +11,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ *  The Splash Screen for the game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Oct 28, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class InitialScreen extends ScreenPanel implements KeyListener, MouseListener
 {
     /**

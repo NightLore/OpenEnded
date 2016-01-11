@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -11,6 +10,15 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+/**
+ *  Base panel for most of the ui in the game, manages all defaults
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Oct 28, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class ScreenPanel extends JPanel implements Screen
 {
 
@@ -30,7 +38,6 @@ public class ScreenPanel extends JPanel implements Screen
         screen = panel;
         this.setBackground( Color.BLACK );
         this.setFocusable( true );
-        this.setPreferredSize( new Dimension( frame.getWidth(), frame.getHeight() ) );
     }
     
     public ScreenPanel( Cards frame, String panel, String fileName )

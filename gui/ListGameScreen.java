@@ -8,6 +8,15 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
+/**
+ *  Screen Lists all game modes for user to play
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Oct 28, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class ListGameScreen extends ScreenPanel implements ActionListener
 {
     /**

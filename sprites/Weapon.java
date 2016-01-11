@@ -2,6 +2,15 @@ package sprites;
 
 import java.awt.image.BufferedImage;
 
+/**
+ *  Weapon class, manages how every weapon works
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class Weapon extends Sprite
 {
 
@@ -12,23 +21,21 @@ public class Weapon extends Sprite
 
     private int direction;
     private Sprite mySprite;
-    private boolean friendlyFire;
 
-    public Weapon( BufferedImage img, boolean friendlyFire )
+    public Weapon( BufferedImage img )
     {
         super( img );
-        this.friendlyFire = friendlyFire;
         this.setSpeed( 6 );
     }
     
-    public Weapon( Sprite s, Weapon w, boolean friendlyFire )
+    public Weapon( Sprite s, Weapon w )
     {
-        this( s, w, friendlyFire, -1 );
+        this( s, w, -1 );
     }
     
-    public Weapon( Sprite s, Weapon w, boolean friendlyFire, int dir ) // TODO copy SpriteData
+    public Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
     {
-        this( w.getImage(), friendlyFire );
+        this( w.getImage() );
         setCollidable( w.canCollide() );
         setRefPixel( w.getRefX(), w.getRefY() );
         setPosition( w.getX(), w.getY() );
@@ -43,7 +50,7 @@ public class Weapon extends Sprite
         Sprite s = sprite;
         if ( sprite instanceof Weapon )
             s = ((Weapon)sprite).mySprite;
-        return friendlyFire ? s != mySprite : !((FightingSprite)mySprite).isSameTeam( s );
+        return mySprite.friendlyFire() ? s != mySprite : !((FightingSprite)mySprite).isSameTeam( s );
     }
 
     @Override
@@ -70,6 +77,12 @@ public class Weapon extends Sprite
     public void takeDamage( int damage )
     {
         dying();
+    }
+
+    @Override
+    public boolean friendlyFire()
+    {
+        return mySprite.friendlyFire();
     }
     
     public Sprite getSprite()

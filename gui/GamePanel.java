@@ -16,6 +16,15 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ *  Manages the User Interface in game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Dec 30, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class GamePanel extends JPanel implements Cards, ActionListener
 {
 
@@ -153,6 +162,11 @@ public class GamePanel extends JPanel implements Cards, ActionListener
     @Override
     public void switchTo( String from, String to )
     {
+        if ( from.equals( "SETTINGS" ) ) {
+            game.settingsUpdate();
+        }
+        
+        
         if ( to.equalsIgnoreCase( "Resume" ) ) {
             to = "GAME";
         }
@@ -160,7 +174,6 @@ public class GamePanel extends JPanel implements Cards, ActionListener
 //            to = "ITEM";
 //        }
         else if ( to.equalsIgnoreCase( "Settings" ) ) {
-            game.settingsUpdate();
             settingsPanel.shown();
 //            to = "SETTINGS";
         }

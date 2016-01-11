@@ -32,9 +32,8 @@ public class Map extends TileCoordinator
     {
         super( center.x, center.y, LargeTile.frameToTilePixelSize( Math.max( frameWidth, frameHeight ) ) ); // round size to nearest TILE_SIZE
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
-        int tSize = Tile.TILE_SIZE;
         frame = new Rectangle();
-        frame.setSize( frameWidth + tSize, frameHeight + tSize );
+        frame.setSize( frameWidth, frameHeight );
         this.updateFrame( center );
         this.assets = assets;
     }
@@ -300,8 +299,7 @@ public class Map extends TileCoordinator
     
     private void updateFrame( int x, int y )
     {
-        frame.setLocation( x - frame.width / 2 - Tile.TILE_SIZE / 2, 
-                           y - frame.height / 2 - Tile.TILE_SIZE / 2 );
+        frame.setLocation( x - frame.width / 2, y - frame.height / 2 );
     }
     
     public Rectangle getFrame()

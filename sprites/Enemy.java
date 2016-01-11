@@ -3,6 +3,15 @@ package sprites;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+/**
+ *  Enemy class for the game, manages AI of the enemy and timers
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class Enemy extends FightingSprite
 {
     /**
@@ -98,12 +107,18 @@ public class Enemy extends FightingSprite
     @Override
     public Weapon attack1()
     {
-        return new Weapon( this, weapons[0], FRIENDLY_FIRE );
+        return new Weapon( this, weapons[0] );
     }
     
     @Override
     public Weapon attack2()
     {
-        return new Weapon( this, weapons[1], FRIENDLY_FIRE, this.direction( target ) );
+        return new Weapon( this, weapons[1], this.direction( target ) );
+    }
+
+    @Override
+    public boolean friendlyFire()
+    {
+        return Enemy.FRIENDLY_FIRE;
     }
 }

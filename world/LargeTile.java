@@ -8,6 +8,15 @@ import java.awt.image.BufferedImage;
 import sprites.Sprite;
 import world.Generator.Generation;
 
+/**
+ *  Manages a chunk of the map
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class LargeTile extends TileCoordinator
 {
     private BufferedImage[] floors;
@@ -107,18 +116,11 @@ public class LargeTile extends TileCoordinator
                     Rectangle r = t.getBounds();
                     if ( r.intersects( frame ) )
                     {
-                        t.draw( g2d );
+                        t.draw( g2d, debug );
                         g2d.drawString( "(" + i + "," + j + ")", r.x + 5, r.y + r.height - 5 );
                     }
                 }
             }
-            g2d.translate( -x, -y );
-            int rad = 64;
-            int x1 = x - rad / 2;
-            int y1 = y - rad / 2;
-            Rectangle r = getBounds();
-            g2d.drawOval( x1, y1, rad, rad );
-            g2d.drawRect( r.x, r.y, r.width, r.height );
         }
         else
         {
@@ -127,10 +129,19 @@ public class LargeTile extends TileCoordinator
                 for ( Tile t : row )
                 {
                     if ( t.getBounds().intersects( frame ) )
-                        t.draw( g2d );
+                        t.draw( g2d, debug );
                 }
             }
-            g2d.translate( -x, -y );
+        }
+        g2d.translate( -x, -y );
+        if ( debug )
+        {
+            int rad = 64;
+            int x1 = x - rad / 2;
+            int y1 = y - rad / 2;
+            Rectangle r = getBounds();
+            g2d.drawOval( x1, y1, rad, rad );
+            g2d.drawRect( r.x, r.y, r.width, r.height );
         }
     }
     

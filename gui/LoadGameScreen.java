@@ -5,6 +5,15 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+/**
+ *  Screen for loading a presaved game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Oct 28, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class LoadGameScreen extends ScreenPanel implements ActionListener
 {
     /**

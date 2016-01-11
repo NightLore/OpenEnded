@@ -3,6 +3,15 @@ package sprites;
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ *  Holds all the sprite data for sprites
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Dec 19, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class SpriteData
 {
     private static final int HP = 0;

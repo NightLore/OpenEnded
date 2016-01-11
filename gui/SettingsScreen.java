@@ -17,6 +17,15 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ *  Settings Screen for the game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Oct 28, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class SettingsScreen extends ScreenPanel implements ActionListener
 {
     /**
@@ -197,8 +206,11 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         pFriendlyFireButton.setText( "Player: " + toWord( tempSettings.playerFriendlyFire ) );
         eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
         numPlayLabel.setText( "" + tempSettings.numPlayers );
+        playerSlider.setValue( tempSettings.numPlayers );
         numNpcLabel.setText( "" + tempSettings.numNPCs );
+        npcSlider.setValue( tempSettings.numNPCs );
         numEnmyLabel.setText( "" + tempSettings.numEnemies );
+        enemySlider.setValue( tempSettings.numEnemies );
     }
 
     @Override

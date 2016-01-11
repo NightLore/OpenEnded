@@ -20,7 +20,7 @@ public class Settings
         numPlayers = 1;
         numNPCs = 4;
         debug = false;
-        playerFriendlyFire = true;
+        playerFriendlyFire = false;
         enemyFriendlyFire = false;
     }
     

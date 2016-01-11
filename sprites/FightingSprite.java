@@ -6,6 +6,15 @@ import java.awt.image.BufferedImage;
 
 import world.Map;
 
+/**
+ *  Abstract class for all sprites that can fight
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public abstract class FightingSprite extends Sprite
 {
 
@@ -26,10 +35,17 @@ public abstract class FightingSprite extends Sprite
         this.setTeam( team );
     }
     
+    @Deprecated
     @Override
     public void paint( Graphics g )
     {
-        super.paint( g );
+        paint( g, false );
+    }
+    
+    @Override
+    public void paint( Graphics g, boolean debug )
+    {
+        super.paint( g, debug );
         this.getSpriteData().drawHp( g, this, false );
         int r = this.getWidth() / 2;
         int d = this.drawDir();
@@ -43,6 +59,7 @@ public abstract class FightingSprite extends Sprite
             g.drawLine( x1, y1, x2, y2 );
         }
     }
+    
     protected abstract int drawDir();
 
     /**

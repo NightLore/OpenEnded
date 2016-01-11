@@ -7,6 +7,15 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ *  Manages all input during the game
+ *  note: TODO use key-binding instead of Listeners
+ *  @author  Nathan Man-ho Lui
+ *  @version Jan 10, 2016
+ *  @author  Assignment: OpenEnded
+ *
+ *  @author  Sources: none
+ */
 public class InputManager implements KeyListener, MouseListener
 {
     // Keyboard states - Here are stored states for keyboard keys - is it down or not.
