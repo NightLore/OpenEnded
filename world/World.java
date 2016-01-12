@@ -16,11 +16,11 @@ import sprites.SpriteGroup;
  */
 public class World
 {
-    SpriteGroup<Sprite> sprites;
+    SpriteGroup sprites;
     Map map;
     public World( Map map )
     {
-        sprites = new SpriteGroup<Sprite>();
+        sprites = new SpriteGroup();
         this.map = map;
     }
     

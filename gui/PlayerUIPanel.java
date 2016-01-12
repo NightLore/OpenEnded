@@ -11,7 +11,6 @@ package gui;
  */
 public class PlayerUIPanel extends ScreenPanel implements Cards
 {
-
     /**
      * 
      */

@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
     private GameScreen game;
     private String currentPane; // note: not actually used
     private SettingsScreen settingsPanel;
+    private PlayerManagerPanel itemPanel;
     
     public GamePanel( GameScreen game, Settings settings )
     {
@@ -53,7 +54,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
             JPanel gamePausePanel = new JPanel();
             JButton pauseButton = new JButton( "Pause" );
         
-        JPanel itemPanel = new JPanel();
+        itemPanel = new PlayerManagerPanel();
         
         JPanel pausePanel = new JPanel();
             JButton resumeButton = new JButton ( "Resume" );
@@ -154,6 +155,11 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         this.switchTo( "GAME" );
     }
     
+    public void reset()
+    {
+        itemPanel.initialize( game.getGame().getPlayers() );
+    }
+    
     public void switchTo( String to )
     {
         this.switchTo( currentPane, to );
@@ -170,9 +176,9 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         if ( to.equalsIgnoreCase( "Resume" ) ) {
             to = "GAME";
         }
-//        else if ( to.equalsIgnoreCase( "Inventory" ) ) {
-//            to = "ITEM";
-//        }
+        else if ( to.equalsIgnoreCase( "Inventory" ) ) {
+            to = "ITEM";
+        }
         else if ( to.equalsIgnoreCase( "Settings" ) ) {
             settingsPanel.shown();
 //            to = "SETTINGS";

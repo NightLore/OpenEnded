@@ -115,6 +115,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         this.requestFocusInWindow();
         this.newGame();
         updater.start();
+        ui.reset();
         ui.switchTo( "GAME" );
     }
     
@@ -193,6 +194,11 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     {
         // TODO destroy current game session
         carder.switchTo( screen, "INITIAL" );
+    }
+    
+    public Game getGame()
+    {
+        return game;
     }
     
 }

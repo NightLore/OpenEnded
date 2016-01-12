@@ -66,7 +66,7 @@ public abstract class FightingSprite extends Sprite
      * @see sprites.Sprite#move(long, world.Map, sprites.SpriteGroup)
      */
     @Override
-    public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
+    public void move( long gameTime, Map map, SpriteGroup sprites )
     {
         super.move( gameTime, map, sprites );
         for ( int i = 0; i < attackTime.length; i++ )

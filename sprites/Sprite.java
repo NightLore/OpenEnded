@@ -72,7 +72,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
         }
     }
     
-    public void move( long gameTime, Map map, SpriteGroup<? extends Sprite> sprites )
+    public void move( long gameTime, Map map, SpriteGroup sprites )
     {
         for ( Sprite sprite : sprites )
         {
@@ -100,7 +100,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
             translate( 0, -y );
         }
     }
-    public boolean isColliding( SpriteGroup<? extends Sprite> sprites, boolean inform )
+    public boolean isColliding( SpriteGroup sprites, boolean inform )
     {
         for ( Sprite s : sprites )
         {

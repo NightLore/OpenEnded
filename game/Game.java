@@ -12,6 +12,7 @@ import java.util.List;
 
 import sprites.Enemy;
 import sprites.Player;
+import sprites.PlayerGroup;
 import sprites.Sprite;
 import sprites.SpriteGroup;
 import sprites.Weapon;
@@ -31,8 +32,8 @@ public class Game {
 //    private String[] choosable;
     public static final int SPAWN_OFFSET = 128;
     
-    private SpriteGroup<Sprite> sprites;
-    private SpriteGroup<Player> players;
+    private SpriteGroup sprites;
+    private PlayerGroup players;
     private GameScreen screen;
     private Map map;
     private BufferedImage enemyImg, projImg;
@@ -60,8 +61,8 @@ public class Game {
      */
     private void initialize()
     {
-        sprites = new SpriteGroup<Sprite>();
-        players = new SpriteGroup<Player>();
+        sprites = new SpriteGroup();
+        players = new PlayerGroup();
     }
     
     /**
@@ -80,7 +81,6 @@ public class Game {
         map.generate();
         spawnPlayers();
         center = players.getCenter();
-        map.setPosition( center );
     }
     
     public void updateSettings()
@@ -221,6 +221,11 @@ public class Game {
     private boolean isSpawnColliding( Sprite sprite )
     {
         return sprite.isColliding( sprites, false ) || map.isColliding( sprite ); // TODO note: may hit and lose hp, etc
+    }
+    
+    public PlayerGroup getPlayers()
+    {
+        return players;
     }
     
     /**
