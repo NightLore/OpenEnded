@@ -157,7 +157,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
     
     public void reset()
     {
-        itemPanel.initialize( game.getGame().getPlayers() );
+        itemPanel.initialize( game.getGame() );
     }
     
     public void switchTo( String to )

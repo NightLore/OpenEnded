@@ -196,6 +196,11 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         carder.switchTo( screen, "INITIAL" );
     }
     
+    public Assets getAssets()
+    {
+        return assets;
+    }
+    
     public Game getGame()
     {
         return game;

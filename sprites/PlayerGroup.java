@@ -1,6 +1,7 @@
 package sprites;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  *  Manages the group of Players
@@ -11,31 +12,90 @@ import java.awt.Point;
  *
  *  @author  Sources: none
  */
-public class PlayerGroup extends SpriteList<Player>
+public class PlayerGroup implements Serializable
 {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+    
+    private Player[] players;
+    private int numPlayers;
+    
+    public PlayerGroup( int maxPlayers )
+    {
+        players = new Player[maxPlayers];
+    }
 
     
     public Point getCenter()
     {
-        if ( this.size() > 0 ) {
+        if ( numPlayers > 0 ) {
             int x = 0;
             int y = 0;
-            for ( Sprite s : this ) {
-                if ( !s.isDead() )
+            for ( Player p : players ) {
+                if ( p != null && !p.isDead() )
                 {
-                    x += s.getX();
-                    y += s.getY();
+                    x += p.getX();
+                    y += p.getY();
                 }
             }
-//            if ( size <= 0 ) size = 1; // multi-thread problem
-            x = Math.round( x / this.size() );
-            y = Math.round( y / this.size() );
+            x = Math.round( x / numPlayers );
+            y = Math.round( y / numPlayers );
             return new Point( x, y );
         }
         return null;
+    }
+    
+    public Player set( Player player, int panel )
+    {
+        Player oldPlayer = this.get( panel );
+        players[panel] = player;
+        if ( oldPlayer == null )
+            numPlayers++; // TODO
+        return oldPlayer;
+    }
+    
+    public Player get( int panel )
+    {
+        return players[panel]; // TODO
+    }
+    
+    public boolean remove( Player player )
+    {
+        for ( int i = 0; i < players.length; i++ )
+        {
+            if ( players[i] == player )
+            {
+                this.remove( i );
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public Player remove( int panel )
+    {
+        Player oldPlayer = this.get( panel );
+        players[panel] = null;
+        if ( oldPlayer != null )
+            numPlayers--;
+        return oldPlayer; // TODO
+    }
+    
+    /** WARNING Does not create a cloned array so do not modify */
+    public Player[] toArray()
+    {
+        return players;
+    }
+    
+    public int numPlayers()
+    {
+        return numPlayers;
+    }
+    
+    public int maxPlayers()
+    {
+        return players.length;
     }
 }

@@ -39,7 +39,6 @@ public class Game {
     private BufferedImage enemyImg, projImg;
     private int numEnemies;
     private Weapon[] defaultWeapons;
-    private boolean gameOver;
     private Point center;
     
     private Assets assets;
@@ -62,7 +61,7 @@ public class Game {
     private void initialize()
     {
         sprites = new SpriteGroup();
-        players = new PlayerGroup();
+        players = new PlayerGroup( 4 );
     }
     
     /**
@@ -79,7 +78,7 @@ public class Game {
         map = new Map( assets, new Point(), screen.getWidth(), screen.getHeight() );
         map.create();
         map.generate();
-        spawnPlayers();
+        addPlayer( 0 );
         center = players.getCenter();
     }
     
@@ -98,7 +97,6 @@ public class Game {
      */
     public void updateGame( long gameTime, Point mousePosition )
     {
-        spawnPlayers();
         Point pCenter = players.getCenter();
         if ( pCenter != null )
             center = pCenter;
@@ -113,13 +111,12 @@ public class Game {
                     numEnemies--;
                 else if ( s instanceof Player )
                 {
-                    if ( players.size() == 1 )
+                    if ( players.numPlayers() == 1 )
                     {
                         screen.gameOver();
-                        gameOver = true;
                     }
                     else settings.numPlayers--;
-                    players.remove( s );
+                    players.remove( (Player)s );
                 }
                 break;
             }
@@ -129,23 +126,6 @@ public class Game {
     private boolean shouldDespawn( Sprite s )
     {
         return !map.inMap( s ) || s.isDead();
-    }
-    private void spawnPlayers()
-    {
-        if ( gameOver ) return;
-        while ( players.size() < settings.numPlayers )
-        {
-            Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
-            player.splitSprite( 2, 3 );
-            setPlayerSpawn( player );
-            player.setDefaultControls( players.size() );
-            sprites.add( player );
-            players.add( player );
-        }
-        while ( players.size() > settings.numPlayers )
-        {
-            sprites.remove( players.remove( players.size() - 1 ) );
-        }
     }
     private void setPlayerSpawn( Sprite sprite )
     {
@@ -165,6 +145,16 @@ public class Game {
             }
             adjustX = !adjustX;
         } while ( isSpawnColliding( sprite ) );
+    }
+    public Player addPlayer( int panel )
+    {
+        Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
+        player.splitSprite( 2, 3 );
+        setPlayerSpawn( player );
+        player.setDefaultControls( players.numPlayers() );
+        sprites.add( player );
+        players.set( player, panel );
+        return player;
     }
     private void spawnEnemies()
     {
@@ -244,7 +234,7 @@ public class Game {
         if ( settings.debug )
         {
             g2d.setColor( new Color( 200, 100, 0 ) );
-            for ( Sprite s : players )
+            for ( Sprite s : players.toArray() )
             {
                 Point sPoint = s.getPosition();
                 int halfX = Math.min( center.x, sPoint.x ) + Math.abs( center.x - sPoint.x ) / 2;
