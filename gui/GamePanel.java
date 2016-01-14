@@ -25,7 +25,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class GamePanel extends JPanel implements Cards, ActionListener
+public class GamePanel extends JPanel implements Carder, ActionListener
 {
 
     /**
@@ -54,7 +54,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
             JPanel gamePausePanel = new JPanel();
             JButton pauseButton = new JButton( "Pause" );
         
-        itemPanel = new PlayerManagerPanel();
+        itemPanel = new PlayerManagerPanel( this, "PAUSE" );
         
         JPanel pausePanel = new JPanel();
             JButton resumeButton = new JButton ( "Resume" );
@@ -160,6 +160,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
         itemPanel.initialize( game.getGame() );
     }
     
+    @Override
     public void switchTo( String to )
     {
         this.switchTo( currentPane, to );
@@ -177,6 +178,7 @@ public class GamePanel extends JPanel implements Cards, ActionListener
             to = "GAME";
         }
         else if ( to.equalsIgnoreCase( "Inventory" ) ) {
+            itemPanel.shown();
             to = "ITEM";
         }
         else if ( to.equalsIgnoreCase( "Settings" ) ) {

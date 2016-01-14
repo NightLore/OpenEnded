@@ -28,27 +28,28 @@ import sprites.Player;
  *
  *  @author  Sources: none
  */
-public class PlayerUIPanel extends JPanel implements Cards, ActionListener
+public class PlayerUIPanel extends JPanel implements Carder, ActionListener
 {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
     
-//    private ArrayedCards carder;
     private CardLayout cardLayout;
     private int panel;
     private boolean isDone;
     JLabel imageLabel;
-    private String currentPanel;
+    private String prevPanel, currentPanel;
+    private PlayerManagerPanel manager;
 
     private Game game;
 
-    public PlayerUIPanel( int panel )
+    public PlayerUIPanel( PlayerManagerPanel manager, int panel )
     {
-//        this.carder = carder;
         this.cardLayout = new CardLayout();
+        this.manager = manager;
         this.panel = panel;
+        this.isDone = true;
         this.setLayout( cardLayout );
         this.setOpaque( false );
         this.setBorder( BorderFactory.createRaisedBevelBorder() );
@@ -58,6 +59,7 @@ public class PlayerUIPanel extends JPanel implements Cards, ActionListener
         addPanel.setLayout( new BoxLayout( addPanel, BoxLayout.Y_AXIS ) );
         addPanel.setOpaque( false );
         addButton.addActionListener( this );
+        addButton.setAlignmentX( CENTER_ALIGNMENT );
         addPanel.add( Box.createVerticalGlue() );
         addPanel.add( addButton );
         addPanel.add( Box.createVerticalGlue() );
@@ -72,9 +74,6 @@ public class PlayerUIPanel extends JPanel implements Cards, ActionListener
         Font tempFont = playerLabel.getFont();
         tempFont = new Font( tempFont.getFontName(), tempFont.getStyle(), 64 );
         playerLabel.setFont( tempFont );
-//        if ( panel < players.size() )
-//            imageLabel.setIcon( new ImageIcon( players.get( panel ).getImage() ) );
-//        backButton.setActionCommand( backButton.getText() + (panel+1) );
         backButton.addActionListener( this );
         titlePanel.setOpaque( false );
         titlePanel.add( playerLabel );
@@ -93,22 +92,17 @@ public class PlayerUIPanel extends JPanel implements Cards, ActionListener
         donePanel.setOpaque( false );
         donePanel.add( doneLabel );
         
-        this.currentPanel = "ADD";
-        this.add( addPanel, "ADD" );
+        this.prevPanel = "START";
+        this.currentPanel = "START";
+        this.add( addPanel, "START" );
         this.add( statsPanel, "STATS" );
         this.add( donePanel, "DONE" );
-        
-//        if ( panel < players.size() )
-//        {
-//            carder.switchTo( panel, "STATS" );
-//        }
     }
     
     public void setPlayer( Player player )
     {
         if ( player == null ) return;
         imageLabel.setIcon( new ImageIcon( player.getImage() ) );
-//        carder.switchTo( panel, "STATS" ); // TODO own actionListener & switcher
     }
     
     public void setGame( Game game )
@@ -118,7 +112,7 @@ public class PlayerUIPanel extends JPanel implements Cards, ActionListener
     
     public void removePlayer()
     {
-//        carder.switchTo( panel, "ADD" );
+        this.switchTo( "START" );
     }
     
     public CardLayout getCardLayout()
@@ -130,32 +124,45 @@ public class PlayerUIPanel extends JPanel implements Cards, ActionListener
     {
         return isDone;
     }
-
-    public void setDone( boolean isDone )
+    
+    public void reset()
     {
-        this.isDone = isDone;
+        if ( !game.getPlayers().hasPlayer( panel ) )
+            switchTo( "START" );
+        else if ( currentPanel.equalsIgnoreCase( "DONE" ) )
+            switchTo( "STATS" );
     }
     
+    @Override
     public void switchTo( String to )
     {
-        switchTo( currentPanel, to );
-        currentPanel = to;
+        switchTo( prevPanel, to );
+        prevPanel = to;
     }
 
     @Override
     public void switchTo( String from, String to )
     {
-        System.out.println( to );
-        if ( to.contains( "ADD" ) )
+        if ( to.contains( "ADD" ) || to.equalsIgnoreCase( "STATS" ) )
         {
-            game.addPlayer( panel );
-            to = "STATS";
+            if ( !game.getPlayers().hasPlayer( panel ) )
+                setPlayer( game.addPlayer( panel ) );
+            currentPanel = "STATS";
+            isDone = false;
         }
         else if ( to.equalsIgnoreCase( "BACK" ) )
         {
-            to = "DONE";
+            isDone = true;
+            currentPanel = "DONE";
+            
         }
-        cardLayout.show( this, to );
+        else if ( to.equalsIgnoreCase( "START" ) )
+        {
+            isDone = true;
+            currentPanel = "START";
+        }
+        cardLayout.show( this, currentPanel );
+        manager.check();
     }
 
     @Override

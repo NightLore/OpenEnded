@@ -83,6 +83,11 @@ public class PlayerGroup implements Serializable
         return oldPlayer; // TODO
     }
     
+    public boolean hasPlayer( int panel )
+    {
+        return players[panel] != null;
+    }
+    
     /** WARNING Does not create a cloned array so do not modify */
     public Player[] toArray()
     {

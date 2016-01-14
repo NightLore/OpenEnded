@@ -38,9 +38,9 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     private Settings settings;
     private Settings tempSettings;
     
-    private JSlider playerSlider, npcSlider, enemySlider;
+    private JSlider npcSlider, enemySlider;
     private JButton pFriendlyFireButton, eFriendlyFireButton, debugButton;
-    private JLabel numPlayLabel, numNpcLabel, numEnmyLabel;
+    private JLabel numNpcLabel, numEnmyLabel;
     
     public SettingsScreen( Cards frame, String panel, String back, Settings settings )
     {
@@ -55,11 +55,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         JLabel title = new JLabel( "SETTINGS" );
         
         JPanel centerPanel = new JPanel();
-        
-        JPanel playerPanel = new JPanel();
-        JLabel playerLabel = new JLabel( "Number of Players: " );
-        playerSlider = new JSlider( JSlider.HORIZONTAL, 1, 4, settings.numPlayers );
-        numPlayLabel = new JLabel( "" + settings.numPlayers );
         
         JPanel npcPanel = new JPanel();
         JLabel npcLabel = new JLabel( "Number of NPCs: " );
@@ -88,12 +83,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         centerPanel.setLayout( new BoxLayout( centerPanel, BoxLayout.Y_AXIS ) );
         centerPanel.setOpaque( false );
         
-        playerPanel.setOpaque( false );
-        playerLabel.setForeground( Color.WHITE );
-        playerSlider.setOpaque( false );
-        playerSlider.setMajorTickSpacing( 1 );
-        numPlayLabel.setForeground( Color.WHITE );
-        
         npcPanel.setOpaque( false );
         npcLabel.setForeground( Color.WHITE );
         npcSlider.setOpaque( false );
@@ -117,10 +106,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         cancelButton.setPreferredSize( new Dimension( 100, 50 ) );
         
         titlePanel.add( title );
-        centerPanel.add( playerPanel );
-        playerPanel.add( playerLabel );
-        playerPanel.add( playerSlider );
-        playerPanel.add( numPlayLabel );
         centerPanel.add( npcPanel );
         npcPanel.add( npcLabel );
         npcPanel.add( npcSlider );
@@ -166,16 +151,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
             }
         } );
         
-        playerSlider.addChangeListener( new ChangeListener() {
-            @Override
-            public void stateChanged( ChangeEvent e )
-            {
-                JSlider slider = (JSlider)e.getSource();
-                // if ( !slider.getValueIsAdjusting() )
-                tempSettings.numPlayers = slider.getValue();
-                numPlayLabel.setText( "" + tempSettings.numPlayers );
-            }
-        } );
         npcSlider.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged( ChangeEvent e )
@@ -205,8 +180,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         debugButton.setText( "Toggle Debug: " + toWord( tempSettings.debug ) );
         pFriendlyFireButton.setText( "Player: " + toWord( tempSettings.playerFriendlyFire ) );
         eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
-        numPlayLabel.setText( "" + tempSettings.numPlayers );
-        playerSlider.setValue( tempSettings.numPlayers );
         numNpcLabel.setText( "" + tempSettings.numNPCs );
         npcSlider.setValue( tempSettings.numNPCs );
         numEnmyLabel.setText( "" + tempSettings.numEnemies );

@@ -75,11 +75,10 @@ public class Game {
         defaultWeapons = new Weapon[2];
         defaultWeapons[0] = w;
         defaultWeapons[1] = w;
-        map = new Map( assets, new Point(), screen.getWidth(), screen.getHeight() );
+        center = new Point();
+        map = new Map( assets, center, screen.getWidth(), screen.getHeight() );
         map.create();
         map.generate();
-        addPlayer( 0 );
-        center = players.getCenter();
     }
     
     public void updateSettings()
@@ -115,7 +114,6 @@ public class Game {
                     {
                         screen.gameOver();
                     }
-                    else settings.numPlayers--;
                     players.remove( (Player)s );
                 }
                 break;
@@ -151,7 +149,7 @@ public class Game {
         Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
         player.splitSprite( 2, 3 );
         setPlayerSpawn( player );
-        player.setDefaultControls( players.numPlayers() );
+        player.setDefaultControls( panel );
         sprites.add( player );
         players.set( player, panel );
         return player;
@@ -236,6 +234,7 @@ public class Game {
             g2d.setColor( new Color( 200, 100, 0 ) );
             for ( Sprite s : players.toArray() )
             {
+                if ( s == null ) continue;
                 Point sPoint = s.getPosition();
                 int halfX = Math.min( center.x, sPoint.x ) + Math.abs( center.x - sPoint.x ) / 2;
                 int halfY = Math.min( center.y, sPoint.y ) + Math.abs( center.y - sPoint.y ) / 2;
