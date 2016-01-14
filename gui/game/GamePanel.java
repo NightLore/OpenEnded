@@ -1,6 +1,8 @@
-package gui;
+package gui.game;
 
 import game.Settings;
+import gui.Carder;
+import gui.SettingsScreen;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

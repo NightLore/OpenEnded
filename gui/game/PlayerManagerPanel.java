@@ -1,6 +1,7 @@
-package gui;
+package gui.game;
 
 import game.Game;
+import gui.Carder;
 
 import java.awt.Color;
 import java.awt.GridLayout;

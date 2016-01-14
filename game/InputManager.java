@@ -1,6 +1,6 @@
 package game;
 
-import gui.GameScreen;
+import gui.game.GameScreen;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

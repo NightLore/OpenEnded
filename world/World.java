@@ -3,7 +3,7 @@ package world;
 import java.awt.Point;
 
 import sprites.Sprite;
-import sprites.SpriteGroup;
+import sprites.groups.SpriteGroup;
 
 /**
  *  Class intended to manage interactions in the game (not implemented)

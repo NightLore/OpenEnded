@@ -1,7 +1,5 @@
 package sprites;
 
-import game.Collidable;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -9,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
+import sprites.groups.SpriteGroup;
 import world.Map;
 
 /**

@@ -1,4 +1,7 @@
-package gui;
+package gui.game;
+
+import gui.ScreenPanel;
+import gui.Window;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

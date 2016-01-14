@@ -1,5 +1,6 @@
-package sprites;
+package sprites.groups;
 
+import sprites.Sprite;
 import world.Map;
 
 /**

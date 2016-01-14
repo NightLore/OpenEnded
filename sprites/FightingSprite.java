@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import sprites.groups.SpriteGroup;
 import world.Map;
 
 /**
@@ -63,7 +64,7 @@ public abstract class FightingSprite extends Sprite
     protected abstract int drawDir();
 
     /**
-     * @see sprites.Sprite#move(long, world.Map, sprites.SpriteGroup)
+     * @see sprites.Sprite#move(long, world.Map, sprites.groups.SpriteGroup)
      */
     @Override
     public void move( long gameTime, Map map, SpriteGroup sprites )

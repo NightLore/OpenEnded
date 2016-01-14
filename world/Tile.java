@@ -1,12 +1,11 @@
 package world;
 
-import game.CollidableAdapter;
-
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import sprites.CollidableAdapter;
 import sprites.Sprite;
 
 /**

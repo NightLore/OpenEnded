@@ -1,6 +1,6 @@
 package game;
 
-import gui.GameScreen;
+import gui.game.GameScreen;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -12,10 +12,10 @@ import java.util.List;
 
 import sprites.Enemy;
 import sprites.Player;
-import sprites.PlayerGroup;
 import sprites.Sprite;
-import sprites.SpriteGroup;
 import sprites.Weapon;
+import sprites.groups.PlayerGroup;
+import sprites.groups.SpriteGroup;
 import world.Map;
 import world.Tile;
 
@@ -92,7 +92,7 @@ public class Game {
      * 
      * @param gameTime total time of game.
      * @param mousePosition current mouse position.
-     * @see gui.GameScreen#gameLoop
+     * @see gui.game.GameScreen#gameLoop
      */
     public void updateGame( long gameTime, Point mousePosition )
     {

@@ -1,4 +1,4 @@
-package gui;
+package gui.game;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
@@ -13,6 +13,8 @@ import game.Assets;
 import game.Game;
 import game.InputManager;
 import game.Settings;
+import gui.Cards;
+import gui.ScreenPanel;
 
 public class GameScreen extends ScreenPanel // implements ActionListener
 {

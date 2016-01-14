@@ -1,8 +1,10 @@
-package sprites;
+package sprites.groups;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import sprites.Sprite;
 
 /**
  *  Allows the drawing of all sprites. Removes by replacing the removed sprite 

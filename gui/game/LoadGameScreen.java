@@ -1,4 +1,7 @@
-package gui;
+package gui.game;
+
+import gui.Cards;
+import gui.ScreenPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

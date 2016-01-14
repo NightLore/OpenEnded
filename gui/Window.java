@@ -2,6 +2,9 @@ package gui;
 
 import game.Assets;
 import game.Settings;
+import gui.game.GameScreen;
+import gui.game.ListGameScreen;
+import gui.game.LoadGameScreen;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;

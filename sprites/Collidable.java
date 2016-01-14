@@ -1,4 +1,4 @@
-package game;
+package sprites;
 
 /**
  *  Conceptual interface for classes that can collide

@@ -1,15 +1,13 @@
 package gui;
 
 /**
- *  TODO Write a one-sentence summary of your class here.
- *  TODO Follow it with additional details about its purpose, what abstraction
- *  it represents, and how to use it.
+ *  Meant for Cards that implement a previous panel method
  *
  *  @author  Nathan
  *  @version Jan 13, 2016
  *  @author  Assignment: OpenEnded
  *
- *  @author  Sources: TODO
+ *  @author  Sources: none
  */
 public interface Carder extends Cards
 {
