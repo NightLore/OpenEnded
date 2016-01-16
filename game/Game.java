@@ -40,6 +40,7 @@ public class Game {
     private int numEnemies;
     private Weapon[] defaultWeapons;
     private Point center;
+    private int numLives;
     
     private Assets assets;
     private Settings settings;
@@ -62,6 +63,7 @@ public class Game {
     {
         sprites = new SpriteGroup();
         players = new PlayerGroup( 4 );
+        numLives = settings.numLives;
     }
     
     /**
@@ -110,11 +112,13 @@ public class Game {
                     numEnemies--;
                 else if ( s instanceof Player )
                 {
-                    if ( players.numPlayers() == 1 )
+                    if ( players.numPlayers() == 1 && numLives <= 0 )
                     {
                         screen.gameOver();
                     }
+                    numLives--;
                     players.remove( (Player)s );
+                    screen.updateGameUI();
                 }
                 break;
             }
@@ -130,7 +134,7 @@ public class Game {
         boolean adjustX = true;
         int offset = Tile.TILE_SIZE;
         Point p = players.getCenter();
-        if ( p == null ) p = new Point();
+        if ( p == null ) p = center;
         do {
             sprite.setPosition( p.x, p.y );
             if ( adjustX ) // note: better replaced with array of "predetermined" locations
@@ -214,6 +218,11 @@ public class Game {
     public PlayerGroup getPlayers()
     {
         return players;
+    }
+    
+    public int numLives()
+    {
+        return numLives;
     }
     
     /**

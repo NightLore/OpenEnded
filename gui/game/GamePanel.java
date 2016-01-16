@@ -40,6 +40,7 @@ public class GamePanel extends JPanel implements Carder, ActionListener
     private String currentPane; // note: not actually used
     private SettingsScreen settingsPanel;
     private PlayerManagerPanel itemPanel;
+    private JLabel lifeLabel;
     
     public GamePanel( GameScreen game, Settings settings )
     {
@@ -55,6 +56,8 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         JPanel gamePanel = new JPanel();
             JPanel gamePausePanel = new JPanel();
             JButton pauseButton = new JButton( "Pause" );
+            JPanel gameLifePanel = new JPanel();
+            lifeLabel = new JLabel( "Number of Lives: " + settings.numLives );
         
         itemPanel = new PlayerManagerPanel( this, "PAUSE" );
         
@@ -64,7 +67,7 @@ public class GamePanel extends JPanel implements Carder, ActionListener
             JButton settingsButton = new JButton( "Settings" );
             JButton returnButton = new JButton( "Return to Main Menu" );
 
-        settingsPanel = new SettingsScreen( this, "SETTINGS", "PAUSE", settings );
+        settingsPanel = new SettingsScreen( this, "PAUSE", settings );
         
         JPanel areYouSurePanel = new JPanel();
         JLabel areYouSureLabel = new JLabel( "Are You Sure You Want To Quit?" );
@@ -88,6 +91,8 @@ public class GamePanel extends JPanel implements Carder, ActionListener
             pauseButton.setPreferredSize( new Dimension( 100, 50 ) );
             pauseButton.setActionCommand( "Pause" );
             pauseButton.addActionListener( this );
+        gameLifePanel.setOpaque( false );
+            lifeLabel.setForeground( Color.WHITE );
 
         pausePanel.setLayout( new BoxLayout( pausePanel, BoxLayout.Y_AXIS ) );
         pausePanel.setBackground( new Color( 0, 0, 0, 64 ) );
@@ -137,6 +142,8 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         pausePanel.add( Box.createVerticalGlue() );
         gamePanel.add( gamePausePanel, BorderLayout.NORTH );
             gamePausePanel.add( pauseButton, BorderLayout.EAST );
+        gamePanel.add( gameLifePanel, BorderLayout.WEST );
+            gameLifePanel.add( lifeLabel );
         areYouSurePanel.add( Box.createVerticalGlue() );
         areYouSurePanel.add( areYouSureLabel );
         areYouSurePanel.add( yesNoPanel );
@@ -167,12 +174,18 @@ public class GamePanel extends JPanel implements Carder, ActionListener
     {
         this.switchTo( currentPane, to );
     }
+    
+    public void update( int numLives )
+    {
+        lifeLabel.setText( "Number of Lives: " + numLives );
+    }
 
     @Override
     public void switchTo( String from, String to )
     {
         if ( from.equals( "SETTINGS" ) ) {
             game.settingsUpdate();
+            update( game.getGame().numLives() );
         }
         
         

@@ -13,7 +13,7 @@ import game.Assets;
 import game.Game;
 import game.InputManager;
 import game.Settings;
-import gui.Cards;
+import gui.Carder;
 import gui.ScreenPanel;
 
 public class GameScreen extends ScreenPanel // implements ActionListener
@@ -70,9 +70,9 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     private Assets assets;
     private GamePanel ui;
     private Timer updater;
-    public GameScreen( Cards frame, String panel, Settings settings, Assets assets )
+    public GameScreen( Carder frame, Settings settings, Assets assets )
     {
-        super( frame, panel );
+        super( frame );
         input = new InputManager( this );
         this.settings = settings;
         this.assets = assets;
@@ -182,6 +182,11 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         game.draw( g, mousePosition() );
     }
     
+    public void updateGameUI()
+    {
+        ui.update( game.numLives() );
+    }
+    
     public void settingsUpdate()
     {
         game.updateSettings();
@@ -195,7 +200,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     public void returnToMainMenu()
     {
         // TODO destroy current game session
-        carder.switchTo( screen, "INITIAL" );
+        carder.switchTo( "INITIAL" );
     }
     
     public Assets getAssets()

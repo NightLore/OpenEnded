@@ -27,9 +27,9 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
 
-    public ListGameScreen( Window frame, String panel )
+    public ListGameScreen( Window frame )
     {
-        super( frame, panel, "GrassyBackground.png" );
+        super( frame, "GrassyBackground.png" );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
         
         Dimension buttonSize = frame.buttonSize;
@@ -73,6 +73,6 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
         else if ( e.getActionCommand().equals( "Load Game" ) ) p = "LOADGAME";
         else if ( e.getActionCommand().equals( "Back" ) ) p = "MAINMENU";
 
-        if ( p != null ) carder.switchTo( screen, p );
+        if ( p != null ) carder.switchTo( p );
     }
 }

@@ -27,22 +27,20 @@ public class ScreenPanel extends JPanel implements Screen
      */
     private static final long serialVersionUID = 1L;
 
-    protected Cards carder;
-    protected String screen;
+    protected Carder carder;
     private Image background;
     
     
-    public ScreenPanel( Cards frame, String panel )
+    public ScreenPanel( Carder frame )
     {
         carder = frame;
-        screen = panel;
         this.setBackground( Color.BLACK );
         this.setFocusable( true );
     }
     
-    public ScreenPanel( Cards frame, String panel, String fileName )
+    public ScreenPanel( Carder frame, String fileName )
     {
-        this( frame, panel );
+        this( frame );
         fileName =  "/imgs/" + fileName; // Package images are found in
         while ( background == null )
         {

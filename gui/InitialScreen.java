@@ -27,9 +27,9 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
      */
     private static final long serialVersionUID = 1L;
 
-    public InitialScreen( Window frame, String panel )
+    public InitialScreen( Window frame )
     {
-        super( frame, panel, "GrassyBackground.png" );
+        super( frame, "GrassyBackground.png" );
         this.addKeyListener( this );
         this.addMouseListener( this );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
@@ -54,7 +54,7 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
         this.add( Box.createVerticalGlue() );
         this.add( Box.createVerticalGlue() );
     }
-    public void start() { carder.switchTo( screen, "MAINMENU" ); }
+    public void start() { carder.switchTo( "MAINMENU" ); }
     @Override
     public void mouseClicked( MouseEvent e ) {}
     @Override

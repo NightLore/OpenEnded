@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class Window extends JFrame implements Cards// implements KeyListener, MouseListener
+public class Window extends JFrame implements Carder// implements KeyListener, MouseListener
 {
 
     /**
@@ -44,6 +44,7 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
     private CardLayout cards;
     private HashMap<String, Screen> screens;
     private Settings settings;
+    private String prevScreen;
 
     public Window()
     {
@@ -63,15 +64,16 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
         main.setLayout( cards );
         settings = new Settings(); // TODO load settings
         assets = new Assets();
+        prevScreen = "INITIAL";
         loadAssets();
         
-        ScreenPanel initial = new InitialScreen( this, "INITIAL" );
-        ScreenPanel mainMenu = new MainMenuScreen( this, "MAINMENU" );
-        ScreenPanel settings = new SettingsScreen( this, "SETTINGS", "MAINMENU", this.settings );
-        ScreenPanel listGame = new ListGameScreen( this, "LISTGAME" );
-        ScreenPanel storyGame = new GameScreen( this, "STORYGAME", this.settings, assets );
-        ScreenPanel loadGame = new LoadGameScreen( this, "LOADGAME" );
-        ScreenPanel freeGame = new GameScreen( this, "FREEGAME", this.settings, assets );
+        ScreenPanel initial = new InitialScreen( this );
+        ScreenPanel mainMenu = new MainMenuScreen( this );
+        ScreenPanel settings = new SettingsScreen( this, "MAINMENU", this.settings );
+        ScreenPanel listGame = new ListGameScreen( this );
+        ScreenPanel storyGame = new GameScreen( this, this.settings, assets );
+        ScreenPanel loadGame = new LoadGameScreen( this );
+        ScreenPanel freeGame = new GameScreen( this, this.settings, assets );
         
         screens.put( "INITIAL", initial );
         screens.put( "MAINMENU", mainMenu );
@@ -90,6 +92,13 @@ public class Window extends JFrame implements Cards// implements KeyListener, Mo
         main.add( freeGame, "FREEGAME" );
         
         this.add( main );
+    }
+
+    @Override
+    public void switchTo( String to )
+    {
+        switchTo( prevScreen, to );
+        prevScreen = to;
     }
     
     @Override

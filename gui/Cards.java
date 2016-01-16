@@ -11,5 +11,6 @@ package gui;
  */
 public interface Cards
 {
+    @Deprecated
     public void switchTo( String from, String to );
 }

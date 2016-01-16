@@ -9,7 +9,7 @@ package game;
 public class Settings
 {
     // note: with getters and setters, can be replaced with array
-    public int sound, music, numEnemies, numNPCs;
+    public int sound, music, numEnemies, numNPCs, numLives;
     public boolean debug, playerFriendlyFire, enemyFriendlyFire;
     
     public Settings()
@@ -18,6 +18,7 @@ public class Settings
         music = 100;
         numEnemies = 20;
         numNPCs = 4;
+        numLives = 10;
         debug = false;
         playerFriendlyFire = false;
         enemyFriendlyFire = false;
@@ -34,6 +35,7 @@ public class Settings
         this.music = settings.music;
         this.numEnemies = settings.numEnemies;
         this.numNPCs = settings.numNPCs;
+        this.numLives = settings.numLives;
         this.debug = settings.debug;
         this.playerFriendlyFire = settings.playerFriendlyFire;
         this.enemyFriendlyFire = settings.enemyFriendlyFire;

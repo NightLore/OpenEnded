@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class PlayerManagerPanel extends JPanel
+public class PlayerManagerPanel extends JPanel implements Manager
 {
     /**
      * 
@@ -60,6 +60,7 @@ public class PlayerManagerPanel extends JPanel
         reset();
     }
     
+    @Override
     public boolean check()
     {
         for ( PlayerUIPanel p : mainPanels )

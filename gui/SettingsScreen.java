@@ -38,13 +38,13 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     private Settings settings;
     private Settings tempSettings;
     
-    private JSlider npcSlider, enemySlider;
+    private JSlider lifeSlider, npcSlider, enemySlider;
     private JButton pFriendlyFireButton, eFriendlyFireButton, debugButton;
-    private JLabel numNpcLabel, numEnmyLabel;
+    private JLabel numLivesLabel, numNpcLabel, numEnmyLabel;
     
-    public SettingsScreen( Cards frame, String panel, String back, Settings settings )
+    public SettingsScreen( Carder frame, String back, Settings settings )
     {
-        super( frame, panel );
+        super( frame );
         this.setLayout( new BorderLayout() );
         this.back = back;
         
@@ -55,6 +55,11 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         JLabel title = new JLabel( "SETTINGS" );
         
         JPanel centerPanel = new JPanel();
+
+        JPanel lifePanel = new JPanel();
+        JLabel lifeLabel = new JLabel( "Number of Lives: " );
+        lifeSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
+        numLivesLabel = new JLabel( "" + settings.numNPCs );
         
         JPanel npcPanel = new JPanel();
         JLabel npcLabel = new JLabel( "Number of NPCs: " );
@@ -82,6 +87,12 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         title.setForeground( Color.WHITE );
         centerPanel.setLayout( new BoxLayout( centerPanel, BoxLayout.Y_AXIS ) );
         centerPanel.setOpaque( false );
+
+        lifePanel.setOpaque( false );
+        lifeLabel.setForeground( Color.WHITE );
+        lifeSlider.setOpaque( false );
+        lifeSlider.setMajorTickSpacing( 1 );
+        numLivesLabel.setForeground( Color.WHITE );
         
         npcPanel.setOpaque( false );
         npcLabel.setForeground( Color.WHITE );
@@ -106,6 +117,10 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         cancelButton.setPreferredSize( new Dimension( 100, 50 ) );
         
         titlePanel.add( title );
+        centerPanel.add( lifePanel );
+        lifePanel.add( lifeLabel );
+        lifePanel.add( lifeSlider );
+        lifePanel.add( numLivesLabel );
         centerPanel.add( npcPanel );
         npcPanel.add( npcLabel );
         npcPanel.add( npcSlider );
@@ -150,7 +165,17 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
                 eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
             }
         } );
-        
+
+        lifeSlider.addChangeListener( new ChangeListener() {
+            @Override
+            public void stateChanged( ChangeEvent e )
+            {
+                JSlider slider = (JSlider)e.getSource();
+                // if ( !slider.getValueIsAdjusting() )
+                tempSettings.numLives = slider.getValue();
+                numLivesLabel.setText( "" + tempSettings.numLives );
+            }
+        } );
         npcSlider.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged( ChangeEvent e )
@@ -180,6 +205,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         debugButton.setText( "Toggle Debug: " + toWord( tempSettings.debug ) );
         pFriendlyFireButton.setText( "Player: " + toWord( tempSettings.playerFriendlyFire ) );
         eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
+        numLivesLabel.setText( "" + tempSettings.numLives );
+        lifeSlider.setValue( tempSettings.numNPCs );
         numNpcLabel.setText( "" + tempSettings.numNPCs );
         npcSlider.setValue( tempSettings.numNPCs );
         numEnmyLabel.setText( "" + tempSettings.numEnemies );
@@ -192,12 +219,12 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         String action = e.getActionCommand();
         if ( action.equals( "Cancel" ) )
         {
-            carder.switchTo( screen, back );
+            carder.switchTo( back );
         }
         else if ( action.equals( "Ok" ) )
         {
             settings.copy( tempSettings );
-            carder.switchTo( screen, back );
+            carder.switchTo( back );
         }
     }
     

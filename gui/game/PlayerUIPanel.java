@@ -41,11 +41,11 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
     private boolean isDone;
     JLabel imageLabel;
     private String prevPanel, currentPanel;
-    private PlayerManagerPanel manager;
+    private Manager manager;
 
     private Game game;
 
-    public PlayerUIPanel( PlayerManagerPanel manager, int panel )
+    public PlayerUIPanel( Manager manager, int panel )
     {
         this.cardLayout = new CardLayout();
         this.manager = manager;

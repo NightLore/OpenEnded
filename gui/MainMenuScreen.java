@@ -29,9 +29,9 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
     
-    public MainMenuScreen( Window frame, String panel )
+    public MainMenuScreen( Window frame )
     {
-        super( frame, panel, "GrassyBackground.png" );
+        super( frame, "GrassyBackground.png" );
         Dimension buttonSize = frame.buttonSize;
         Dimension filler = new Dimension( frame.getWidth() / 20, frame.getHeight() / 20 );
         
@@ -115,6 +115,6 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         else if ( e.getActionCommand().equals( "Back" ) )      p = "INITIAL";
         else if ( e.getActionCommand().equals( "Exit Game" ) ) System.exit( 0 );
         
-        if ( p != null ) carder.switchTo( screen, p );
+        if ( p != null ) carder.switchTo( p );
     }
 }

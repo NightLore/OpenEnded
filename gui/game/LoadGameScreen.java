@@ -1,6 +1,6 @@
 package gui.game;
 
-import gui.Cards;
+import gui.Carder;
 import gui.ScreenPanel;
 
 import java.awt.event.ActionEvent;
@@ -24,9 +24,9 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
 
-    public LoadGameScreen( Cards frame, String panel )
+    public LoadGameScreen( Carder frame )
     {
-        super( frame, panel );
+        super( frame );
         JButton backButton = new JButton( "Back" );
         backButton.addActionListener( this );
         this.add( backButton );
@@ -37,7 +37,7 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
     {
         if ( e.getActionCommand().equals( "Back" ) )
         {
-            carder.switchTo( screen, "LISTGAME" );
+            carder.switchTo( "LISTGAME" );
         }
     }
 }
