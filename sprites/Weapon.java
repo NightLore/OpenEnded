@@ -22,10 +22,11 @@ public class Weapon extends Sprite
     private int direction;
     private Sprite mySprite;
 
-    public Weapon( BufferedImage img )
+    public Weapon( BufferedImage img, String skillClass )
     {
         super( img );
         this.setSpeed( 6 );
+        this.setSkillClass( skillClass );
     }
     
     public Weapon( Sprite s, Weapon w )
@@ -35,7 +36,7 @@ public class Weapon extends Sprite
     
     public Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
     {
-        this( w.getImage() );
+        this( w.getImage(), w.getSkillClass() );
         setCollidable( w.canCollide() );
         setRefPixel( w.getRefX(), w.getRefY() );
         setPosition( w.getX(), w.getY() );

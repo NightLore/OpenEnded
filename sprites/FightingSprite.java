@@ -34,6 +34,7 @@ public abstract class FightingSprite extends Sprite
         super( img );
         this.weapons = weapons;
         this.setTeam( team );
+        this.setSkillClass( "INEPT" ); // TODO replace with skill chooser
     }
     
     @Deprecated
@@ -135,6 +136,11 @@ public abstract class FightingSprite extends Sprite
     public void takeDamage( int damage )
     {
         this.getSpriteData().decreaseHp( damage );
+    }
+    
+    public Weapon[] getWeapons()
+    {
+        return weapons.clone();
     }
     
     public void setAttack( int attack )

@@ -39,6 +39,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
 
     private SpriteData data;
     private int speed;
+    private String skillClass;
     public Sprite( String imgFile )
     {
         this( makeTransparent( toImage( "/imgs/" + imgFile ), java.awt.Color.WHITE ) );
@@ -198,6 +199,17 @@ public abstract class Sprite extends ImageSprite implements Collidable
     {
         data.dies();
     }
+    
+    public String getSkillClass()
+    {
+        return skillClass;
+    }
+    public void setSkillClass( String newClass )
+    {
+        this.skillClass = newClass;
+    }
+    
+    // -------------------------- DRAWING GETTERS/SETTERS ------------------- //
     
     public void translate( int dx, int dy)
     {

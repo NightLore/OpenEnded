@@ -28,6 +28,13 @@ public class Player extends FightingSprite
     public static final int NUMPADKEYS = 3;
     public static final int NUMDEFAULT = 4;
     
+    public static final int UP = 0;
+    public static final int RIGHT = 1;
+    public static final int DOWN = 2;
+    public static final int LEFT = 3;
+    public static final int PRIMARY = 4;
+    public static final int SECONDARY = 5;
+    
     public static final int[] WASDVB = new int[]{KeyEvent.VK_W, KeyEvent.VK_D, 
         KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_V, KeyEvent.VK_B };
     
@@ -102,6 +109,11 @@ public class Player extends FightingSprite
     public Weapon attack2()
     {
         return new Weapon( this, weapons[1], getSpriteData().getDirFacing() );
+    }
+    
+    public int[] getControls()
+    {
+        return controls.clone();
     }
     
     public void setControls( int... newCtrls )

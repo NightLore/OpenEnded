@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -22,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import sprites.Player;
+import sprites.Weapon;
 
 /**
  * Manages the User Interface for spawning in players
@@ -39,10 +41,19 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
      */
     private static final long serialVersionUID = 1L;
     
+    public static final String START_PANEL = "START";
+    public static final String STATS_PANEL = "STATS";
+    public static final String ITEMS_PANEL = "ITEMS";
+    public static final String CTRLS_PANEL = "CTRLS";
+    public static final String DONE_PANEL = "DONE";
+
     private CardLayout cardLayout;
     private int panel;
     private boolean isDone;
-    JLabel imageLabel;
+    private JLabel imageLabel;
+    private JButton upButton, leftButton, downButton, rightButton, primaryButton, scndaryButton;
+    private JButton classButton, atk1Button, atk2Button;
+    
     private String prevPanel, currentPanel;
     private Manager manager;
 
@@ -58,6 +69,7 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         this.setOpaque( false );
         this.setBorder( BorderFactory.createRaisedBevelBorder() );
         
+        // ------------------------- ADD PANEL -------------------------- //
         JPanel addPanel = new JPanel();
         JButton addButton = new JButton( "Add Player " + (panel+1) );
         addPanel.setLayout( new BoxLayout( addPanel, BoxLayout.Y_AXIS ) );
@@ -68,14 +80,15 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         addPanel.add( addButton );
         addPanel.add( Box.createVerticalGlue() );
         
+        // ------------------------ STATS PANEL ------------------------ //
         JPanel statsPanel = new JPanel( new BorderLayout() );
         JPanel titlePanel = new JPanel();
         JLabel playerLabel = new JLabel( "Player " + (panel+1) );
         imageLabel = new JLabel();
         JPanel statSidePanel = new JPanel();
-        JButton itemButton = new JButton( "ITEM" );
+        JButton itemButton = new JButton( ITEMS_PANEL );
         JButton controlButton = new JButton( "CONTROLS" );
-        JButton doneButton = new JButton( "DONE" );
+        JButton doneButton = new JButton( DONE_PANEL );
         playerLabel.setAlignmentY( CENTER_ALIGNMENT );
         playerLabel.setForeground( Color.WHITE );
         Font tempFont = playerLabel.getFont();
@@ -84,6 +97,7 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         itemButton.addActionListener( this );
         controlButton.addActionListener( this );
         doneButton.addActionListener( this );
+        controlButton.setActionCommand( CTRLS_PANEL );
         titlePanel.setOpaque( false );
         titlePanel.add( playerLabel );
         statSidePanel.setOpaque( false );
@@ -95,16 +109,26 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         statsPanel.add( statSidePanel, BorderLayout.EAST );
         statsPanel.add( doneButton, BorderLayout.SOUTH );
         
-        JPanel itemPanel = new JPanel();
-        JButton atk1Button = new JButton( "Primary Attack: Mine" ); // TODO
-        JButton atk2Button = new JButton( "Secondary Attack: Projectile" );
+        // ------------------ ITEM PANEL --------------------- //
+        JPanel itemPanel = new JPanel( new BorderLayout() );
+        JPanel itemNorthPanel = new JPanel();
+        JPanel itemSouthPanel = new JPanel();
+        classButton = new JButton();
+        atk1Button = new JButton(); // TODO
+        atk2Button = new JButton();
         JButton backButton = new JButton( "BACK" );
         backButton.addActionListener( this );
         itemPanel.setOpaque( false );
-        itemPanel.add( atk1Button );
-        itemPanel.add( atk2Button );
-        itemPanel.add( backButton );
+        itemNorthPanel.setOpaque( false );
+        itemSouthPanel.setOpaque( false );
+        itemNorthPanel.add( classButton );
+        itemNorthPanel.add( atk1Button );
+        itemNorthPanel.add( atk2Button );
+        itemSouthPanel.add( backButton );
+        itemPanel.add( itemNorthPanel, BorderLayout.NORTH );
+        itemPanel.add( itemSouthPanel, BorderLayout.SOUTH );
         
+        // ---------------- CONTROL PANEL -------------------- //
         GridLayout arrowLayout = new GridLayout( 0, 3 );
         GridBagConstraints c;
         JPanel space1 = new JPanel();
@@ -114,16 +138,15 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         
         JPanel controlPanel = new JPanel( new GridBagLayout() );
         JPanel movementPanel = new JPanel( arrowLayout );
-        JButton upButton = new JButton( "UP" );
-        JButton leftButton = new JButton( "LEFT" );
-        JButton downButton = new JButton( "DOWN");
-        JButton rightButton = new JButton( "RIGHT" );
+        upButton = new JButton();
+        leftButton = new JButton();
+        downButton = new JButton();
+        rightButton = new JButton();
         JPanel attackPanel = new JPanel();
-        JButton primaryButton = new JButton();
-        JButton scndaryButton = new JButton();
+        primaryButton = new JButton();
+        scndaryButton = new JButton();
         JPanel confirmPanel = new JPanel();
         JButton okButton = new JButton( "OK" );
-        JButton cancelButton = new JButton( "BACK" );
         controlPanel.setOpaque( false );
         movementPanel.setOpaque( false );
         attackPanel.setOpaque( false );
@@ -131,7 +154,6 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         arrowLayout.setHgap( 5 );
         arrowLayout.setVgap( 5 );
         okButton.addActionListener( this );
-        cancelButton.addActionListener( this );
         movementPanel.add( space1 );
         movementPanel.add( upButton );
         movementPanel.add( space2 );
@@ -141,7 +163,6 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         attackPanel.add( primaryButton );
         attackPanel.add( scndaryButton );
         confirmPanel.add( okButton );
-        confirmPanel.add( cancelButton );
         c = new GridBagConstraints();
         c.weightx = 0.5;
         c.gridx = 2;
@@ -153,13 +174,14 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         c.gridy = 2;
         controlPanel.add( attackPanel, c );
         c = new GridBagConstraints();
-        c.weightx = 0.5;
+        c.weightx = 0.0;
         c.gridx = 3;
         c.gridy = 6;
         controlPanel.add( confirmPanel, c );
         
+        // ----------------------- DONE PANEL ---------------------- //
         JPanel donePanel = new JPanel();
-        JLabel doneLabel = new JLabel( "DONE" );
+        JLabel doneLabel = new JLabel( DONE_PANEL );
         doneLabel.setForeground( Color.WHITE );
         tempFont = doneLabel.getFont();
         tempFont = new Font( tempFont.getFontName(), tempFont.getStyle(), 64 );
@@ -167,19 +189,37 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
         donePanel.setOpaque( false );
         donePanel.add( doneLabel );
         
-        this.prevPanel = "START";
-        this.currentPanel = "START";
-        this.add( addPanel, "START" );
-        this.add( statsPanel, "STATS" );
-        this.add( itemPanel, "ITEM" );
-        this.add( controlPanel, "CONTROLS" );
-        this.add( donePanel, "DONE" );
+        this.prevPanel = START_PANEL;
+        this.currentPanel = START_PANEL;
+        this.add( addPanel, START_PANEL );
+        this.add( statsPanel, STATS_PANEL );
+        this.add( itemPanel, ITEMS_PANEL );
+        this.add( controlPanel, CTRLS_PANEL );
+        this.add( donePanel, DONE_PANEL );
     }
     
     public void setPlayer( Player player )
     {
         if ( player == null ) return;
         imageLabel.setIcon( new ImageIcon( player.getImage() ) );
+        
+        updateControls( player.getControls() );
+        updateItems( player.getSkillClass(), player.getWeapons() );
+    }
+    private void updateControls( int[] controls )
+    {
+        upButton.setText( KeyEvent.getKeyText( controls[Player.UP] ) );
+        leftButton.setText( KeyEvent.getKeyText( controls[Player.LEFT] ) );
+        downButton.setText( KeyEvent.getKeyText( controls[Player.DOWN] ) );
+        rightButton.setText( KeyEvent.getKeyText( controls[Player.RIGHT] ) );
+        primaryButton.setText( KeyEvent.getKeyText( controls[Player.PRIMARY] ) );
+        scndaryButton.setText( KeyEvent.getKeyText( controls[Player.SECONDARY] ) );
+    }
+    private void updateItems( String skillClass, Weapon[] weapons )
+    {
+        classButton.setText( "Class: " + skillClass );
+        atk1Button.setText( "Primary Attack: " + weapons[0].getSkillClass() );
+        atk2Button.setText( "Secondary Attack: " + weapons[1].getSkillClass() );
     }
     
     public void setGame( Game game )
@@ -189,7 +229,7 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
     
     public void removePlayer()
     {
-        this.switchTo( "START" );
+        this.switchTo( START_PANEL );
     }
     
     public CardLayout getCardLayout()
@@ -205,9 +245,9 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
     public void reset()
     {
         if ( !game.getPlayers().hasPlayer( panel ) )
-            switchTo( "START" );
-        else if ( currentPanel.equalsIgnoreCase( "DONE" ) )
-            switchTo( "STATS" );
+            switchTo( START_PANEL );
+        else if ( currentPanel.equalsIgnoreCase( DONE_PANEL ) )
+            switchTo( STATS_PANEL );
     }
     
     @Override
@@ -220,34 +260,34 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener
     @Override
     public void switchTo( String from, String to )
     {
-        if ( to.contains( "ADD" ) || to.equalsIgnoreCase( "CONTROLS" ) )
+        if ( to.contains( "ADD" ) || to.equalsIgnoreCase( CTRLS_PANEL ) )
         {
             if ( !game.getPlayers().hasPlayer( panel ) )
                 setPlayer( game.addPlayer( panel ) );
-            currentPanel = "CONTROLS";
+            currentPanel = CTRLS_PANEL;
             isDone = false;
         }
-        else if ( to.equalsIgnoreCase( "STATS" ) || to.equalsIgnoreCase( "OK" ) || to.equalsIgnoreCase( "BACK" ) )
+        else if ( to.equalsIgnoreCase( STATS_PANEL ) || to.equalsIgnoreCase( "OK" ) || to.equalsIgnoreCase( "BACK" ) )
         {
             if ( !game.getPlayers().hasPlayer( panel ) )
                 setPlayer( game.addPlayer( panel ) );
             isDone = false;
-            currentPanel = "STATS";
+            currentPanel = STATS_PANEL;
         }
-        else if ( to.equalsIgnoreCase( "DONE" ) )
+        else if ( to.equalsIgnoreCase( DONE_PANEL ) )
         {
             isDone = true;
-            currentPanel = "DONE";
+            currentPanel = DONE_PANEL;
         }
-        else if ( to.equalsIgnoreCase( "START" ) )
+        else if ( to.equalsIgnoreCase( START_PANEL ) )
         {
             isDone = true;
-            currentPanel = "START";
+            currentPanel = START_PANEL;
         }
-        else if ( to.equalsIgnoreCase( "ITEM" ) )
+        else if ( to.equalsIgnoreCase( ITEMS_PANEL ) )
         {
             isDone = false;
-            currentPanel = "ITEM";
+            currentPanel = ITEMS_PANEL;
         }
         cardLayout.show( this, currentPanel );
         manager.check();

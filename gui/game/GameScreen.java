@@ -39,16 +39,6 @@ public class GameScreen extends ScreenPanel // implements ActionListener
      * Pause between updates. It is in nanoseconds.
      */
     private final int GAME_UPDATE_PERIOD = secInMillisec / GAME_FPS;
-//    /**
-//     * Possible states of the game
-//     */
-//    public static enum GameState{
-//        STARTING, PLAYING, PAUSED, RESUMED, VISUALIZING
-//    }
-//    /**
-//     * Current state of the game
-//     */
-//    public static GameState gameState;
     
     /**
      * Elapsed game time in nanoseconds.

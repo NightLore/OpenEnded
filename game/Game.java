@@ -73,10 +73,9 @@ public class Game {
     {
         enemyImg = assets.getSkin( Assets.REDCIRCLE );
         projImg = assets.getSkin( Assets.SMALLCIRCLE );
-        Weapon w = new Weapon( projImg );
         defaultWeapons = new Weapon[2];
-        defaultWeapons[0] = w;
-        defaultWeapons[1] = w;
+        defaultWeapons[0] = new Weapon( projImg, "MINE" );
+        defaultWeapons[1] = new Weapon( projImg, "PROJECTILE" );
         center = new Point();
         map = new Map( assets, center, screen.getWidth(), screen.getHeight() );
         map.create();

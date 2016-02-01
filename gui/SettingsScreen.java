@@ -206,7 +206,7 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         pFriendlyFireButton.setText( "Player: " + toWord( tempSettings.playerFriendlyFire ) );
         eFriendlyFireButton.setText( "Enemy: " + toWord( tempSettings.enemyFriendlyFire ) );
         numLivesLabel.setText( "" + tempSettings.numLives );
-        lifeSlider.setValue( tempSettings.numNPCs );
+        lifeSlider.setValue( tempSettings.numLives );
         numNpcLabel.setText( "" + tempSettings.numNPCs );
         npcSlider.setValue( tempSettings.numNPCs );
         numEnmyLabel.setText( "" + tempSettings.numEnemies );
