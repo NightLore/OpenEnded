@@ -47,7 +47,7 @@ public class Player extends FightingSprite
     public static final int[] NUMPAD = new int[]{KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD6, 
         KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD4, KeyEvent.VK_MULTIPLY, KeyEvent.VK_SUBTRACT };
 
-    private static final int[][] defaultCtrls = new int[][]{ WASDVB, ARROWS, IJKLTY, NUMPAD };
+    public static final int[][] defaultCtrls = new int[][]{ WASDVB, ARROWS, IJKLTY, NUMPAD };
     
     private int[] controls;
     

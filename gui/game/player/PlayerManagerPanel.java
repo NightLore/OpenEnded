@@ -1,4 +1,4 @@
-package gui.game;
+package gui.game.player;
 
 import game.Game;
 import gui.Carder;

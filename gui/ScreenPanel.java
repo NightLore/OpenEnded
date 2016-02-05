@@ -33,8 +33,13 @@ public class ScreenPanel extends JPanel implements Screen
     
     public ScreenPanel( Carder frame )
     {
+        this( frame, Color.BLACK );
+    }
+    
+    public ScreenPanel( Carder frame, Color background )
+    {
         carder = frame;
-        this.setBackground( Color.BLACK );
+        this.setBackground( background );
         this.setFocusable( true );
     }
     

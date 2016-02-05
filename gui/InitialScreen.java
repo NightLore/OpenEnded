@@ -37,7 +37,7 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
         JPanel menuTitlePanel = new JPanel();
         menuTitlePanel.setOpaque( false );
         JLabel title = new JLabel( frame.getGameName() );
-        JLabel start = new JLabel( "PRESS ANY KEY TO CONTINUE" );
+        JLabel start = new JLabel( "CLICK TO CONTINUE" );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         title.setAlignmentX( CENTER_ALIGNMENT );
