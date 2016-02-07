@@ -1,6 +1,7 @@
 package gui.game.player;
 
 import gui.Carder;
+import gui.ClearPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -40,35 +41,28 @@ public class PlayerControlPanel extends PlayerPanel
     public PlayerControlPanel( Carder carder, String to )
     {
         super( carder, to );
-
-        GridLayout arrowLayout = new GridLayout( 0, 3 );
-        GridBagConstraints c;
-        JPanel space1 = new JPanel();
-        space1.setOpaque( false );
-        JPanel space2 = new JPanel();
-        space2.setOpaque( false );
         
         this.setLayout( new GridBagLayout() );
+        GridBagConstraints c;
+
+        GridLayout arrowLayout = new GridLayout( 0, 3 );
         
-        JPanel movementPanel = new JPanel( arrowLayout );
+        JPanel movementPanel = new ClearPanel( arrowLayout );
         upButton = new JButton();
         leftButton = new JButton();
         downButton = new JButton();
         rightButton = new JButton();
-        JPanel attackPanel = new JPanel();
+        JPanel attackPanel = new ClearPanel();
         primaryButton = new JButton();
         scndaryButton = new JButton();
-        JPanel confirmPanel = new JPanel();
+        JPanel confirmPanel = new ClearPanel();
         JButton okButton = new JButton( "OK" );
         
-        movementPanel.setOpaque( false );
-        attackPanel.setOpaque( false );
-        confirmPanel.setOpaque( false );
         arrowLayout.setHgap( 5 );
         arrowLayout.setVgap( 5 );
-        movementPanel.add( space1 );
+        movementPanel.add( new ClearPanel() );
         movementPanel.add( upButton );
-        movementPanel.add( space2 );
+        movementPanel.add( new ClearPanel() );
         movementPanel.add( leftButton );
         movementPanel.add( downButton );
         movementPanel.add( rightButton );
@@ -137,23 +131,11 @@ public class PlayerControlPanel extends PlayerPanel
         primaryButton.setText( KeyEvent.getKeyText( controls[Player.PRIMARY] ) );
         scndaryButton.setText( KeyEvent.getKeyText( controls[Player.SECONDARY] ) );
     }
-    @Override
-    public void up() {}
-    @Override
-    public void left() {}
-    @Override
-    public void down() {}
-    @Override
-    public void right() {}
+    
     @Override
     public void confirm()
     {
         player.setControls( controls );
-        back();
-    }
-    @Override
-    public void cancel()
-    {
         back();
     }
     
@@ -186,4 +168,7 @@ public class PlayerControlPanel extends PlayerPanel
         if ( button != null )
             button.setText( KeyEvent.getKeyText( controls[control] ) );
     }
+
+    @Override
+    public void act( String selected ) {}
 }

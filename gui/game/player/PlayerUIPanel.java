@@ -12,6 +12,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import sprites.Player;
 
@@ -44,7 +45,6 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener, Con
     private String prevPanel, currentPanel;
     private Manager manager;
 
-    @SuppressWarnings("unused")
     private Action upAction, leftAction, downAction, rightAction, confirmAction, cancelAction;
 
     private Game game;
@@ -59,29 +59,11 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener, Con
         this.setOpaque( false );
         this.setBorder( BorderFactory.createRaisedBevelBorder() );
         
-        // ------------------------- ADD PANEL -------------------------- //
-        JPanel addPanel = new PlayerAddPanel( this, panel );
-//        JPanel addPanel = new JPanel();
-//        JButton addButton = new JButton( "Add Player " + (panel+1) );
-//        addPanel.setLayout( new BoxLayout( addPanel, BoxLayout.Y_AXIS ) );
-//        addPanel.setOpaque( false );
-//        addButton.addActionListener( this );
-//        addButton.setAlignmentX( CENTER_ALIGNMENT );
-//        addPanel.add( Box.createVerticalGlue() );
-//        addPanel.add( addButton );
-//        addPanel.add( Box.createVerticalGlue() );
-        
-        // ------------------------ STATS PANEL ------------------------ //
+        PlayerPanel addPanel = new PlayerAddPanel( this, panel );
         statsPanel = new PlayerStatsPanel( this, panel );
-        
-        // ------------------ ITEM PANEL --------------------- //
         itemPanel = new PlayerItemPanel( this );
-        
-        // ---------------- CONTROL PANEL -------------------- //
         controlPanel = new PlayerControlPanel( this );
-        
-        // ----------------------- DONE PANEL ---------------------- //
-        PlayerDonePanel donePanel = new PlayerDonePanel( this );
+        PlayerPanel donePanel = new PlayerDonePanel( this );
         
         this.prevPanel = START_PANEL;
         this.currentPanel = START_PANEL;
@@ -91,25 +73,82 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener, Con
         this.add( controlPanel, CTRLS_PANEL );
         this.add( donePanel, DONE_PANEL );
         
-        navigatables.put( START_PANEL, this );
+        navigatables.put( START_PANEL, addPanel );
         navigatables.put( STATS_PANEL, statsPanel );
-        navigatables.put( ITEMS_PANEL, this );
+        navigatables.put( ITEMS_PANEL, itemPanel );
         navigatables.put( CTRLS_PANEL, controlPanel );
         navigatables.put( DONE_PANEL, donePanel );
 
-        confirmAction = new AbstractAction() {
-            /**
-             * 
-             */
+        upAction = new AbstractAction() {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void actionPerformed( ActionEvent e )
             {
-                act( "CONFIRM" );
+                up();
             }
-            
         };
+        leftAction = new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent e )
+            {
+                left();
+            }
+        };
+        downAction = new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent e )
+            {
+                down();
+            }
+        };
+        rightAction = new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent e )
+            {
+                right();
+            }
+        };
+        confirmAction = new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent e )
+            {
+                confirm();
+            }
+        };
+        cancelAction = new AbstractAction() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent e )
+            {
+                cancel();
+            }
+        };
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.UP ), UP );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.LEFT ), LEFT );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.DOWN ), DOWN );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.RIGHT ), RIGHT );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.PRIMARY ), CONFIRM );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.SECONDARY ), CANCEL );
+        this.getActionMap().put( UP, upAction );
+        this.getActionMap().put( LEFT, leftAction );
+        this.getActionMap().put( DOWN, downAction );
+        this.getActionMap().put( RIGHT, rightAction );
+        this.getActionMap().put( CONFIRM, confirmAction );
+        this.getActionMap().put( CANCEL, cancelAction );
+    }
+    private KeyStroke getDefaultKeyStroke( int player, int control )
+    {
+        return KeyStroke.getKeyStroke( Player.defaultCtrls[player][control], 0 );
     }
     
     public void setPlayer( Player player )
@@ -197,30 +236,31 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener, Con
         this.switchTo( e.getActionCommand().toUpperCase() );
     }
     
+    @Override
     public void act( String action )
     {
         ControlListener navigator = navigatables.get( currentPanel );
-        if ( action.equals( "UP" ) ) // note: enums?
+        if ( action.equals( UP ) ) // note: enums?
         {
             navigator.up();
         }
-        else if ( action.equals( "LEFT" ) )
+        else if ( action.equals( LEFT ) )
         {
             navigator.left();
         }
-        else if ( action.equals( "DOWN" ) )
+        else if ( action.equals( DOWN ) )
         {
             navigator.down();
         }
-        else if ( action.equals( "RIGHT" ) )
+        else if ( action.equals( RIGHT ) )
         {
             navigator.right();
         }
-        else if ( action.equals( "CONFIRM" ) )
+        else if ( action.equals( CONFIRM ) )
         {
             navigator.confirm();
         }
-        else if ( action.equals( "CANCEL" ) )
+        else if ( action.equals( CANCEL ) )
         {
             navigator.cancel();
         }
@@ -229,37 +269,37 @@ public class PlayerUIPanel extends JPanel implements Carder, ActionListener, Con
     @Override
     public void up()
     {
-        
+        act( UP );
     }
 
     @Override
     public void left()
     {
-        
+        act( LEFT );
     }
 
     @Override
     public void down()
     {
-        
+        act( DOWN );
     }
 
     @Override
     public void right()
     {
-        
+        act( RIGHT );
     }
 
     @Override
     public void confirm()
     {
-        
+        act( CONFIRM );
     }
 
     @Override
     public void cancel()
     {
-        this.switchTo(/* currentPanel.equalsIgnoreCase( STATS_PANEL ) ? DONE_PANEL :*/ STATS_PANEL );
+        act( CANCEL );
     }
 
 }

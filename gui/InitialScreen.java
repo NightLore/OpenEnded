@@ -34,10 +34,9 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
         this.addMouseListener( this );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
         
-        JPanel menuTitlePanel = new JPanel();
-        menuTitlePanel.setOpaque( false );
+        JPanel menuTitlePanel = new ClearPanel();
         JLabel title = new JLabel( frame.getGameName() );
-        JLabel start = new JLabel( "CLICK TO CONTINUE" );
+        JLabel start = new JLabel( "PRESS ANY KEY TO CONTINUE" );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         title.setAlignmentX( CENTER_ALIGNMENT );
@@ -53,6 +52,11 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
         this.add( Box.createVerticalGlue() );
         this.add( Box.createVerticalGlue() );
         this.add( Box.createVerticalGlue() );
+    }
+    @Override
+    public void shown()
+    {
+        this.requestFocus();
     }
     public void start() { carder.switchTo( "MAINMENU" ); }
     @Override

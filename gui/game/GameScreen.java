@@ -90,8 +90,6 @@ public class GameScreen extends ScreenPanel // implements ActionListener
             public void actionPerformed( ActionEvent arg0 )
             {
                 if ( inGame ) {
-                    if ( InputManager.keyboardKeyState( KeyEvent.VK_ESCAPE ) )
-                        ui.switchTo( "PAUSE" );
                     gameTime += System.nanoTime() - lastTime;
                     game.updateGame( gameTime, mousePosition() );
                     lastTime = System.nanoTime();

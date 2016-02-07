@@ -3,16 +3,21 @@ package gui.game.player;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import gui.Carder;
+import gui.ClearPanel;
+import gui.MenuNavigator;
 
 /**
  *  Overview panel of the player and their stats
@@ -36,50 +41,66 @@ public class PlayerStatsPanel extends PlayerPanel
     public PlayerStatsPanel( Carder frame, String to, int panel )
     {
         super( frame, to );
+        
         this.setLayout( new BorderLayout() );
-        JPanel titlePanel = new JPanel();
+        JPanel titlePanel = new ClearPanel();
+        JPanel centerPanel = new ClearPanel( new GridLayout( 1, 2 ) );
         JLabel playerLabel = new JLabel( "Player " + (panel+1) );
+        JPanel imagePanel = new ClearPanel();
         imageLabel = new JLabel();
-        JPanel statSidePanel = new JPanel();
+        JPanel sidePanel = new ClearPanel();
         JButton itemButton = new JButton( ITEMS_PANEL );
         JButton controlButton = new JButton( "CONTROLS" );
         JButton doneButton = new JButton( to );
+        
         playerLabel.setAlignmentY( CENTER_ALIGNMENT );
         playerLabel.setForeground( Color.WHITE );
         Font tempFont = playerLabel.getFont();
         tempFont = new Font( tempFont.getFontName(), tempFont.getStyle(), 64 );
         playerLabel.setFont( tempFont );
-        titlePanel.setOpaque( false );
+        itemButton.setAlignmentX( CENTER_ALIGNMENT );
+        controlButton.setAlignmentX( CENTER_ALIGNMENT );
+        
         titlePanel.add( playerLabel );
-        statSidePanel.setOpaque( false );
-        statSidePanel.add( itemButton );
-        statSidePanel.add( controlButton );
-        this.setOpaque( false );
+        imagePanel.add( imageLabel );
+        sidePanel.setLayout( new BoxLayout( sidePanel, BoxLayout.Y_AXIS ) );
+        sidePanel.add( Box.createVerticalGlue() );
+        sidePanel.add( itemButton );
+        sidePanel.add( Box.createVerticalGlue() );
+        sidePanel.add( controlButton );
+        sidePanel.add( Box.createVerticalGlue() );
+        centerPanel.add( imagePanel );
+        centerPanel.add( sidePanel );
+        
         this.add( titlePanel, BorderLayout.NORTH );
-        this.add( imageLabel, BorderLayout.WEST ); // note: TODO update
-        this.add( statSidePanel, BorderLayout.EAST );
+        this.add( centerPanel, BorderLayout.CENTER );
         this.add( doneButton, BorderLayout.SOUTH );
+        
         itemButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e )
             {
-                carder.switchTo( ITEMS_PANEL );
+                act( ITEMS_PANEL );
             }
         } );
         controlButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e )
             {
-                carder.switchTo( CTRLS_PANEL );
+                act( CTRLS_PANEL );
             }
         } );
         doneButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e )
             {
-                cancel();
+                back();
             }
         } );
+        
+        navigator = new MenuNavigator(1,2);
+        navigator.addMenuItem( ITEMS_PANEL );
+        navigator.addMenuItem( CTRLS_PANEL );
     }
     
     public void setPlayerImage( Image i )
@@ -88,16 +109,12 @@ public class PlayerStatsPanel extends PlayerPanel
     }
 
     @Override
-    public void confirm()
+    public void act( String selected )
     {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void cancel()
-    {
-        back();
+        if ( selected.equals( ITEMS_PANEL ) || selected.equals( CTRLS_PANEL ) )
+        {
+            carder.switchTo( selected );
+        }
     }
 
 }

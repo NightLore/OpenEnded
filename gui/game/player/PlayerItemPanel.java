@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import sprites.Weapon;
 import gui.Carder;
+import gui.ClearPanel;
 
 /**
  *  Panel for managing the Player's items and skill class
@@ -36,14 +37,12 @@ public class PlayerItemPanel extends PlayerPanel
         super( frame, to );
         this.setLayout( new BorderLayout() );
         
-        JPanel itemNorthPanel = new JPanel();
-        JPanel itemSouthPanel = new JPanel();
+        JPanel itemNorthPanel = new ClearPanel();
+        JPanel itemSouthPanel = new ClearPanel();
         classButton = new JButton();
         atk1Button = new JButton(); // TODO
         atk2Button = new JButton();
         JButton backButton = new JButton( "BACK" );
-        itemNorthPanel.setOpaque( false );
-        itemSouthPanel.setOpaque( false );
         itemNorthPanel.add( classButton );
         itemNorthPanel.add( atk1Button );
         itemNorthPanel.add( atk2Button );
@@ -112,6 +111,13 @@ public class PlayerItemPanel extends PlayerPanel
     public void cancel()
     {
         back();
+    }
+
+    @Override
+    public void act( String selected )
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

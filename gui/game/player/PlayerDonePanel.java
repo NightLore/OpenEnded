@@ -38,19 +38,7 @@ public class PlayerDonePanel extends PlayerPanel
         doneLabel.setFont( tempFont );
         this.add( doneLabel );
     }
-
-    @Override
-    public void up() {}
-
-    @Override
-    public void left() {}
-
-    @Override
-    public void down() {}
-
-    @Override
-    public void right() {}
-
+    
     @Override
     public void confirm()
     {
@@ -58,9 +46,8 @@ public class PlayerDonePanel extends PlayerPanel
     }
 
     @Override
-    public void cancel()
-    {
-        back();
-    }
+    public void cancel() {}
 
+    @Override
+    public void act( String selected ) {}
 }

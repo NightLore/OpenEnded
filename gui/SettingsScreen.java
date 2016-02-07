@@ -51,66 +51,58 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         this.settings = settings;
         this.tempSettings = new Settings( settings );
         
-        JPanel titlePanel = new JPanel();
+        JPanel titlePanel = new ClearPanel();
         JLabel title = new JLabel( "SETTINGS" );
         
-        JPanel centerPanel = new JPanel();
+        JPanel centerPanel = new ClearPanel();
 
-        JPanel lifePanel = new JPanel();
+        JPanel lifePanel = new ClearPanel();
         JLabel lifeLabel = new JLabel( "Number of Lives: " );
         lifeSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
         numLivesLabel = new JLabel( "" + settings.numNPCs );
         
-        JPanel npcPanel = new JPanel();
+        JPanel npcPanel = new ClearPanel();
         JLabel npcLabel = new JLabel( "Number of NPCs: " );
         npcSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
         numNpcLabel = new JLabel( "" + settings.numNPCs );
         
-        JPanel enemyPanel = new JPanel();
+        JPanel enemyPanel = new ClearPanel();
         JLabel enemyLabel = new JLabel( "Number of Enemies: " );
         enemySlider = new JSlider( JSlider.HORIZONTAL, 0, 100, settings.numEnemies );
         numEnmyLabel = new JLabel( "" + settings.numEnemies );
         
-        JPanel friendlyFirePanel = new JPanel();
+        JPanel friendlyFirePanel = new ClearPanel();
         JLabel friendlyFireLabel = new JLabel( "Friendly Fire: " );
         pFriendlyFireButton = new JButton( "Player: " + toWord( settings.playerFriendlyFire ) );
         eFriendlyFireButton = new JButton ( "Enemy: " + toWord( settings.enemyFriendlyFire ) );
         
-        JPanel debugPanel = new JPanel();
+        JPanel debugPanel = new ClearPanel();
         debugButton = new JButton( "Toggle Debug: " + toWord( settings.debug ) );
-        JPanel backPanel = new JPanel();
+        JPanel backPanel = new ClearPanel();
         JButton confirmButton = new JButton( "Ok" );
         JButton cancelButton = new JButton( "Cancel" );
 
-        titlePanel.setOpaque( false );
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         title.setForeground( Color.WHITE );
         centerPanel.setLayout( new BoxLayout( centerPanel, BoxLayout.Y_AXIS ) );
-        centerPanel.setOpaque( false );
 
-        lifePanel.setOpaque( false );
         lifeLabel.setForeground( Color.WHITE );
         lifeSlider.setOpaque( false );
         lifeSlider.setMajorTickSpacing( 1 );
         numLivesLabel.setForeground( Color.WHITE );
         
-        npcPanel.setOpaque( false );
         npcLabel.setForeground( Color.WHITE );
         npcSlider.setOpaque( false );
         npcSlider.setMajorTickSpacing( 1 );
         numNpcLabel.setForeground( Color.WHITE );
         
-        enemyPanel.setOpaque( false );
         enemyLabel.setForeground( Color.WHITE );
         enemySlider.setOpaque( false );
         enemySlider.setMajorTickSpacing( 5 );
         numEnmyLabel.setForeground( Color.WHITE );
         
-        friendlyFirePanel.setOpaque( false );
         friendlyFireLabel.setForeground(  Color.WHITE );
         
-        debugPanel.setOpaque( false );
-        backPanel.setOpaque( false );
         confirmButton.addActionListener( this );
         confirmButton.setPreferredSize( new Dimension( 100, 50 ) );
         cancelButton.addActionListener( this );

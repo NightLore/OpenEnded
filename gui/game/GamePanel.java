@@ -2,6 +2,7 @@ package gui.game;
 
 import game.Settings;
 import gui.Carder;
+import gui.ClearPanel;
 import gui.SettingsScreen;
 import gui.game.player.PlayerManagerPanel;
 
@@ -12,12 +13,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 /**
  *  Manages the User Interface in game
@@ -36,6 +41,14 @@ public class GamePanel extends JPanel implements Carder, ActionListener
      */
     private static final long serialVersionUID = 1L;
     
+    public static final String LOAD_PANEL = "LOAD";
+    public static final String GAME_PANEL = "GAME";
+    public static final String ITEM_PANEL = "ITEM";
+    public static final String PAUSE_PANEL = "PAUSE";
+    public static final String SETTINGS_PANEL = "SETTINGS";
+    public static final String EXIT_PANEL = "EXIT";
+    public static final String OVER_PANEL = "OVER";
+    
     private CardLayout cards;
     private GameScreen game;
     private String currentPane; // note: not actually used
@@ -43,56 +56,52 @@ public class GamePanel extends JPanel implements Carder, ActionListener
     private PlayerManagerPanel itemPanel;
     private JLabel lifeLabel;
     
+    private Action pauseAction, itemsAction;
+    
     public GamePanel( GameScreen game, Settings settings )
     {
         this.setOpaque( false );
         this.cards = new CardLayout();
         this.game = game;
-        this.currentPane = "LOAD";
+        this.currentPane = LOAD_PANEL;
         this.setLayout( this.cards );
 
         JPanel loadPanel = new JPanel();
         JLabel loadLabel = new JLabel( "Loading..." );
 
-        JPanel gamePanel = new JPanel();
-            JPanel gamePausePanel = new JPanel();
-            JButton pauseButton = new JButton( "Pause" );
-            JPanel gameLifePanel = new JPanel();
+        JPanel gamePanel = new ClearPanel( new BorderLayout() );
+            JPanel gamePausePanel = new ClearPanel( new BorderLayout() );
+            JButton pauseButton = new JButton( PAUSE_PANEL );
+            JPanel gameLifePanel = new ClearPanel();
             lifeLabel = new JLabel( "Number of Lives: " + settings.numLives );
         
-        itemPanel = new PlayerManagerPanel( this, "PAUSE" );
+        itemPanel = new PlayerManagerPanel( this, PAUSE_PANEL );
         
         JPanel pausePanel = new JPanel();
-            JButton resumeButton = new JButton ( "Resume" );
-            JButton inventoryButton = new JButton( "Inventory" );
-            JButton settingsButton = new JButton( "Settings" );
-            JButton returnButton = new JButton( "Return to Main Menu" );
+            JButton resumeButton = new JButton ( "RESUME" );
+            JButton inventoryButton = new JButton( "INVENTORY" );
+            JButton settingsButton = new JButton( SETTINGS_PANEL );
+            JButton returnButton = new JButton( "RETURN TO MAIN MENU" );
 
-        settingsPanel = new SettingsScreen( this, "PAUSE", settings );
+        settingsPanel = new SettingsScreen( this, PAUSE_PANEL, settings );
         
         JPanel areYouSurePanel = new JPanel();
         JLabel areYouSureLabel = new JLabel( "Are You Sure You Want To Quit?" );
-            JPanel yesNoPanel = new JPanel();
+            JPanel yesNoPanel = new ClearPanel();
             JButton yesButton = new JButton( "Yes" );
             JButton noButton = new JButton( "No" );
             
         JPanel gameOverPanel = new JPanel();
         JLabel gameOverLabel = new JLabel( "GAME OVER" );
-            JPanel returnPanel = new JPanel();
-            JButton mainMenuButton = new JButton( "Return to Main Menu" );
+            JPanel returnPanel = new ClearPanel();
+            JButton mainMenuButton = new JButton( "RETURN TO MAIN MENU" );
 
         loadPanel.setBackground( new Color( 0, 0, 0, 192 ) );
         loadLabel.setForeground( Color.WHITE );
         
-        gamePanel.setLayout( new BorderLayout() );
-        gamePanel.setOpaque( false );
         gamePanel.setPreferredSize( getPreferredSize() );
-        gamePausePanel.setLayout( new BorderLayout() );
-        gamePausePanel.setOpaque( false );
             pauseButton.setPreferredSize( new Dimension( 100, 50 ) );
-            pauseButton.setActionCommand( "Pause" );
             pauseButton.addActionListener( this );
-        gameLifePanel.setOpaque( false );
             lifeLabel.setForeground( Color.WHITE );
 
         pausePanel.setLayout( new BoxLayout( pausePanel, BoxLayout.Y_AXIS ) );
@@ -114,7 +123,6 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         areYouSureLabel.setFont( exitFont );
         areYouSureLabel.setForeground( Color.LIGHT_GRAY );
         areYouSureLabel.setAlignmentX( CENTER_ALIGNMENT );
-            yesNoPanel.setOpaque( false );
             yesButton.addActionListener( this );
             noButton.addActionListener( this );
         
@@ -127,7 +135,6 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 );
         gameOverLabel.setFont( exitFont );
         gameOverLabel.setAlignmentX( CENTER_ALIGNMENT );
-            returnPanel.setOpaque( false );
             mainMenuButton.setActionCommand( "Yes" );
             mainMenuButton.addActionListener( this );
         
@@ -154,15 +161,41 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         gameOverPanel.add( gameOverLabel );
         gameOverPanel.add( returnPanel );
             returnPanel.add( mainMenuButton );
-        this.add( loadPanel, "LOAD" );
-        this.add( gamePanel, "GAME" );
-        this.add( itemPanel, "ITEM" );
-        this.add( pausePanel, "PAUSE" );
-        this.add( settingsPanel, "SETTINGS" );
-        this.add( areYouSurePanel, "EXIT" );
-        this.add( gameOverPanel, "OVER" );
+        this.add( loadPanel, LOAD_PANEL );
+        this.add( gamePanel, GAME_PANEL );
+        this.add( itemPanel, ITEM_PANEL );
+        this.add( pausePanel, PAUSE_PANEL );
+        this.add( settingsPanel, SETTINGS_PANEL );
+        this.add( areYouSurePanel, EXIT_PANEL );
+        this.add( gameOverPanel, OVER_PANEL );
         
-        this.switchTo( "GAME" );
+        this.switchTo( GAME_PANEL );
+        
+        pauseAction = new AbstractAction() {
+            
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent arg0 )
+            {
+                togglePause();
+            }
+        };
+        itemsAction = new AbstractAction() {
+            
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void actionPerformed( ActionEvent arg0 )
+            {
+                switchTo( ITEM_PANEL );
+            }
+        };
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0 ), PAUSE_PANEL );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, 0 ), ITEM_PANEL );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_SPACE, 0 ), ITEM_PANEL );
+        this.getActionMap().put( PAUSE_PANEL, pauseAction );
+        this.getActionMap().put( ITEM_PANEL, itemsAction );
     }
     
     public void reset()
@@ -170,58 +203,58 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         itemPanel.initialize( game.getGame() );
     }
     
+    public void update( int numLives )
+    {
+        lifeLabel.setText( "Number of Lives: " + numLives );
+    }
+    
     @Override
     public void switchTo( String to )
     {
         this.switchTo( currentPane, to );
     }
-    
-    public void update( int numLives )
-    {
-        lifeLabel.setText( "Number of Lives: " + numLives );
-    }
 
     @Override
     public void switchTo( String from, String to )
     {
-        if ( from.equals( "SETTINGS" ) ) {
+        if ( from.equals( SETTINGS_PANEL ) ) {
             game.settingsUpdate();
             update( game.getGame().numLives() );
         }
         
         
-        if ( to.equalsIgnoreCase( "Resume" ) ) {
-            to = "GAME";
+        if ( to.equalsIgnoreCase( "RESUME" ) ) {
+            to = GAME_PANEL;
         }
-        else if ( to.equalsIgnoreCase( "Inventory" ) ) {
+        else if ( to.equalsIgnoreCase( "INVENTORY" ) || to.equalsIgnoreCase( ITEM_PANEL ) ) {
             itemPanel.shown();
-            to = "ITEM";
+            to = ITEM_PANEL;
         }
-        else if ( to.equalsIgnoreCase( "Settings" ) ) {
+        else if ( to.equalsIgnoreCase( SETTINGS_PANEL ) ) {
             settingsPanel.shown();
-//            to = "SETTINGS";
+//            to = SETTINGS_PANEL;
         }
-//        else if ( to.equalsIgnoreCase( "Pause" ) ) {
-//            to = "PAUSE";
+//        else if ( to.equalsIgnoreCase( PAUSE_PANEL ) ) {
+//            to = PAUSE_PANEL;
 //        }
         else if ( to.equalsIgnoreCase( "Return to Main Menu" ) ) {
-            to = "EXIT";
+            to = EXIT_PANEL;
         }
         else if ( to.equalsIgnoreCase( "Yes" ) ) {
             game.returnToMainMenu(); // TODO quit game
             return;
         }
         else if ( to.equalsIgnoreCase( "No" ) ) {
-            to = "PAUSE";
+            to = PAUSE_PANEL;
         }
-        game.inGame = to.equalsIgnoreCase( "GAME" ) || to.equalsIgnoreCase( "OVER" );
+        game.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
         this.cards.show( this, to.toUpperCase() );
         currentPane = to;
     }
     
     public void togglePause()
     {
-        String panel = currentPane.equalsIgnoreCase( "PAUSE" ) ? "GAME" : "PAUSE";
+        String panel = currentPane.equalsIgnoreCase( PAUSE_PANEL ) ? GAME_PANEL : PAUSE_PANEL;
         switchTo( panel );
     }
 

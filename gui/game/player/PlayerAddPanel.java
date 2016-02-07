@@ -34,7 +34,6 @@ public class PlayerAddPanel extends PlayerPanel
         super( frame, to );
         JButton addButton = new JButton( "Add Player " + (panel+1) );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
-        this.setOpaque( false );
         addButton.setAlignmentX( CENTER_ALIGNMENT );
         this.add( Box.createVerticalGlue() );
         this.add( addButton );
@@ -49,18 +48,15 @@ public class PlayerAddPanel extends PlayerPanel
         } );
     }
 
-
     @Override
     public void confirm()
     {
         back();
     }
 
+    @Override
+    public void cancel() {}
 
     @Override
-    public void cancel()
-    {
-        
-    }
-
+    public void act( String selected ) {}
 }

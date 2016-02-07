@@ -71,4 +71,16 @@ public abstract class PlayerPanel extends ScreenPanel implements ControlListener
         if ( navigator != null )
             navigator.right();
     }
+
+    @Override
+    public void confirm()
+    {
+        act( navigator.getSelected() );
+    }
+
+    @Override
+    public void cancel()
+    {
+        back();
+    }
 }

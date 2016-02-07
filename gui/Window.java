@@ -118,7 +118,7 @@ public class Window extends JFrame implements Carder// implements KeyListener, M
     
     public String getVersion()
     {
-        return "V0.18";
+        return "V0.19";
     }
 
     public static void main( String[] args ) {

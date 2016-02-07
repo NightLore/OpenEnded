@@ -35,8 +35,8 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         Dimension buttonSize = frame.buttonSize;
         Dimension filler = new Dimension( frame.getWidth() / 20, frame.getHeight() / 20 );
         
-        JPanel titlePanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
+        JPanel titlePanel = new ClearPanel();
+        JPanel buttonPanel = new ClearPanel();
         JLabel title = new JLabel( frame.getGameName() );
         JLabel version = new JLabel( "                " + frame.getVersion() );
         JButton playButton = new JButton( "Play Game" );
@@ -48,8 +48,6 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         titlePanel.setLayout( new BoxLayout( titlePanel, BoxLayout.Y_AXIS ) );
         buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.Y_AXIS ) );
 
-        titlePanel.setOpaque( false );
-        buttonPanel.setOpaque( false );
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         version.setFont( new Font( version.getFont().getFontName(), Font.BOLD, 20 ) );
 
