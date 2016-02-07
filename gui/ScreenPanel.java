@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class ScreenPanel extends JPanel implements Screen
+public class ScreenPanel extends JPanel implements Screen, ControlListener
 {
 
     /**
@@ -29,23 +29,27 @@ public class ScreenPanel extends JPanel implements Screen
 
     protected Carder carder;
     private Image background;
+
+    private String back;
+    protected Navigator navigator;
     
-    
-    public ScreenPanel( Carder frame )
+    public ScreenPanel( Carder frame, String back )
     {
-        this( frame, Color.BLACK );
+        this( frame, Color.BLACK, back );
+        this.setOpaque( false );
     }
     
-    public ScreenPanel( Carder frame, Color background )
+    public ScreenPanel( Carder carder, Color background, String back )
     {
-        carder = frame;
+        this.carder = carder;
+        this.back = back;
         this.setBackground( background );
         this.setFocusable( true );
     }
     
-    public ScreenPanel( Carder frame, String fileName )
+    public ScreenPanel( Carder frame, String fileName, String back )
     {
-        this( frame );
+        this( frame, Color.BLACK, back );
         fileName =  "/imgs/" + fileName; // Package images are found in
         while ( background == null )
         {
@@ -76,23 +80,73 @@ public class ScreenPanel extends JPanel implements Screen
         draw( g2d );
     }
     
-//    @Override
-//    public Dimension getPreferredSize() {
-//        return new Dimension(
-//            background.getWidth(null),
-//            background.getHeight(null));
-//    }
-    
     @Override
-    public void shown()
+    public void shown() {}
+
+    @Override
+    public void cover() {}
+    
+    public void back()
     {
-        
+        carder.switchTo( back );
     }
 
     @Override
-    public void cover()
+    public void up()
     {
-        
+        if ( navigator != null )
+            navigator.up();
+    }
+
+    @Override
+    public void left()
+    {
+        if ( navigator != null )
+            navigator.left();
+    }
+
+    @Override
+    public void down()
+    {
+        if ( navigator != null )
+            navigator.down();
+    }
+
+    @Override
+    public void right()
+    {
+        if ( navigator != null )
+            navigator.right();
+    }
+
+    @Override
+    public void confirm()
+    {
+        if ( navigator != null )
+            act( navigator.getSelected() );
+    }
+
+    @Override
+    public void cancel()
+    {
+        back();
+    }
+
+    @Override
+    public void act( String selected ) {}
+
+    @Deprecated
+    @Override
+    public String getSelected()
+    {
+        return navigator.getSelected();
+    }
+
+    @Deprecated
+    @Override
+    public void addMenuItem( String item )
+    {
+        navigator.addMenuItem( item );
     }
 
 }

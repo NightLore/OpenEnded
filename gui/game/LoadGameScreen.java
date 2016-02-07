@@ -3,6 +3,7 @@ package gui.game;
 import gui.Carder;
 import gui.ScreenPanel;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,11 +24,16 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
      * 
      */
     private static final long serialVersionUID = 1L;
-
+    
     public LoadGameScreen( Carder frame )
     {
-        super( frame );
-        JButton backButton = new JButton( "Back" );
+        this( frame, LISTGAME );
+    }
+
+    public LoadGameScreen( Carder frame, String back )
+    {
+        super( frame, Color.BLACK, back );
+        JButton backButton = new JButton( "BACK" );
         backButton.addActionListener( this );
         this.add( backButton );
     }
@@ -35,9 +41,15 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        if ( e.getActionCommand().equals( "Back" ) )
+        act( e.getActionCommand() );
+    }
+    
+    @Override
+    public void act( String selected )
+    {
+        if ( selected.equalsIgnoreCase( "BACK" ) )
         {
-            carder.switchTo( "LISTGAME" );
+            back();
         }
     }
 }

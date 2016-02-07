@@ -1,5 +1,7 @@
 package gui.game;
 
+import gui.Carder;
+import gui.MenuNavigator;
 import gui.ScreenPanel;
 import gui.Window;
 
@@ -26,13 +28,18 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
      * 
      */
     private static final long serialVersionUID = 1L;
-
-    public ListGameScreen( Window frame )
+    
+    public ListGameScreen( Carder frame )
     {
-        super( frame, "GrassyBackground.png" );
+        this( frame, MAINMENU );
+    }
+
+    public ListGameScreen( Carder frame, String back )
+    {
+        super( frame, "GrassyBackground.png", back );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
         
-        Dimension buttonSize = frame.buttonSize;
+        Dimension buttonSize = Window.buttonSize;
         JButton stryButton = new JButton( "Story Mode" );
         JButton freeButton = new JButton( "Endless Mode" );
         JButton loadButton = new JButton( "Load Game" );
@@ -62,16 +69,28 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
         this.add( Box.createVerticalGlue() );
         this.add( backButton );
         this.add( Box.createVerticalGlue() );
+        
+        navigator = new MenuNavigator(1,4);
+        navigator.addMenuItem( STORYGAME );
+        navigator.addMenuItem( FREEGAME );
+        navigator.addMenuItem( LOADGAME );
+        navigator.addMenuItem( MAINMENU );
     }
 
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        String p = null;
-        if ( e.getActionCommand().equals( "Story Mode" ) ) p = "STORYGAME";
-        else if ( e.getActionCommand().equals( "Endless Mode" ) ) p = "FREEGAME";
-        else if ( e.getActionCommand().equals( "Load Game" ) ) p = "LOADGAME";
-        else if ( e.getActionCommand().equals( "Back" ) ) p = "MAINMENU";
+        act( e.getActionCommand() );
+    }
+    
+    @Override
+    public void act( String selected )
+    {
+        String p = selected;
+        if ( selected.equals( "Story Mode" ) ) p = STORYGAME;
+        else if ( selected.equals( "Endless Mode" ) ) p = FREEGAME;
+        else if ( selected.equals( "Load Game" ) ) p = LOADGAME;
+        else if ( selected.equals( "Back" ) ) p = MAINMENU;
 
         if ( p != null ) carder.switchTo( p );
     }

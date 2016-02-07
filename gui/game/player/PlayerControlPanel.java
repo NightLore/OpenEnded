@@ -2,6 +2,7 @@ package gui.game.player;
 
 import gui.Carder;
 import gui.ClearPanel;
+import gui.ScreenPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +22,7 @@ import sprites.Player;
  *  @author  Nathan Lui
  *  @version Feb 3, 2016
  */
-public class PlayerControlPanel extends PlayerPanel
+public class PlayerControlPanel extends ScreenPanel
 {
 
     /**

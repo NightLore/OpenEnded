@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import sprites.Weapon;
 import gui.Carder;
 import gui.ClearPanel;
+import gui.ScreenPanel;
 
 /**
  *  Panel for managing the Player's items and skill class
@@ -17,7 +18,7 @@ import gui.ClearPanel;
  *  @author  Nathan Lui
  *  @version Feb 4, 2016
  */
-public class PlayerItemPanel extends PlayerPanel
+public class PlayerItemPanel extends ScreenPanel
 {
     /**
      * 

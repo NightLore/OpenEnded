@@ -1,6 +1,7 @@
 package gui.game;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -16,7 +17,7 @@ import game.Settings;
 import gui.Carder;
 import gui.ScreenPanel;
 
-public class GameScreen extends ScreenPanel // implements ActionListener
+public class GameScreen extends ScreenPanel
 {
     /**
      * Time of one second in milliseconds.
@@ -60,9 +61,15 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     private Assets assets;
     private GamePanel ui;
     private Timer updater;
+    
     public GameScreen( Carder frame, Settings settings, Assets assets )
     {
-        super( frame );
+        this( frame, settings, assets, LISTGAME );
+    }
+    
+    public GameScreen( Carder frame, Settings settings, Assets assets, String back )
+    {
+        super( frame, Color.BLACK, back );
         input = new InputManager( this );
         this.settings = settings;
         this.assets = assets;
@@ -106,7 +113,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
         this.newGame();
         updater.start();
         ui.reset();
-        ui.switchTo( "GAME" );
+        ui.switchTo( GamePanel.GAME_PANEL );
     }
     
     @Override
@@ -114,7 +121,7 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     {
         updater.stop();
         InputManager.reset();
-        ui.switchTo( "LOAD" );
+        ui.switchTo( GamePanel.LOAD_PANEL );
     }
     
     /**
@@ -182,13 +189,13 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     
     public void gameOver()
     {
-        ui.switchTo( "OVER" );
+        ui.switchTo( GamePanel.OVER_PANEL );
     }
        
     public void returnToMainMenu()
     {
         // TODO destroy current game session
-        carder.switchTo( "INITIAL" );
+        carder.switchTo( INITIAL );
     }
     
     public Assets getAssets()
@@ -199,6 +206,48 @@ public class GameScreen extends ScreenPanel // implements ActionListener
     public Game getGame()
     {
         return game;
+    }
+    
+    @Override
+    public void act( String action )
+    {
+        ui.act( action );
+    }
+
+    @Override
+    public void up()
+    {
+        act( UP );
+    }
+
+    @Override
+    public void left()
+    {
+        act( LEFT );
+    }
+
+    @Override
+    public void down()
+    {
+        act( DOWN );
+    }
+
+    @Override
+    public void right()
+    {
+        act( RIGHT );
+    }
+
+    @Override
+    public void confirm()
+    {
+        act( CONFIRM );
+    }
+
+    @Override
+    public void cancel()
+    {
+        act( CANCEL );
     }
     
 }

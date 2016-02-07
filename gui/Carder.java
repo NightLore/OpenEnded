@@ -9,7 +9,8 @@ package gui;
  *
  *  @author  Sources: none
  */
-public interface Carder extends Cards
+public interface Carder
 {
     public void switchTo( String to );
+    public void switchTo( String from, String to );
 }

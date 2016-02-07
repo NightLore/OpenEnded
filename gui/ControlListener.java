@@ -1,6 +1,4 @@
-package gui.game.player;
-
-import gui.Navigator;
+package gui;
 
 /**
  *  Interface for panels that use keyboard controls to navigate
@@ -10,6 +8,13 @@ import gui.Navigator;
  */
 public interface ControlListener extends Navigator
 {
+    public static final String INITIAL = "INITIAL";
+    public static final String MAINMENU = "MAINMENU";
+    public static final String SETTINGS = "SETTINGS";
+    public static final String LISTGAME = "LISTGAME";
+    public static final String STORYGAME = "STORYGAME";
+    public static final String LOADGAME = "LOADGAME";
+    public static final String FREEGAME = "FREEGAME";
     // note: switch to Enums
     public static final String START_PANEL = "START";
     public static final String STATS_PANEL = "STATS";

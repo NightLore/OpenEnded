@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.MenuNavigator;
+import gui.ScreenPanel;
 
 /**
  *  Overview panel of the player and their stats
@@ -25,7 +26,7 @@ import gui.MenuNavigator;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 4, 2016
  */
-public class PlayerStatsPanel extends PlayerPanel
+public class PlayerStatsPanel extends ScreenPanel
 {
     /**
      * 

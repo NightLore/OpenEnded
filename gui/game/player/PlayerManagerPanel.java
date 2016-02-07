@@ -2,11 +2,10 @@ package gui.game.player;
 
 import game.Game;
 import gui.Carder;
+import gui.ScreenPanel;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-
-import javax.swing.JPanel;
 
 /**
  *  This Class manages the Display of the four players in the Item screen
@@ -17,7 +16,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class PlayerManagerPanel extends JPanel implements Manager
+public class PlayerManagerPanel extends ScreenPanel implements Manager
 {
     /**
      * 
@@ -27,14 +26,10 @@ public class PlayerManagerPanel extends JPanel implements Manager
     public static final int MAX_PLAYERS = 4;
     
     private PlayerUIPanel[] mainPanels;
-    private Carder carder;
-    private String back;
     public PlayerManagerPanel( Carder carder, String back )
     {
-        this.carder = carder;
-        this.back = back;
+        super( carder, new Color( 64, 64, 64 ), back );
         this.setLayout( new GridLayout( 2, 2 ) );
-        this.setBackground( new Color( 64, 64, 64 ) );
         
         mainPanels = new PlayerUIPanel[MAX_PLAYERS];
         
@@ -50,13 +45,15 @@ public class PlayerManagerPanel extends JPanel implements Manager
         {
             mainPanels[i].setGame( game );
             if ( i == 0 )
-                mainPanels[i].switchTo( "STATS" );
+                mainPanels[i].switchTo( STATS_PANEL );
             this.add( mainPanels[i] );
         }
     }
     
+    @Override
     public void shown()
     {
+        this.requestFocus();
         reset();
     }
     
@@ -70,7 +67,7 @@ public class PlayerManagerPanel extends JPanel implements Manager
                 return false;
             }
         }
-        carder.switchTo( back );
+        back();
         return true;
     }
     

@@ -29,20 +29,26 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
     
-    public MainMenuScreen( Window frame )
+    public MainMenuScreen( Carder frame )
     {
-        super( frame, "GrassyBackground.png" );
-        Dimension buttonSize = frame.buttonSize;
-        Dimension filler = new Dimension( frame.getWidth() / 20, frame.getHeight() / 20 );
+        this( frame, INITIAL );
+    }
+    
+    public MainMenuScreen( Carder frame, String back )
+    {
+        super( frame, "GrassyBackground.png", back );
+        Dimension buttonSize = Window.buttonSize;
+        Dimension windowSize = Window.windowSize;
+        Dimension filler = new Dimension( windowSize.width / 20, windowSize.height / 20 );
         
         JPanel titlePanel = new ClearPanel();
         JPanel buttonPanel = new ClearPanel();
-        JLabel title = new JLabel( frame.getGameName() );
-        JLabel version = new JLabel( "                " + frame.getVersion() );
-        JButton playButton = new JButton( "Play Game" );
-        JButton stgsButton = new JButton( "Settings" );
-        JButton backButton = new JButton( "Back" );
-        JButton exitButton = new JButton( "Exit Game" );
+        JLabel title = new JLabel( Window.getGameName() );
+        JLabel version = new JLabel( "                " + Window.getVersion() );
+        JButton playButton = new JButton( "PLAY GAME" );
+        JButton stgsButton = new JButton( SETTINGS );
+        JButton backButton = new JButton( "BACK" );
+        JButton exitButton = new JButton( "EXIT GAME" );
         
         this.setLayout( new BorderLayout() );
         titlePanel.setLayout( new BoxLayout( titlePanel, BoxLayout.Y_AXIS ) );
@@ -58,7 +64,7 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         exitButton.addActionListener( this );
 
         // -------------------- Setting Sizes     ----------------------- //
-        buttonPanel.setPreferredSize( new Dimension( frame.getWidth() / 4, frame.getHeight() / 3 ) );
+        buttonPanel.setPreferredSize( new Dimension( windowSize.width / 4, windowSize.height / 3 ) );
         playButton.setPreferredSize( buttonSize );
         stgsButton.setPreferredSize( buttonSize );
         backButton.setPreferredSize( buttonSize );
@@ -88,30 +94,28 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         buttonPanel.add( exitButton );
         buttonPanel.add( Box.createRigidArea( filler ) );
         buttonPanel.add( Box.createVerticalGlue() );
-    }
-
-    @Override
-    public void shown()
-    {
         
-    }
-
-    @Override
-    public void cover()
-    {
-        
+        navigator = new MenuNavigator(1,4);
+        navigator.addMenuItem( LISTGAME );
+        navigator.addMenuItem( SETTINGS );
+        navigator.addMenuItem( INITIAL );
+        navigator.addMenuItem( "EXIT GAME" );
     }
 
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        String p = null;
+        act( e.getActionCommand() );
+    }
+    @Override
+    public void act( String selected )
+    {
+        String p = selected;
         
-        if ( e.getActionCommand().equals( "Play Game" ) )      p = "LISTGAME";
-        else if ( e.getActionCommand().equals( "Load Game" ) ) p = "LOADGAME";
-        else if ( e.getActionCommand().equals( "Settings" ) )  p = "SETTINGS";
-        else if ( e.getActionCommand().equals( "Back" ) )      p = "INITIAL";
-        else if ( e.getActionCommand().equals( "Exit Game" ) ) System.exit( 0 );
+        if ( selected.equals( "PLAY GAME" ) )      p = LISTGAME;
+        // else if ( selected.equals( SETTINGS ) )  p = SETTINGS;
+        else if ( selected.equals( "BACK" ) )      p = INITIAL;
+        else if ( selected.equals( "EXIT GAME" ) ) System.exit( 0 );
         
         if ( p != null ) carder.switchTo( p );
     }

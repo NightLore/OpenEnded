@@ -33,8 +33,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
     
-    private String back;
-    
     private Settings settings;
     private Settings tempSettings;
     
@@ -44,9 +42,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     
     public SettingsScreen( Carder frame, String back, Settings settings )
     {
-        super( frame );
+        super( frame, Color.BLACK, back );
         this.setLayout( new BorderLayout() );
-        this.back = back;
         
         this.settings = settings;
         this.tempSettings = new Settings( settings );
@@ -79,8 +76,8 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         JPanel debugPanel = new ClearPanel();
         debugButton = new JButton( "Toggle Debug: " + toWord( settings.debug ) );
         JPanel backPanel = new ClearPanel();
-        JButton confirmButton = new JButton( "Ok" );
-        JButton cancelButton = new JButton( "Cancel" );
+        JButton confirmButton = new JButton( "OK" );
+        JButton cancelButton = new JButton( "CANCEL" );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         title.setForeground( Color.WHITE );
@@ -188,6 +185,10 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
                 numEnmyLabel.setText( "" + tempSettings.numEnemies );
             }
         } );
+        
+        navigator = new MenuNavigator(2,1);
+        navigator.addMenuItem( "OK" );
+        navigator.addMenuItem( "CANCEL" );
     }
     
     @Override
@@ -208,15 +209,20 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        String action = e.getActionCommand();
-        if ( action.equals( "Cancel" ) )
+        act( e.getActionCommand() );
+    }
+    
+    @Override
+    public void act( String selected )
+    {
+        if ( selected.equalsIgnoreCase( "CANCEL" ) )
         {
-            carder.switchTo( back );
+            back();
         }
-        else if ( action.equals( "Ok" ) )
+        else if ( selected.equalsIgnoreCase( "OK" ) )
         {
             settings.copy( tempSettings );
-            carder.switchTo( back );
+            back();
         }
     }
     

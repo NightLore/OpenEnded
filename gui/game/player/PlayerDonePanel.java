@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 
 import gui.Carder;
+import gui.ScreenPanel;
 
 /**
  *  Panel for notifying when a player is done with their menu
@@ -13,7 +14,7 @@ import gui.Carder;
  *  @author  Nathan
  *  @version Feb 4, 2016
  */
-public class PlayerDonePanel extends PlayerPanel
+public class PlayerDonePanel extends ScreenPanel
 {
     
     /**

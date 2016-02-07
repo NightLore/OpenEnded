@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 import gui.Carder;
+import gui.ScreenPanel;
 
 /**
  *  Panel for adding a Player
@@ -15,7 +16,7 @@ import gui.Carder;
  *  @author  Nathan Lui
  *  @version Feb 4, 2016
  */
-public class PlayerAddPanel extends PlayerPanel
+public class PlayerAddPanel extends ScreenPanel
 {
     /**
      * 

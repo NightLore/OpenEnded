@@ -27,15 +27,20 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
      */
     private static final long serialVersionUID = 1L;
 
-    public InitialScreen( Window frame )
+    public InitialScreen( Carder frame )
     {
-        super( frame, "GrassyBackground.png" );
+        this( frame, MAINMENU );
+    }
+    
+    public InitialScreen( Carder frame, String back )
+    {
+        super( frame, "GrassyBackground.png", back );
         this.addKeyListener( this );
         this.addMouseListener( this );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
         
         JPanel menuTitlePanel = new ClearPanel();
-        JLabel title = new JLabel( frame.getGameName() );
+        JLabel title = new JLabel( Window.getGameName() );
         JLabel start = new JLabel( "PRESS ANY KEY TO CONTINUE" );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
@@ -56,9 +61,9 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
     @Override
     public void shown()
     {
-        this.requestFocus();
+        this.requestFocusInWindow();
     }
-    public void start() { carder.switchTo( "MAINMENU" ); }
+    public void start() { back(); }
     @Override
     public void mouseClicked( MouseEvent e ) {}
     @Override
@@ -70,7 +75,7 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
     @Override
     public void mouseReleased( MouseEvent e ) {}
     @Override
-    public void keyPressed( KeyEvent e ) { start(); }
+    public void keyPressed( KeyEvent e ) { start(); e.consume(); }
     @Override
     public void keyReleased( KeyEvent e ) {}
     @Override

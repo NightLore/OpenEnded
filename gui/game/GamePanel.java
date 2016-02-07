@@ -1,13 +1,12 @@
 package gui.game;
 
 import game.Settings;
-import gui.Carder;
 import gui.ClearPanel;
+import gui.NavigatablePanel;
 import gui.SettingsScreen;
 import gui.game.player.PlayerManagerPanel;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -33,7 +32,7 @@ import javax.swing.KeyStroke;
  *
  *  @author  Sources: none
  */
-public class GamePanel extends JPanel implements Carder, ActionListener
+public class GamePanel extends NavigatablePanel implements ActionListener
 {
 
     /**
@@ -49,9 +48,7 @@ public class GamePanel extends JPanel implements Carder, ActionListener
     public static final String EXIT_PANEL = "EXIT";
     public static final String OVER_PANEL = "OVER";
     
-    private CardLayout cards;
     private GameScreen game;
-    private String currentPane; // note: not actually used
     private SettingsScreen settingsPanel;
     private PlayerManagerPanel itemPanel;
     private JLabel lifeLabel;
@@ -60,11 +57,8 @@ public class GamePanel extends JPanel implements Carder, ActionListener
     
     public GamePanel( GameScreen game, Settings settings )
     {
-        this.setOpaque( false );
-        this.cards = new CardLayout();
         this.game = game;
-        this.currentPane = LOAD_PANEL;
-        this.setLayout( this.cards );
+        this.currentPanel = LOAD_PANEL;
 
         JPanel loadPanel = new JPanel();
         JLabel loadLabel = new JLabel( "Loading..." );
@@ -161,6 +155,7 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         gameOverPanel.add( gameOverLabel );
         gameOverPanel.add( returnPanel );
             returnPanel.add( mainMenuButton );
+            
         this.add( loadPanel, LOAD_PANEL );
         this.add( gamePanel, GAME_PANEL );
         this.add( itemPanel, ITEM_PANEL );
@@ -168,6 +163,14 @@ public class GamePanel extends JPanel implements Carder, ActionListener
         this.add( settingsPanel, SETTINGS_PANEL );
         this.add( areYouSurePanel, EXIT_PANEL );
         this.add( gameOverPanel, OVER_PANEL );
+        
+//        navigatables.put( LOAD_PANEL, loadPanel );
+//        navigatables.put( GAME_PANEL, gamePanel );
+        navigatables.put( ITEM_PANEL, itemPanel );
+//        navigatables.put( PAUSE_PANEL, pausePanel );
+//        navigatables.put( SETTINGS_PANEL, SETTINGS_PANEL );
+//        navigatables.put( EXIT_PANEL, areYouSurePanel );
+//        navigatables.put( OVER_PANEL, gameOverPanel );
         
         this.switchTo( GAME_PANEL );
         
@@ -191,6 +194,8 @@ public class GamePanel extends JPanel implements Carder, ActionListener
                 switchTo( ITEM_PANEL );
             }
         };
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_P, 0 ), PAUSE_PANEL );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ), PAUSE_PANEL );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0 ), PAUSE_PANEL );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, 0 ), ITEM_PANEL );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_SPACE, 0 ), ITEM_PANEL );
@@ -206,12 +211,6 @@ public class GamePanel extends JPanel implements Carder, ActionListener
     public void update( int numLives )
     {
         lifeLabel.setText( "Number of Lives: " + numLives );
-    }
-    
-    @Override
-    public void switchTo( String to )
-    {
-        this.switchTo( currentPane, to );
     }
 
     @Override
@@ -248,21 +247,19 @@ public class GamePanel extends JPanel implements Carder, ActionListener
             to = PAUSE_PANEL;
         }
         game.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
-        this.cards.show( this, to.toUpperCase() );
-        currentPane = to;
+        this.cardLayout.show( this, to.toUpperCase() );
     }
     
     public void togglePause()
     {
-        String panel = currentPane.equalsIgnoreCase( PAUSE_PANEL ) ? GAME_PANEL : PAUSE_PANEL;
+        String panel = currentPanel.equalsIgnoreCase( PAUSE_PANEL ) ? GAME_PANEL : PAUSE_PANEL;
         switchTo( panel );
     }
 
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        String action = e.getActionCommand();
-        this.switchTo( action.toUpperCase() );
+        this.switchTo( e.getActionCommand().toUpperCase() );
     }
     
 }
