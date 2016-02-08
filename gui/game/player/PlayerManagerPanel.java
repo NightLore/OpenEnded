@@ -3,6 +3,7 @@ package gui.game.player;
 import game.Game;
 import gui.Carder;
 import gui.ScreenPanel;
+import gui.game.GamePanel;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -26,6 +27,12 @@ public class PlayerManagerPanel extends ScreenPanel implements Manager
     public static final int MAX_PLAYERS = 4;
     
     private PlayerUIPanel[] mainPanels;
+    
+    public PlayerManagerPanel( Carder carder )
+    {
+        this( carder, GamePanel.PAUSE_PANEL );
+    }
+    
     public PlayerManagerPanel( Carder carder, String back )
     {
         super( carder, new Color( 64, 64, 64 ), back );
@@ -53,7 +60,7 @@ public class PlayerManagerPanel extends ScreenPanel implements Manager
     @Override
     public void shown()
     {
-        this.requestFocus();
+        this.requestFocusInWindow();
         reset();
     }
     

@@ -215,6 +215,7 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
     @Override
     public void act( String selected )
     {
+        super.act( selected );
         if ( selected.equalsIgnoreCase( "CANCEL" ) )
         {
             back();

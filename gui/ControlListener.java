@@ -8,6 +8,13 @@ package gui;
  */
 public interface ControlListener extends Navigator
 {
+    public static final String BACK = "BACK";
+    
+    public static final String ESCAPE = "ESCAPE";
+    public static final String SPACE = "SPACE";
+    public static final String ENTER = "ENTER";
+    public static final String BACKSPACE = "BACKSPACE";
+    
     public static final String INITIAL = "INITIAL";
     public static final String MAINMENU = "MAINMENU";
     public static final String SETTINGS = "SETTINGS";

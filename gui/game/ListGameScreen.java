@@ -29,6 +29,10 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
      */
     private static final long serialVersionUID = 1L;
     
+    public static final String STORY_MODE = "STORY MODE";
+    public static final String ENDLESS_MODE = "ENDLESS MODE";
+    public static final String LOAD_MODE = "LOAD GAME";
+    
     public ListGameScreen( Carder frame )
     {
         this( frame, MAINMENU );
@@ -40,10 +44,10 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
         
         Dimension buttonSize = Window.buttonSize;
-        JButton stryButton = new JButton( "Story Mode" );
-        JButton freeButton = new JButton( "Endless Mode" );
-        JButton loadButton = new JButton( "Load Game" );
-        JButton backButton = new JButton( "Back" );
+        JButton stryButton = new JButton( STORY_MODE );
+        JButton freeButton = new JButton( ENDLESS_MODE );
+        JButton loadButton = new JButton( LOAD_MODE );
+        JButton backButton = new JButton( BACK );
 
         stryButton.addActionListener( this );
         freeButton.addActionListener( this );
@@ -86,11 +90,12 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
     @Override
     public void act( String selected )
     {
-        String p = selected;
-        if ( selected.equals( "Story Mode" ) ) p = STORYGAME;
-        else if ( selected.equals( "Endless Mode" ) ) p = FREEGAME;
-        else if ( selected.equals( "Load Game" ) ) p = LOADGAME;
-        else if ( selected.equals( "Back" ) ) p = MAINMENU;
+        super.act( selected );
+        String p = null;
+        if ( selected.equals( STORY_MODE ) || selected.equals( STORYGAME ) ) p = STORYGAME;
+        else if ( selected.equals( ENDLESS_MODE ) ) p = FREEGAME;
+        else if ( selected.equals( LOAD_MODE ) ) p = LOADGAME;
+        else if ( selected.equals( BACK ) ) back();
 
         if ( p != null ) carder.switchTo( p );
     }

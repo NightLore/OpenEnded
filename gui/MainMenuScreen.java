@@ -47,7 +47,7 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         JLabel version = new JLabel( "                " + Window.getVersion() );
         JButton playButton = new JButton( "PLAY GAME" );
         JButton stgsButton = new JButton( SETTINGS );
-        JButton backButton = new JButton( "BACK" );
+        JButton backButton = new JButton( BACK );
         JButton exitButton = new JButton( "EXIT GAME" );
         
         this.setLayout( new BorderLayout() );
@@ -110,11 +110,12 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
     @Override
     public void act( String selected )
     {
-        String p = selected;
+        super.act( selected );
+        String p = null;
         
-        if ( selected.equals( "PLAY GAME" ) )      p = LISTGAME;
-        // else if ( selected.equals( SETTINGS ) )  p = SETTINGS;
-        else if ( selected.equals( "BACK" ) )      p = INITIAL;
+        if ( selected.equals( "PLAY GAME" ) || selected.equals( LISTGAME ) ) p = LISTGAME;
+         else if ( selected.equals( SETTINGS ) )                          p = SETTINGS;
+        else if ( selected.equals( BACK ) || selected.equals( INITIAL ) ) p = INITIAL;
         else if ( selected.equals( "EXIT GAME" ) ) System.exit( 0 );
         
         if ( p != null ) carder.switchTo( p );

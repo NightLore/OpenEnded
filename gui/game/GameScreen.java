@@ -17,6 +17,12 @@ import game.Settings;
 import gui.Carder;
 import gui.ScreenPanel;
 
+/**
+ *  Screen that manages the Game
+ *
+ *  @author  Nathan Man-ho Lui
+ *  @version Nov 1, 2015
+ */
 public class GameScreen extends ScreenPanel
 {
     /**

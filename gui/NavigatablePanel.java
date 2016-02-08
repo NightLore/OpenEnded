@@ -121,6 +121,10 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
         {
             navigator.cancel();
         }
+        else
+        {
+            navigator.act( action );
+        }
     }
 
     @Override

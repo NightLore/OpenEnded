@@ -47,6 +47,7 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
     @Override
     public void act( String selected )
     {
+        super.act( selected );
         if ( selected.equalsIgnoreCase( "BACK" ) )
         {
             back();
