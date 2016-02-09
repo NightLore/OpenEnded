@@ -10,14 +10,16 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import gui.Carder;
 import gui.ClearPanel;
-import gui.MenuNavigator;
 import gui.ScreenPanel;
+import gui.utilities.MappedSelector;
+import gui.utilities.MenuNavigator;
+import gui.utilities.SelectableButton;
+import gui.utilities.Selector;
 
 /**
  *  Overview panel of the player and their stats
@@ -49,17 +51,15 @@ public class PlayerStatsPanel extends ScreenPanel
         JPanel imagePanel = new ClearPanel();
         imageLabel = new JLabel();
         JPanel sidePanel = new ClearPanel();
-        JButton itemButton = new JButton( ITEMS_PANEL );
-        JButton controlButton = new JButton( "CONTROLS" );
-        JButton doneButton = new JButton( to );
+        SelectableButton itemButton = new SelectableButton( ITEMS_PANEL );
+        SelectableButton controlButton = new SelectableButton( "CONTROLS" );
+        SelectableButton doneButton = new SelectableButton( DONE_PANEL );
         
         playerLabel.setAlignmentY( CENTER_ALIGNMENT );
         playerLabel.setForeground( Color.WHITE );
         Font tempFont = playerLabel.getFont();
         tempFont = new Font( tempFont.getFontName(), tempFont.getStyle(), 64 );
         playerLabel.setFont( tempFont );
-        itemButton.setAlignmentX( CENTER_ALIGNMENT );
-        controlButton.setAlignmentX( CENTER_ALIGNMENT );
         
         titlePanel.add( playerLabel );
         imagePanel.add( imageLabel );
@@ -92,13 +92,19 @@ public class PlayerStatsPanel extends ScreenPanel
             @Override
             public void actionPerformed( ActionEvent e )
             {
-                back();
+                act( DONE_PANEL );
             }
         } );
         
-        navigator = new MenuNavigator(1,2);
+        navigator = new MenuNavigator(1,3);
         navigator.addMenuItem( ITEMS_PANEL );
         navigator.addMenuItem( CTRLS_PANEL );
+        navigator.addMenuItem( DONE_PANEL );
+        Selector selector = new MappedSelector();
+        selector.addSelectable( ITEMS_PANEL, itemButton );
+        selector.addSelectable( CTRLS_PANEL, controlButton );
+        selector.addSelectable( DONE_PANEL, doneButton );
+        navigator.setSelector( selector );
     }
     
     public void setPlayerImage( Image i )
@@ -109,7 +115,7 @@ public class PlayerStatsPanel extends ScreenPanel
     @Override
     public void act( String selected )
     {
-        if ( selected.equals( ITEMS_PANEL ) || selected.equals( CTRLS_PANEL ) )
+        if ( selected.equals( ITEMS_PANEL ) || selected.equals( CTRLS_PANEL ) || selected.equals( DONE_PANEL ) )
         {
             carder.switchTo( selected );
         }

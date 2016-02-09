@@ -3,8 +3,6 @@ package gui.game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,7 +18,7 @@ import gui.ScreenPanel;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 8, 2016
  */
-public class InGamePanel extends ScreenPanel implements ActionListener
+public class InGamePanel extends ScreenPanel
 {
     /**
      * 
@@ -77,11 +75,5 @@ public class InGamePanel extends ScreenPanel implements ActionListener
     public void update( int numLives )
     {
         lifeLabel.setText( "Number of Lives: " + numLives );
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
     }
 }

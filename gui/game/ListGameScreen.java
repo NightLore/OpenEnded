@@ -1,15 +1,15 @@
 package gui.game;
 
 import gui.Carder;
-import gui.MenuNavigator;
 import gui.ScreenPanel;
+import gui.utilities.MappedSelector;
+import gui.utilities.MenuNavigator;
+import gui.utilities.SelectableButton;
+import gui.utilities.Selector;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 
 /**
  *  Screen Lists all game modes for user to play
@@ -20,7 +20,7 @@ import javax.swing.JButton;
  *
  *  @author  Sources: none
  */
-public class ListGameScreen extends ScreenPanel implements ActionListener
+public class ListGameScreen extends ScreenPanel
 {
     /**
      * 
@@ -44,10 +44,10 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
         this.setLayout( new GridLayout( 0, 1, 0, marginY ) );
         this.setBorder( BorderFactory.createEmptyBorder( marginY, marginX, 3 * marginY / 2, marginX ) );
         
-        JButton stryButton = new JButton( STORY_MODE );
-        JButton freeButton = new JButton( ENDLESS_MODE );
-        JButton loadButton = new JButton( LOAD_MODE );
-        JButton backButton = new JButton( BACK );
+        SelectableButton stryButton = new SelectableButton( STORY_MODE );
+        SelectableButton freeButton = new SelectableButton( ENDLESS_MODE );
+        SelectableButton loadButton = new SelectableButton( LOAD_MODE );
+        SelectableButton backButton = new SelectableButton( BACK );
 
         stryButton.addActionListener( this );
         freeButton.addActionListener( this );
@@ -64,12 +64,12 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
         navigator.addMenuItem( FREEGAME );
         navigator.addMenuItem( LOADGAME );
         navigator.addMenuItem( MAINMENU );
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
+        Selector selector = new MappedSelector();
+        selector.addSelectable( STORYGAME, stryButton );
+        selector.addSelectable( FREEGAME, freeButton );
+        selector.addSelectable( LOADGAME, loadButton );
+        selector.addSelectable( MAINMENU, backButton );
+        navigator.setSelector( selector );
     }
     
     @Override

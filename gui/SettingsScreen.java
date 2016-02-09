@@ -1,6 +1,7 @@
 package gui;
 
 import game.Settings;
+import gui.utilities.MenuNavigator;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,7 +27,7 @@ import javax.swing.event.ChangeListener;
  *
  *  @author  Sources: none
  */
-public class SettingsScreen extends ScreenPanel implements ActionListener
+public class SettingsScreen extends ScreenPanel
 {
     /**
      * 
@@ -204,12 +205,6 @@ public class SettingsScreen extends ScreenPanel implements ActionListener
         npcSlider.setValue( tempSettings.numNPCs );
         numEnmyLabel.setText( "" + tempSettings.numEnemies );
         enemySlider.setValue( tempSettings.numEnemies );
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
     }
     
     @Override

@@ -7,8 +7,6 @@ import gui.NavigatablePanel;
 import gui.ScreenPanel;
 
 import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.KeyStroke;
@@ -24,7 +22,7 @@ import sprites.Player;
  *
  *  @author  Sources: none
  */
-public class PlayerUIPanel extends NavigatablePanel implements Carder, ActionListener, ControlListener
+public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlListener
 {
     /**
      * 
@@ -156,11 +154,5 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ActionLis
         }
         cardLayout.show( this, currentPanel );
         manager.check();
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        this.switchTo( e.getActionCommand().toUpperCase() );
     }
 }

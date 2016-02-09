@@ -2,8 +2,6 @@ package gui.game;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,7 +18,7 @@ import gui.ScreenPanel;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 8, 2016
  */
-public class GameOverPanel extends ScreenPanel implements ActionListener
+public class GameOverPanel extends ScreenPanel
 {
     /**
      * 
@@ -68,12 +66,6 @@ public class GameOverPanel extends ScreenPanel implements ActionListener
         {
             carder.switchTo( selected );
         }
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
     }
 
 }

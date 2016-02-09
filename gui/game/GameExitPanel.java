@@ -2,19 +2,19 @@ package gui.game;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import gui.Carder;
 import gui.ClearPanel;
-import gui.MenuNavigator;
 import gui.ScreenPanel;
+import gui.utilities.MappedSelector;
+import gui.utilities.MenuNavigator;
+import gui.utilities.SelectableButton;
+import gui.utilities.Selector;
 
 /**
  *  Panel asks whether user wants to quit the game
@@ -22,13 +22,16 @@ import gui.ScreenPanel;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 8, 2016
  */
-public class GameExitPanel extends ScreenPanel implements ActionListener
+public class GameExitPanel extends ScreenPanel
 {
     
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+    
+    public static final String YES = "YES";
+    public static final String NO = "NO";
 
     public GameExitPanel( Carder carder )
     {
@@ -42,8 +45,8 @@ public class GameExitPanel extends ScreenPanel implements ActionListener
 
         JLabel areYouSureLabel = new JLabel( "Are You Sure You Want To Quit?" );
         JPanel yesNoPanel = new ClearPanel();
-        JButton yesButton = new JButton( "Yes" );
-        JButton noButton = new JButton( "No" );
+        SelectableButton yesButton = new SelectableButton( YES );
+        SelectableButton noButton = new SelectableButton( NO );
 
         Font exitFont = areYouSureLabel.getFont();
         exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 );
@@ -61,24 +64,22 @@ public class GameExitPanel extends ScreenPanel implements ActionListener
         this.add( Box.createVerticalGlue() );
         
         navigator = new MenuNavigator(2,1);
-        navigator.addMenuItem( "Yes" );
-        navigator.addMenuItem( "No" );
+        navigator.addMenuItem( YES );
+        navigator.addMenuItem( NO );
+        Selector selector = new MappedSelector();
+        selector.addSelectable( YES, yesButton );
+        selector.addSelectable( NO, noButton );
+        navigator.setSelector( selector );
     }
     
     @Override
     public void act( String selected )
     {
         super.act( selected );
-        if ( selected.equalsIgnoreCase( "YES" ) || selected.equalsIgnoreCase( "NO" ) )
+        if ( selected.equalsIgnoreCase( YES ) || selected.equalsIgnoreCase( NO ) )
         {
             carder.switchTo( selected );
         }
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
     }
 
 }

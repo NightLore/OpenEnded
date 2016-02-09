@@ -1,4 +1,4 @@
-package gui;
+package gui.utilities;
 
 /**
  *  This class navigates through a given grid of Strings (intended to represent 
@@ -12,6 +12,7 @@ public class MenuNavigator implements Navigator
     private String[][] menu;
     private int addX, addY;
     private int selectedX, selectedY;
+    private Selector selector;
     
     public MenuNavigator( int w, int h )
     {
@@ -64,6 +65,7 @@ public class MenuNavigator implements Navigator
     {
         selectedY--;
         if ( selectedY < 0 ) selectedY = 0;
+        updateSelector();
     }
 
     @Override
@@ -71,6 +73,7 @@ public class MenuNavigator implements Navigator
     {
         selectedX--;
         if ( selectedX < 0 ) selectedX = 0;
+        updateSelector();
     }
 
     @Override
@@ -78,6 +81,7 @@ public class MenuNavigator implements Navigator
     {
         selectedY++;
         if ( selectedY >= menu[0].length ) selectedY = menu[0].length - 1;
+        updateSelector();
     }
 
     @Override
@@ -85,6 +89,7 @@ public class MenuNavigator implements Navigator
     {
         selectedX++;
         if ( selectedX >= menu.length ) selectedX = menu.length - 1;
+        updateSelector();
     }
     
     @Override
@@ -103,5 +108,18 @@ public class MenuNavigator implements Navigator
             s += "]\n";
         }
         return s;
+    }
+
+    @Override
+    public void setSelector( Selector selector )
+    {
+        this.selector = selector;
+        updateSelector();
+    }
+    
+    private void updateSelector()
+    {
+        if ( selector != null )
+            this.selector.select( getSelected() );
     }
 }

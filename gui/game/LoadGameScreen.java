@@ -4,8 +4,6 @@ import gui.Carder;
 import gui.ScreenPanel;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
@@ -18,7 +16,7 @@ import javax.swing.JButton;
  *
  *  @author  Sources: none
  */
-public class LoadGameScreen extends ScreenPanel implements ActionListener
+public class LoadGameScreen extends ScreenPanel
 {
     /**
      * 
@@ -36,12 +34,6 @@ public class LoadGameScreen extends ScreenPanel implements ActionListener
         JButton backButton = new JButton( "BACK" );
         backButton.addActionListener( this );
         this.add( backButton );
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
     }
     
     @Override

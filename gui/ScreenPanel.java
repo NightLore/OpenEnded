@@ -1,10 +1,15 @@
 package gui;
 
+import game.Window;
+import gui.utilities.Navigator;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -23,7 +28,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class ScreenPanel extends JPanel implements Screen, ControlListener
+public class ScreenPanel extends JPanel implements Screen, ControlListener, ActionListener
 {
 
     /**
@@ -177,18 +182,9 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener
         }
     }
 
-    @Deprecated
     @Override
-    public String getSelected()
+    public void actionPerformed( ActionEvent e )
     {
-        return navigator.getSelected();
+        act( e.getActionCommand() );
     }
-
-    @Deprecated
-    @Override
-    public void addMenuItem( String item )
-    {
-        navigator.addMenuItem( item );
-    }
-
 }

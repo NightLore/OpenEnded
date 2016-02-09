@@ -1,4 +1,6 @@
-package gui;
+package game;
+
+import gui.MainPanel;
 
 import java.awt.Dimension;
 

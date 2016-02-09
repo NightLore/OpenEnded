@@ -1,5 +1,7 @@
 package gui;
 
+import game.Window;
+
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

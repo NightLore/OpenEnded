@@ -2,12 +2,13 @@ package gui;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-public abstract class NavigatablePanel extends ClearPanel implements Carder, ControlListener
+public abstract class NavigatablePanel extends ClearPanel implements Carder, ControlListener, ActionListener
 {
 
     /**
@@ -163,17 +164,9 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
         act( CANCEL );
     }
 
-    @Deprecated
     @Override
-    public String getSelected()
+    public void actionPerformed( ActionEvent e )
     {
-        return null;
-    }
-
-    @Deprecated
-    @Override
-    public void addMenuItem( String item )
-    {
-        
+        this.switchTo( e.getActionCommand().toUpperCase() );
     }
 }

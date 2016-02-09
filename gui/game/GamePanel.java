@@ -8,7 +8,6 @@ import gui.game.player.PlayerManagerPanel;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -24,7 +23,7 @@ import javax.swing.KeyStroke;
  *
  *  @author  Sources: none
  */
-public class GamePanel extends NavigatablePanel implements ActionListener
+public class GamePanel extends NavigatablePanel
 {
 
     /**
@@ -143,12 +142,6 @@ public class GamePanel extends NavigatablePanel implements ActionListener
         game.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
         this.cardLayout.show( this, to.toUpperCase() );
         currentPanel = to;
-    }
-
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        this.switchTo( e.getActionCommand().toUpperCase() );
     }
     
 }

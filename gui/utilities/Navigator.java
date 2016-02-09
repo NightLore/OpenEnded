@@ -1,4 +1,4 @@
-package gui;
+package gui.utilities;
 
 /**
  *  Interface for Classes that can navigate grid spaces (intended for menus but
@@ -19,6 +19,7 @@ public interface Navigator
     public void down();
     public void right();
     
+    public void setSelector( Selector selector );
     public String getSelected();
     public void addMenuItem( String item );
 }

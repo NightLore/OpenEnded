@@ -1,15 +1,18 @@
 package gui;
 
+import game.Window;
+import gui.utilities.MappedSelector;
+import gui.utilities.MenuNavigator;
+import gui.utilities.SelectableButton;
+import gui.utilities.Selector;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,7 +25,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class MainMenuScreen extends ScreenPanel implements ActionListener
+public class MainMenuScreen extends ScreenPanel
 {
 
     /**
@@ -47,10 +50,10 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         JPanel buttonPanel = new ClearPanel();
         JLabel title = new JLabel( Window.getGameName() );
         JLabel version = new JLabel( "                " + Window.getVersion() );
-        JButton playButton = new JButton( "PLAY GAME" );
-        JButton stgsButton = new JButton( SETTINGS );
-        JButton backButton = new JButton( BACK );
-        JButton exitButton = new JButton( "EXIT GAME" );
+        SelectableButton playButton = new SelectableButton( "PLAY GAME" );
+        SelectableButton stgsButton = new SelectableButton( SETTINGS );
+        SelectableButton backButton = new SelectableButton( BACK );
+        SelectableButton exitButton = new SelectableButton( "EXIT GAME" );
         
         titlePanel.setLayout( new BoxLayout( titlePanel, BoxLayout.Y_AXIS ) );
         buttonPanel.setLayout( gridLayout );
@@ -88,13 +91,14 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         navigator.addMenuItem( SETTINGS );
         navigator.addMenuItem( INITIAL );
         navigator.addMenuItem( "EXIT GAME" );
+        Selector selector = new MappedSelector();
+        selector.addSelectable( LISTGAME, playButton );
+        selector.addSelectable( SETTINGS, stgsButton );
+        selector.addSelectable( INITIAL, backButton );
+        selector.addSelectable( "EXIT GAME", exitButton );
+        navigator.setSelector( selector );
     }
 
-    @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        act( e.getActionCommand() );
-    }
     @Override
     public void act( String selected )
     {
