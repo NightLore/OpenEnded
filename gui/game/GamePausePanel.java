@@ -1,11 +1,11 @@
 package gui.game;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 import gui.Carder;
@@ -34,31 +34,26 @@ public class GamePausePanel extends ScreenPanel implements ActionListener
     public GamePausePanel( Carder carder, String back )
     {
         super( carder, new Color( 0, 0, 0, 64 ), back );
-        this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
+        int marginX = 8 * gapX;
+        int marginY = 2 * gapY;
+        
+        this.setLayout( new GridLayout( 0, 1, 0, marginY ) );
+        this.setBorder( BorderFactory.createEmptyBorder( marginY, marginX, 3 * marginY / 2, marginX) );
         
         JButton resumeButton = new JButton ( "RESUME" );
         JButton inventoryButton = new JButton( "INVENTORY" );
         JButton settingsButton = new JButton( GamePanel.SETTINGS_PANEL );
         JButton returnButton = new JButton( "RETURN TO MAIN MENU" );
-        resumeButton.setAlignmentX( CENTER_ALIGNMENT );
-        inventoryButton.setAlignmentX( CENTER_ALIGNMENT );
-        settingsButton.setAlignmentX( CENTER_ALIGNMENT );
-        returnButton.setAlignmentX( CENTER_ALIGNMENT );
 
         resumeButton.addActionListener( this );
         inventoryButton.addActionListener( this );
         settingsButton.addActionListener( this );
         returnButton.addActionListener( this );
         
-        this.add( Box.createVerticalGlue() );
         this.add( resumeButton );
-        this.add( Box.createVerticalGlue() );
         this.add( inventoryButton );
-        this.add( Box.createVerticalGlue() );
         this.add( settingsButton );
-        this.add( Box.createVerticalGlue() );
         this.add( returnButton );
-        this.add( Box.createVerticalGlue() );
         
         navigator = new MenuNavigator(1,4);
         navigator.addMenuItem( GamePanel.GAME_PANEL );

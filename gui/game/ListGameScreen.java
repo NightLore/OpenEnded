@@ -3,14 +3,12 @@ package gui.game;
 import gui.Carder;
 import gui.MenuNavigator;
 import gui.ScreenPanel;
-import gui.Window;
 
-import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 /**
@@ -41,9 +39,11 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
     public ListGameScreen( Carder frame, String back )
     {
         super( frame, "GrassyBackground.png", back );
-        this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
+        int marginX = 8 * gapX;
+        int marginY = 2 * gapY;
+        this.setLayout( new GridLayout( 0, 1, 0, marginY ) );
+        this.setBorder( BorderFactory.createEmptyBorder( marginY, marginX, 3 * marginY / 2, marginX ) );
         
-        Dimension buttonSize = Window.buttonSize;
         JButton stryButton = new JButton( STORY_MODE );
         JButton freeButton = new JButton( ENDLESS_MODE );
         JButton loadButton = new JButton( LOAD_MODE );
@@ -53,26 +53,11 @@ public class ListGameScreen extends ScreenPanel implements ActionListener
         freeButton.addActionListener( this );
         loadButton.addActionListener( this );
         backButton.addActionListener( this );
-        
-        stryButton.setPreferredSize( buttonSize );
-        freeButton.setPreferredSize( buttonSize );
-        loadButton.setPreferredSize( buttonSize );
-        backButton.setPreferredSize( buttonSize );
-        
-        stryButton.setAlignmentX( CENTER_ALIGNMENT );
-        freeButton.setAlignmentX( CENTER_ALIGNMENT );
-        loadButton.setAlignmentX( CENTER_ALIGNMENT );
-        backButton.setAlignmentX( CENTER_ALIGNMENT );
 
-        this.add( Box.createVerticalGlue() );
         this.add( stryButton );
-        this.add( Box.createVerticalGlue() );
         this.add( freeButton );
-        this.add( Box.createVerticalGlue() );
         this.add( loadButton );
-        this.add( Box.createVerticalGlue() );
         this.add( backButton );
-        this.add( Box.createVerticalGlue() );
         
         navigator = new MenuNavigator(1,4);
         navigator.addMenuItem( STORYGAME );

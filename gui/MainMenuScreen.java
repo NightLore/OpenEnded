@@ -3,10 +3,11 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -37,9 +38,10 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
     public MainMenuScreen( Carder frame, String back )
     {
         super( frame, "GrassyBackground.png", back );
-        Dimension buttonSize = Window.buttonSize;
-        Dimension windowSize = Window.windowSize;
-        Dimension filler = new Dimension( windowSize.width / 20, windowSize.height / 20 );
+        this.setLayout( new BorderLayout() );
+        
+        GridLayout gridLayout = new GridLayout( 0, 1 );
+        gridLayout.setVgap( gapY );
         
         JPanel titlePanel = new ClearPanel();
         JPanel buttonPanel = new ClearPanel();
@@ -50,9 +52,9 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         JButton backButton = new JButton( BACK );
         JButton exitButton = new JButton( "EXIT GAME" );
         
-        this.setLayout( new BorderLayout() );
         titlePanel.setLayout( new BoxLayout( titlePanel, BoxLayout.Y_AXIS ) );
-        buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.Y_AXIS ) );
+        buttonPanel.setLayout( gridLayout );
+        buttonPanel.setBorder( BorderFactory.createEmptyBorder( 2*gapY, 2*gapX, 4*gapY, 2*gapX ) );
 
         title.setFont( new Font( title.getFont().getFontName(), Font.BOLD, 72 ) );
         version.setFont( new Font( version.getFont().getFontName(), Font.BOLD, 20 ) );
@@ -64,19 +66,11 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
         exitButton.addActionListener( this );
 
         // -------------------- Setting Sizes     ----------------------- //
-        buttonPanel.setPreferredSize( new Dimension( windowSize.width / 4, windowSize.height / 3 ) );
-        playButton.setPreferredSize( buttonSize );
-        stgsButton.setPreferredSize( buttonSize );
-        backButton.setPreferredSize( buttonSize );
-        exitButton.setPreferredSize( buttonSize );
+        buttonPanel.setPreferredSize( new Dimension( windowSize.width / 3, windowSize.height / 3 ) );
 
         // -------------------- Setting Alignment ----------------------- //
         title.setAlignmentX( CENTER_ALIGNMENT );
         version.setAlignmentX( LEFT_ALIGNMENT );
-        playButton.setAlignmentX( CENTER_ALIGNMENT );
-        stgsButton.setAlignmentX( CENTER_ALIGNMENT );
-        backButton.setAlignmentX( CENTER_ALIGNMENT );
-        exitButton.setAlignmentX( CENTER_ALIGNMENT );
 
         // -------------------- Adding Components ----------------------- //
         this.add( titlePanel, BorderLayout.NORTH );
@@ -84,16 +78,10 @@ public class MainMenuScreen extends ScreenPanel implements ActionListener
 
         titlePanel.add( title );
         titlePanel.add( version );
-        buttonPanel.add( Box.createVerticalGlue() );
         buttonPanel.add( playButton );
-        buttonPanel.add( Box.createRigidArea( filler ) );
         buttonPanel.add( stgsButton );
-        buttonPanel.add( Box.createRigidArea( filler ) );
         buttonPanel.add( backButton );
-        buttonPanel.add( Box.createRigidArea( filler ) );
         buttonPanel.add( exitButton );
-        buttonPanel.add( Box.createRigidArea( filler ) );
-        buttonPanel.add( Box.createVerticalGlue() );
         
         navigator = new MenuNavigator(1,4);
         navigator.addMenuItem( LISTGAME );

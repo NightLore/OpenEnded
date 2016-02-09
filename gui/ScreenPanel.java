@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -12,6 +13,9 @@ import javax.swing.JPanel;
 
 /**
  *  Base panel for most of the ui in the game, manages all defaults
+ *  Gives all key input to its own navigator, except for confirm() and cancel()
+ *  where confirm will call act( navigator.getSelected() ) and cancel() will
+ *  call back()
  *
  *  @author  Nathan Man-ho Lui
  *  @version Oct 28, 2015
@@ -26,6 +30,9 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener
      * 
      */
     private static final long serialVersionUID = 1L;
+    public static final Dimension windowSize = Window.windowSize;
+    public static final int gapY = windowSize.height / 15;
+    public static final int gapX = windowSize.width / 20;
 
     protected Carder carder;
     private Image background;
@@ -33,12 +40,26 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener
     private String back;
     protected Navigator navigator;
     
-    public ScreenPanel( Carder frame, String back )
+    /**
+     * Constructs a transparent ScreenPanel
+     * if opacity is set back to true, default background color is Color.BLACK
+     * 
+     * @param frame
+     * @param back
+     */
+    public ScreenPanel( Carder carder, String back )
     {
-        this( frame, Color.BLACK, back );
+        this( carder, Color.BLACK, back );
         this.setOpaque( false );
     }
     
+    /**
+     * Constructs a ScreenPanel with given background color
+     * 
+     * @param carder
+     * @param background
+     * @param back
+     */
     public ScreenPanel( Carder carder, Color background, String back )
     {
         this.carder = carder;
@@ -47,9 +68,16 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener
         this.setFocusable( true );
     }
     
-    public ScreenPanel( Carder frame, String fileName, String back )
+    /**
+     * Constructs a ScreenPanel with a given background image
+     * 
+     * @param carder
+     * @param fileName
+     * @param back
+     */
+    public ScreenPanel( Carder carder, String fileName, String back )
     {
-        this( frame, Color.BLACK, back );
+        this( carder, Color.BLACK, back );
         fileName =  "/imgs/" + fileName; // Package images are found in
         while ( background == null )
         {
@@ -126,6 +154,11 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener
             act( navigator.getSelected() );
     }
 
+    /**
+     * Calls back()
+     * 
+     * @see gui.ControlListener#cancel()
+     */
     @Override
     public void cancel()
     {

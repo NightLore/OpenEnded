@@ -8,8 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -64,12 +63,10 @@ public class PlayerStatsPanel extends ScreenPanel
         
         titlePanel.add( playerLabel );
         imagePanel.add( imageLabel );
-        sidePanel.setLayout( new BoxLayout( sidePanel, BoxLayout.Y_AXIS ) );
-        sidePanel.add( Box.createVerticalGlue() );
+        sidePanel.setLayout( new GridLayout( 0, 1, gapX, gapY ) );
+        sidePanel.setBorder( BorderFactory.createEmptyBorder( gapY, gapX, gapY, gapX ) );
         sidePanel.add( itemButton );
-        sidePanel.add( Box.createVerticalGlue() );
         sidePanel.add( controlButton );
-        sidePanel.add( Box.createVerticalGlue() );
         centerPanel.add( imagePanel );
         centerPanel.add( sidePanel );
         
