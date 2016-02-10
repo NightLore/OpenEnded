@@ -31,18 +31,16 @@ public class LoadGameScreen extends ScreenPanel
     public LoadGameScreen( Carder frame, String back )
     {
         super( frame, Color.BLACK, back );
-        JButton backButton = new JButton( "BACK" );
+        JButton backButton = new JButton( BACK );
         backButton.addActionListener( this );
+        backButton.setActionCommand( back );
         this.add( backButton );
     }
     
     @Override
     public void act( String selected )
     {
-        super.act( selected );
-        if ( selected.equalsIgnoreCase( "BACK" ) )
-        {
-            back();
-        }
+        if ( check( selected ) ) return;
+        carder.switchTo( selected );
     }
 }

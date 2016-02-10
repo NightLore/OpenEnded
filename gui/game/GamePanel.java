@@ -117,31 +117,11 @@ public class GamePanel extends NavigatablePanel
             update( game.getGame().numLives() );
         }
         
-        
-        if ( to.equalsIgnoreCase( "RESUME" ) || to.equalsIgnoreCase( GAME_PANEL ) ) {
-            to = GAME_PANEL;
-        }
-        else if ( to.equalsIgnoreCase( "INVENTORY" ) || to.equalsIgnoreCase( ITEM_PANEL ) ) {
-            itemPanel.shown();
-            to = ITEM_PANEL;
-        }
-        else if ( to.equalsIgnoreCase( SETTINGS_PANEL ) ) {
-            settingsPanel.shown();
-            to = SETTINGS_PANEL;
-        }
-        else if ( to.equalsIgnoreCase( "Return to Main Menu" ) || to.equalsIgnoreCase( EXIT_PANEL ) ) {
-            to = EXIT_PANEL;
-        }
-        else if ( to.equalsIgnoreCase( "Yes" ) ) {
+        if ( to.equalsIgnoreCase( LOAD_PANEL ) ) {
             game.returnToMainMenu(); // TODO quit game
-            return;
-        }
-        else if ( to.equalsIgnoreCase( "No" ) || to.equalsIgnoreCase( PAUSE_PANEL ) ) {
-            to = PAUSE_PANEL;
         }
         game.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
-        this.cardLayout.show( this, to.toUpperCase() );
-        currentPanel = to;
+        this.cardLayout.show( this, to );
     }
     
 }

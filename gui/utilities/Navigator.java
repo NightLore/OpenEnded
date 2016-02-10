@@ -19,6 +19,7 @@ public interface Navigator
     public void down();
     public void right();
     
+    public void reset();
     public void setSelector( Selector selector );
     public String getSelected();
     public void addMenuItem( String item );

@@ -50,6 +50,11 @@ public class GamePausePanel extends ScreenPanel
         settingsButton.addActionListener( this );
         returnButton.addActionListener( this );
         
+        resumeButton.setActionCommand( GamePanel.GAME_PANEL );
+        inventoryButton.setActionCommand( GamePanel.ITEM_PANEL );
+        settingsButton.setActionCommand( GamePanel.SETTINGS_PANEL );
+        returnButton.setActionCommand( GamePanel.EXIT_PANEL );
+        
         this.add( resumeButton );
         this.add( inventoryButton );
         this.add( settingsButton );
@@ -71,16 +76,12 @@ public class GamePausePanel extends ScreenPanel
     @Override
     public void act( String selected )
     {
-        super.act( selected );
+        if ( check( selected ) ) return;
         if ( selected.equals( "P" ) )
         {
-            back();
+            selected = GamePanel.GAME_PANEL;
         }
-        else if ( !selected.equals( SPACE ) && !selected.equals( ENTER ) 
-         && !selected.equals( ESCAPE ) && !selected.equals( BACKSPACE ) )
-        {
-            carder.switchTo( selected );
-        }
+        carder.switchTo( selected );
     }
 
 }

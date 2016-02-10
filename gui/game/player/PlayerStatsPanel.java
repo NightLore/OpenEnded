@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -74,27 +72,11 @@ public class PlayerStatsPanel extends ScreenPanel
         this.add( centerPanel, BorderLayout.CENTER );
         this.add( doneButton, BorderLayout.SOUTH );
         
-        itemButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                act( ITEMS_PANEL );
-            }
-        } );
-        controlButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                act( CTRLS_PANEL );
-            }
-        } );
-        doneButton.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                act( DONE_PANEL );
-            }
-        } );
+        
+        controlButton.setActionCommand( CTRLS_PANEL );
+        itemButton.addActionListener( this );
+        controlButton.addActionListener( this );
+        doneButton.addActionListener( this );
         
         navigator = new MenuNavigator(1,3);
         navigator.addMenuItem( ITEMS_PANEL );

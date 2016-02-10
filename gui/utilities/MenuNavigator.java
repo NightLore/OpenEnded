@@ -49,15 +49,11 @@ public class MenuNavigator implements Navigator
         }
     }
     
-    public void select( int x, int y )
+    private void select( int x, int y )
     {
         selectedX = x;
         selectedY = y;
-    }
-    
-    public String getSelected()
-    {
-        return menu[selectedX][selectedY];
+        updateSelector();
     }
 
     @Override
@@ -91,6 +87,31 @@ public class MenuNavigator implements Navigator
         if ( selectedX >= menu.length ) selectedX = menu.length - 1;
         updateSelector();
     }
+
+    @Override
+    public void reset()
+    {
+        select( 0, 0 );
+    }
+
+    @Override
+    public void setSelector( Selector selector )
+    {
+        this.selector = selector;
+        updateSelector();
+    }
+    
+    @Override
+    public String getSelected()
+    {
+        return menu[selectedX][selectedY];
+    }
+    
+    private void updateSelector()
+    {
+        if ( selector != null )
+            this.selector.select( getSelected() );
+    }
     
     @Override
     public String toString()
@@ -108,18 +129,5 @@ public class MenuNavigator implements Navigator
             s += "]\n";
         }
         return s;
-    }
-
-    @Override
-    public void setSelector( Selector selector )
-    {
-        this.selector = selector;
-        updateSelector();
-    }
-    
-    private void updateSelector()
-    {
-        if ( selector != null )
-            this.selector.select( getSelected() );
     }
 }

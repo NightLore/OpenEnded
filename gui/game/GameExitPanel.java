@@ -55,6 +55,8 @@ public class GameExitPanel extends ScreenPanel
         areYouSureLabel.setAlignmentX( CENTER_ALIGNMENT );
         yesButton.addActionListener( this );
         noButton.addActionListener( this );
+        yesButton.setActionCommand( GamePanel.LOAD_PANEL );
+        noButton.setActionCommand( GamePanel.PAUSE_PANEL );
 
         yesNoPanel.add( yesButton );
         yesNoPanel.add( noButton );
@@ -65,21 +67,18 @@ public class GameExitPanel extends ScreenPanel
         
         navigator = new MenuNavigator(2,1);
         navigator.addMenuItem( YES );
-        navigator.addMenuItem( NO );
+        navigator.addMenuItem( GamePanel.PAUSE_PANEL );
         Selector selector = new MappedSelector();
         selector.addSelectable( YES, yesButton );
-        selector.addSelectable( NO, noButton );
+        selector.addSelectable( GamePanel.PAUSE_PANEL, noButton );
         navigator.setSelector( selector );
     }
     
     @Override
     public void act( String selected )
     {
-        super.act( selected );
-        if ( selected.equalsIgnoreCase( YES ) || selected.equalsIgnoreCase( NO ) )
-        {
-            carder.switchTo( selected );
-        }
+        if ( check( selected ) ) return;
+        carder.switchTo( selected );
     }
 
 }

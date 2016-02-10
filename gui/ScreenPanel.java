@@ -172,14 +172,22 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener, Acti
 
     @Override
     public void act( String selected ) {
+        check( selected );
+    }
+    
+    public boolean check( String selected )
+    {
         if ( selected.equals( SPACE ) || selected.equals( ENTER ) )
         {
             confirm();
+            return true;
         }
         else if ( selected.equals( ESCAPE ) || selected.equals( BACKSPACE ) )
         {
             cancel();
+            return true;
         }
+        return false;
     }
 
     @Override

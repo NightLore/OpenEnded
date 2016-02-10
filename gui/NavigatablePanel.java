@@ -16,7 +16,7 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
      */
     private static final long serialVersionUID = 1L;
 
-    protected HashMap<String,ControlListener> navigatables;
+    protected HashMap<String,ScreenPanel> navigatables;
 
 
     protected Action upAction, leftAction, downAction, rightAction, confirmAction, cancelAction;
@@ -25,7 +25,7 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
 
     public NavigatablePanel()
     {
-        this.navigatables = new HashMap<String,ControlListener>();
+        this.navigatables = new HashMap<String,ScreenPanel>();
         this.cardLayout = new CardLayout();
         this.setLayout( cardLayout );
         this.setFocusable( true );
@@ -89,8 +89,11 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
     @Override
     public void switchTo( String to )
     {
-        switchTo( currentPanel, to );
-        currentPanel = to;
+        navigatables.get( currentPanel ).cover();
+        String prev = currentPanel;
+        currentPanel = to; // note: code specifically in this order so that currentPanel may be adjusted before method return
+        switchTo( prev, to );
+        navigatables.get( currentPanel ).shown();
     }
 
     @Override

@@ -99,7 +99,13 @@ public class MainPanel extends NavigatablePanel
             }
         };
         
-        
+
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_W, 0 ), UP );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_A, 0 ), LEFT );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_S, 0 ), DOWN );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_D, 0 ), RIGHT );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_V, 0 ), CONFIRM );
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_B, 0 ), CANCEL );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, 0 ), UP );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, 0 ), LEFT );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0 ), DOWN );
@@ -125,9 +131,6 @@ public class MainPanel extends NavigatablePanel
     @Override
     public void switchTo( String from, String to )
     {
-        ( (ScreenPanel)navigatables.get( from ) ).cover();
         cardLayout.show( this, to );
-        ( (ScreenPanel)navigatables.get( to ) ).shown();
-        currentPanel = to;
     }
 }

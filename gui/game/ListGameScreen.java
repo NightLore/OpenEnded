@@ -53,6 +53,11 @@ public class ListGameScreen extends ScreenPanel
         freeButton.addActionListener( this );
         loadButton.addActionListener( this );
         backButton.addActionListener( this );
+        
+        stryButton.setActionCommand( STORYGAME );
+        freeButton.setActionCommand( FREEGAME );
+        loadButton.setActionCommand( LOADGAME );
+        backButton.setActionCommand( back );
 
         this.add( stryButton );
         this.add( freeButton );
@@ -68,20 +73,15 @@ public class ListGameScreen extends ScreenPanel
         selector.addSelectable( STORYGAME, stryButton );
         selector.addSelectable( FREEGAME, freeButton );
         selector.addSelectable( LOADGAME, loadButton );
-        selector.addSelectable( MAINMENU, backButton );
+        selector.addSelectable( back, backButton );
         navigator.setSelector( selector );
     }
     
     @Override
     public void act( String selected )
     {
-        super.act( selected );
-        String p = null;
-        if ( selected.equals( STORY_MODE ) || selected.equals( STORYGAME ) ) p = STORYGAME;
-        else if ( selected.equals( ENDLESS_MODE ) ) p = FREEGAME;
-        else if ( selected.equals( LOAD_MODE ) ) p = LOADGAME;
-        else if ( selected.equals( BACK ) ) back();
+        if ( check( selected ) ) return;
 
-        if ( p != null ) carder.switchTo( p );
+        carder.switchTo( selected );
     }
 }

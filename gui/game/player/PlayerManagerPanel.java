@@ -60,7 +60,6 @@ public class PlayerManagerPanel extends ScreenPanel implements Manager
     @Override
     public void shown()
     {
-        this.requestFocusInWindow();
         reset();
     }
     

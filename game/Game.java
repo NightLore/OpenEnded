@@ -44,6 +44,9 @@ public class Game {
     
     private Assets assets;
     private Settings settings;
+    
+    private long spawnTime;
+    private int delay = 500; // milliseconds
 
     public Game( GameScreen screen, Settings settings, Assets assets )
     {
@@ -122,7 +125,11 @@ public class Game {
                 break;
             }
         }
-        spawnEnemies();
+        if ( gameTime > spawnTime + delay * 1000000L )
+        {
+            spawnEnemies();
+            spawnTime = gameTime;
+        }
     }
     private boolean shouldDespawn( Sprite s )
     {

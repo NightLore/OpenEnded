@@ -210,7 +210,7 @@ public class SettingsScreen extends ScreenPanel
     @Override
     public void act( String selected )
     {
-        super.act( selected );
+        check( selected );
         if ( selected.equalsIgnoreCase( "CANCEL" ) )
         {
             back();

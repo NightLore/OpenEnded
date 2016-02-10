@@ -27,7 +27,7 @@ public class GameOverPanel extends ScreenPanel
 
     public GameOverPanel( Carder carder )
     {
-        this( carder, "Yes" );
+        this( carder, GamePanel.LOAD_PANEL );
     }
 
     public GameOverPanel( Carder carder, String back )
@@ -44,7 +44,7 @@ public class GameOverPanel extends ScreenPanel
         exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 );
         gameOverLabel.setFont( exitFont );
         gameOverLabel.setAlignmentX( CENTER_ALIGNMENT );
-        mainMenuButton.setActionCommand( "Yes" );
+        mainMenuButton.setActionCommand( GamePanel.LOAD_PANEL );
         mainMenuButton.addActionListener( this );
 
         this.add( gameOverLabel );
@@ -61,11 +61,8 @@ public class GameOverPanel extends ScreenPanel
     @Override
     public void act( String selected )
     {
-        super.act( selected );
-        if ( selected.equalsIgnoreCase( "YES" ) )
-        {
-            carder.switchTo( selected );
-        }
+        if ( check( selected ) ) return;
+        carder.switchTo( selected );
     }
 
 }

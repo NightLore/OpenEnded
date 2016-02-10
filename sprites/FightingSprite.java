@@ -71,11 +71,6 @@ public abstract class FightingSprite extends Sprite
     public void move( long gameTime, Map map, SpriteGroup sprites )
     {
         super.move( gameTime, map, sprites );
-        for ( int i = 0; i < attackTime.length; i++ )
-        {
-            if ( attackTime[i] == 0 )
-                attackTime[i] = gameTime;
-        }
         if ( attack >= 0 ) // TODO note: comparing long with int
         {
             Weapon w = attack( gameTime, attack );

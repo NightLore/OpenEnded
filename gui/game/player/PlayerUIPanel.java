@@ -35,7 +35,6 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
     private PlayerStatsPanel statsPanel;
     private PlayerItemPanel itemPanel;
     
-    private String currentPanel;
     private Manager manager;
 
     private Game game;
@@ -123,34 +122,29 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
     @Override
     public void switchTo( String from, String to )
     {
-        if ( to.contains( "ADD" ) || to.equalsIgnoreCase( CTRLS_PANEL ) )
+        if ( to.equalsIgnoreCase( CTRLS_PANEL ) )
         {
             if ( !game.getPlayers().hasPlayer( panel ) )
                 setPlayer( game.addPlayer( panel ) );
-            currentPanel = CTRLS_PANEL;
             isDone = false;
         }
-        else if ( to.equalsIgnoreCase( STATS_PANEL ) || to.equalsIgnoreCase( "OK" ) || to.equalsIgnoreCase( "BACK" ) )
+        else if ( to.equalsIgnoreCase( STATS_PANEL ) )
         {
             if ( !game.getPlayers().hasPlayer( panel ) )
                 setPlayer( game.addPlayer( panel ) );
             isDone = false;
-            currentPanel = STATS_PANEL;
         }
         else if ( to.equalsIgnoreCase( DONE_PANEL ) )
         {
             isDone = true;
-            currentPanel = DONE_PANEL;
         }
         else if ( to.equalsIgnoreCase( START_PANEL ) )
         {
             isDone = true;
-            currentPanel = START_PANEL;
         }
         else if ( to.equalsIgnoreCase( ITEMS_PANEL ) )
         {
             isDone = false;
-            currentPanel = ITEMS_PANEL;
         }
         cardLayout.show( this, currentPanel );
         manager.check();

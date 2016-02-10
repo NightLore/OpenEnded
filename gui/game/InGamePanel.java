@@ -52,23 +52,22 @@ public class InGamePanel extends ScreenPanel
     }
     
     @Override
-    public void confirm()
-    {
-        act( GamePanel.ITEM_PANEL );
-    }
+    public void confirm() {}
+    
+    @Override
+    public void cancel() {}
     
     @Override
     public void act( String selected )
     {
-        super.act( selected );
-        if ( selected.equals( "P" ) )
+        if ( selected.equals( "P" ) || selected.equals( ESCAPE ) 
+          || selected.equals( BACKSPACE ) || selected.equals( GamePanel.PAUSE_PANEL ) )
         {
             back();
         }
-        else if ( !selected.equals( SPACE ) && !selected.equals( ENTER ) 
-              && !selected.equals( ESCAPE ) && !selected.equals( BACKSPACE ) )
+        else if ( selected.equals( ENTER ) || selected.equals( SPACE ) )
         {
-            carder.switchTo( selected );
+            carder.switchTo( GamePanel.ITEM_PANEL );
         }
     }
 

@@ -102,7 +102,7 @@ public class MainMenuScreen extends ScreenPanel
     @Override
     public void act( String selected )
     {
-        super.act( selected );
+        if ( check( selected ) ) return;
         String p = null;
         
         if ( selected.equals( "PLAY GAME" ) || selected.equals( LISTGAME ) ) p = LISTGAME;
