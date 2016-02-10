@@ -66,10 +66,10 @@ public class GameExitPanel extends ScreenPanel
         this.add( Box.createVerticalGlue() );
         
         navigator = new MenuNavigator(2,1);
-        navigator.addMenuItem( YES );
+        navigator.addMenuItem( GamePanel.LOAD_PANEL );
         navigator.addMenuItem( GamePanel.PAUSE_PANEL );
         Selector selector = new MappedSelector();
-        selector.addSelectable( YES, yesButton );
+        selector.addSelectable( GamePanel.LOAD_PANEL, yesButton );
         selector.addSelectable( GamePanel.PAUSE_PANEL, noButton );
         navigator.setSelector( selector );
     }

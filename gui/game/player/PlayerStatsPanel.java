@@ -89,6 +89,12 @@ public class PlayerStatsPanel extends ScreenPanel
         navigator.setSelector( selector );
     }
     
+    @Override
+    public void cover()
+    {
+        navigator.reset();
+    }
+    
     public void setPlayerImage( Image i )
     {
         imageLabel.setIcon( new ImageIcon( i ) );

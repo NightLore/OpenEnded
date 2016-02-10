@@ -127,7 +127,6 @@ public class GameScreen extends ScreenPanel
     {
         updater.stop();
         InputManager.reset();
-        ui.switchTo( GamePanel.LOAD_PANEL );
     }
     
     /**
