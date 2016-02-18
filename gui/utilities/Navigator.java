@@ -23,4 +23,5 @@ public interface Navigator
     public void setSelector( Selector selector );
     public String getSelected();
     public void addMenuItem( String item );
+    public void updateSelector();
 }

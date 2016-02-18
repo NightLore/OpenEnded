@@ -7,22 +7,19 @@ package gui.utilities;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 7, 2016
  */
-public class MenuNavigator implements Navigator
+public class MenuNavigator extends AbstractNavigator
 {
     private String[][] menu;
     private int addX, addY;
-    private int selectedX, selectedY;
-    private Selector selector;
     
     public MenuNavigator( int w, int h )
     {
         menu = new String[w][h];
         addX = 0;
         addY = 0;
-        selectedX = 0;
-        selectedY = 0;
     }
     
+    @Override
     public void addMenuItem( String item )
     {
         while ( menu[addX][addY] != null && !menu[addX][addY].equals( "" ) ) incrementXY();
@@ -47,13 +44,6 @@ public class MenuNavigator implements Navigator
             addX = 0;
             addY++;
         }
-    }
-    
-    private void select( int x, int y )
-    {
-        selectedX = x;
-        selectedY = y;
-        updateSelector();
     }
 
     @Override
@@ -87,30 +77,11 @@ public class MenuNavigator implements Navigator
         if ( selectedX >= menu.length ) selectedX = menu.length - 1;
         updateSelector();
     }
-
-    @Override
-    public void reset()
-    {
-        select( 0, 0 );
-    }
-
-    @Override
-    public void setSelector( Selector selector )
-    {
-        this.selector = selector;
-        updateSelector();
-    }
     
     @Override
     public String getSelected()
     {
         return menu[selectedX][selectedY];
-    }
-    
-    private void updateSelector()
-    {
-        if ( selector != null )
-            this.selector.select( getSelected() );
     }
     
     @Override

@@ -46,7 +46,7 @@ public class Game {
     private Settings settings;
     
     private long spawnTime;
-    private int delay = 500; // milliseconds
+    private int delay = 750; // milliseconds
 
     public Game( GameScreen screen, Settings settings, Assets assets )
     {
