@@ -21,6 +21,8 @@ import javax.swing.JPanel;
  *  Gives all key input to its own navigator, except for confirm() and cancel()
  *  where confirm will call act( navigator.getSelected() ) and cancel() will
  *  call back()
+ *  
+ *  <br> Implements Screen, ControlListener, and ActionListener
  *
  *  @author  Nathan Man-ho Lui
  *  @version Oct 28, 2015
@@ -49,7 +51,7 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener, Acti
      * Constructs a transparent ScreenPanel
      * if opacity is set back to true, default background color is Color.BLACK
      * 
-     * @param frame
+     * @param carder
      * @param back
      */
     public ScreenPanel( Carder carder, String back )

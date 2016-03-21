@@ -1,7 +1,6 @@
 package gui.game.player;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,8 +16,6 @@ import gui.ClearPanel;
 import gui.ScreenPanel;
 import gui.utilities.InterSelectorNavigator;
 import gui.utilities.MappedSelector;
-import gui.utilities.MenuNavigator;
-import gui.utilities.Navigator;
 import gui.utilities.SelectableButton;
 import gui.utilities.Selector;
 
@@ -36,6 +33,10 @@ public class PlayerItemPanel extends ScreenPanel
     private static final long serialVersionUID = 1L;
     
     public static final String[] TAB_IDENTIFIERS = { "CLASS","PRIMARY ATTACK","SECONDARY ATTACK" };
+    public static final String[][] ITEMS = { { "INEPT", "ADEPT", "DIRECT" }, // UNKEMPT, REJECT
+                                             { "MELEE", "SPELL", "MINES" },
+                                             { "MELEE", "SPELL", "MINES" } };
+    
     public static final int SKILL_CLASS = 0;
     public static final int PRIMARY = 1;
     public static final int SECONDARY = 2;
@@ -45,9 +46,7 @@ public class PlayerItemPanel extends ScreenPanel
     public static final int DEFAULT_HEIGHT = 4;
     
     private JTabbedPane tabs;
-    private SelectableButton[][] selectables;
-    private Navigator[] navigators;
-    private int end;
+    private SelectableButton[] tabButtons;
     
     public PlayerItemPanel( Carder carder )
     {
@@ -73,8 +72,7 @@ public class PlayerItemPanel extends ScreenPanel
                 cancel();
             }
         } );
-        this.navigator = new InterSelectorNavigator( NUMCHOICES, true );
-        this.end = w*h;
+        InterSelectorNavigator navigate = new InterSelectorNavigator( NUMCHOICES, true ); // main navigator
         
         JPanel[] panes = new JPanel[NUMCHOICES];
         
@@ -88,58 +86,41 @@ public class PlayerItemPanel extends ScreenPanel
 //        UIManager.put("TabbedPane.contentOpaque", true);
         
         Selector mainSelector = new MappedSelector();
-        this.selectables = new SelectableButton[NUMCHOICES][end+1];
-        this.navigators = new Navigator[NUMCHOICES];
+        this.tabButtons = new SelectableButton[NUMCHOICES];
         for ( int i = 0; i < NUMCHOICES; i++ )
         {
             String identifier = TAB_IDENTIFIERS[i];
+            
+            PlayerTabbedPanel pane = new PlayerTabbedPanel( this, w, h );
+            pane.replaceItems( ITEMS[i] );
+            tabs.addTab( "", pane );
+            
             SelectableButton tabButton = new SelectableButton();
             tabButton.setContentAreaFilled( false );
             tabButton.setDeselectedBorder( null );
-            
-            JPanel pane = new ClearPanel();
-            pane.setLayout( new GridLayout( h, w ) ); // row, col instead of w, h
-            this.navigators[i] = new MenuNavigator( w, h );
-            Selector selector = new MappedSelector();
-            
-            for ( int j = 0; j < end; j++ )
-            {
-                SelectableButton button = new SelectableButton();
-                button.setActionCommand( i + "" + j );
-                button.addActionListener( this );
-                button.setContentAreaFilled( false );
-                button.setDeselectedBorder( null );
-                
-                pane.add( button );
-                selector.addSelectable( i + "" + j, button );
-                navigators[i].addMenuItem( i + "" + j );
-                selectables[i][j] = button;
-            }
-            
-            tabs.addTab( "", pane );
-            tabs.setTabComponentAt( i, tabButton );
             mainSelector.addSelectable( identifier, tabButton );
+            tabs.setTabComponentAt( i, tabButton );
             panes[i] = pane;
-            this.selectables[i][end] = tabButton;
-            this.navigators[i].setSelector( selector );
-            ( (InterSelectorNavigator)this.navigator ).addNavigator( identifier, navigators[i] );
+            this.tabButtons[i] = tabButton;
+            navigate.addNavigator( identifier, pane.getNavigator() );
         }
-        navigator.setSelector( mainSelector );
+        navigate.setSelector( mainSelector );
 
+        this.navigator = navigate;
         itemSouthPanel.add( backButton );
         this.add( tabs, BorderLayout.CENTER );
         this.add( itemSouthPanel, BorderLayout.SOUTH );
     }
     
-    public void setMenuItems( String[][] selectables )
+//    public void setMenuItems( String[][] selectables )
     {
-        for ( int i = 0; i < NUMCHOICES; i++ )
-        {
-            for ( int j = 0; j < end; j++ )
-            {
-                this.selectables[i][j].setText( selectables[i][j] );
-            }
-        }
+//        for ( int i = 0; i < NUMCHOICES; i++ )
+//        {
+//            for ( int j = 0; j < end; j++ )
+//            {
+//                this.selectables[i][j].setText( selectables[i][j] );
+//            }
+//        }
     }
     
     public void setItems( String skillClass, Weapon[] weapons )
@@ -151,7 +132,7 @@ public class PlayerItemPanel extends ScreenPanel
     
     public void setTabName( String name, int identifier )
     {
-        selectables[identifier][end].setText( TAB_IDENTIFIERS[identifier] + ": " + name );
+        tabButtons[identifier].setText( TAB_IDENTIFIERS[identifier] + ": " + name );
     }
     
     @Override
@@ -206,16 +187,12 @@ public class PlayerItemPanel extends ScreenPanel
                 return;
             }
         }
-        if ( Character.isDigit( selected.charAt( 0 ) ) )
-        {
-            int pane = ( (InterSelectorNavigator)navigator ).getCurrentIndex();
-            int i = Character.digit( selected.charAt( 0 ), 10 );
-            int j = Character.digit( selected.charAt( 1 ), 10 );
-            String s = selectables[pane][i*j].getText();
-            if ( s == null || s.equals( "" ) ) return;
-            setTabName( s, pane );
-            updatePlayer( s, pane );
-        }
+        InterSelectorNavigator n = (InterSelectorNavigator)navigator;
+        int pane = n.getCurrentIndex();
+        String s = selected; // selectables[pane][i*j].getText(); // TODO
+        if ( s == null || s.equals( "" ) ) return;
+        setTabName( s, pane );
+        updatePlayer( s, pane );
     }
     private void updateTabs( int identifier )
     {

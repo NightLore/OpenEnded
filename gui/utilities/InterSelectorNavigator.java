@@ -19,11 +19,23 @@ public class InterSelectorNavigator extends AbstractNavigator
     
     public InterSelectorNavigator( int size, boolean horizontal )
     {
+        init( size, horizontal );
+    }
+    
+    @Override
+    public void clear()
+    {
+        init( this.navigator.size(), this.horizontal );
+    }
+    
+    private void init( int size, boolean horizontal )
+    {
         this.navigators = new HashMap<String,Navigator>();
         this.navigator = new ArrayList<String>( size );
         this.horizontal = horizontal;
         this.inNavigator = false;
         this.loc = 0;
+        this.reset();
     }
 
     @Override

@@ -137,6 +137,7 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
         else if ( to.equalsIgnoreCase( DONE_PANEL ) )
         {
             isDone = true;
+            manager.check();
         }
         else if ( to.equalsIgnoreCase( START_PANEL ) )
         {
@@ -147,6 +148,5 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
             isDone = false;
         }
         cardLayout.show( this, currentPanel );
-        manager.check();
     }
 }

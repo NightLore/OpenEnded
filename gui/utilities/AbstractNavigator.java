@@ -11,12 +11,6 @@ public abstract class AbstractNavigator implements Navigator
 {
     protected int selectedX, selectedY;
     private Selector selector;
-    
-    public AbstractNavigator()
-    {
-        selectedX = 0;
-        selectedY = 0;
-    }
 
     @Override
     public void reset()

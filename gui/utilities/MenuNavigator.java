@@ -14,9 +14,21 @@ public class MenuNavigator extends AbstractNavigator
     
     public MenuNavigator( int w, int h )
     {
+        init( w, h );
+    }
+    
+    @Override
+    public void clear()
+    {
+        init( menu.length, menu[0].length );
+    }
+    
+    private void init( int w, int h )
+    {
         menu = new String[w][h];
         addX = 0;
         addY = 0;
+        reset();
     }
     
     @Override
@@ -36,7 +48,7 @@ public class MenuNavigator extends AbstractNavigator
     {
         if ( addY >= menu[0].length )
         {
-            System.err.println( addX + "," + addY + "; ADDING TOO MUCH: " + this );
+            System.err.println( "In MenuNavigator: " + addX + "," + addY + "; ADDING TOO MUCH:\n" + this );
         }
         addX++;
         if ( addX >= menu.length )
@@ -50,7 +62,7 @@ public class MenuNavigator extends AbstractNavigator
     public void up()
     {
         selectedY--;
-        if ( selectedY < 0 ) selectedY = 0;
+        keepSelectedInBounds();
         updateSelector();
     }
 
@@ -58,7 +70,7 @@ public class MenuNavigator extends AbstractNavigator
     public void left()
     {
         selectedX--;
-        if ( selectedX < 0 ) selectedX = 0;
+        keepSelectedInBounds();
         updateSelector();
     }
 
@@ -66,7 +78,7 @@ public class MenuNavigator extends AbstractNavigator
     public void down()
     {
         selectedY++;
-        if ( selectedY >= menu[0].length ) selectedY = menu[0].length - 1;
+        keepSelectedInBounds();
         updateSelector();
     }
 
@@ -74,8 +86,18 @@ public class MenuNavigator extends AbstractNavigator
     public void right()
     {
         selectedX++;
-        if ( selectedX >= menu.length ) selectedX = menu.length - 1;
+        keepSelectedInBounds();
         updateSelector();
+    }
+    
+    protected boolean keepSelectedInBounds()
+    {
+        boolean b = false;
+        if ( selectedX < 0 ) { selectedX = 0; b = true; }
+        if ( selectedY < 0 ) { selectedY = 0; b = true; }
+        if ( selectedX >= menu.length ) { selectedX = menu.length - 1; b = true; }
+        if ( selectedY >= menu[0].length ) { selectedY = menu[0].length - 1; b = true; }
+        return b;
     }
     
     @Override

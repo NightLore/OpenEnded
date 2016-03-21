@@ -122,6 +122,7 @@ public class GamePanel extends NavigatablePanel
         }
         game.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
         this.cardLayout.show( this, to );
+        game.requestFocusInWindow(); // update gameScreen in case of mouse clicks
     }
     
 }

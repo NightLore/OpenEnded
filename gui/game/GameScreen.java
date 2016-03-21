@@ -115,7 +115,6 @@ public class GameScreen extends ScreenPanel
     @Override
     public void shown()
     {
-        this.requestFocusInWindow();
         this.newGame();
         updater.start();
         ui.reset();

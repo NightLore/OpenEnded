@@ -8,6 +8,15 @@ import java.util.HashMap;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+/**
+ *  Base Panel for Navigatable Panels
+ *  
+ *  <br> Extends ClearPanel; Implements Carder, ControlListener, ActionListener
+ *
+ *  @author  Nathan M. Lui
+ *  @version Jan 10, 2016
+ *  @author  Assignment: OpenEnded
+ */
 public abstract class NavigatablePanel extends ClearPanel implements Carder, ControlListener, ActionListener
 {
 

@@ -13,6 +13,13 @@ import gui.game.GameScreen;
 import gui.game.ListGameScreen;
 import gui.game.LoadGameScreen;
 
+/**
+ *  The main panel that loads all the other panels
+ *
+ *  @author  Nathan M. Lui
+ *  @version Jan 10, 2016
+ *  @author  Assignment: OpenEnded
+ */
 public class MainPanel extends NavigatablePanel
 {
     /**
