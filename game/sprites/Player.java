@@ -1,4 +1,4 @@
-package sprites;
+package game.sprites;
 
 import game.InputManager;
 

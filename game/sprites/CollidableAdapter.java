@@ -1,4 +1,4 @@
-package sprites;
+package game.sprites;
 
 /**
  *  Adapter class for the Collidable interface

@@ -1,12 +1,12 @@
-package world;
+package game.world;
+
+import game.sprites.Sprite;
+import game.world.Generator.Generation;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
-import sprites.Sprite;
-import world.Generator.Generation;
 
 /**
  *  Manages a chunk of the map
@@ -48,7 +48,7 @@ public class LargeTile extends TileCoordinator
     
     /**
      * Randomly Generates this LargeTile based on Generator
-     * @see world.Generator
+     * @see game.world.Generator
      */
     @Override
     public void generate()

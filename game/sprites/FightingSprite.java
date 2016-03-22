@@ -1,11 +1,11 @@
-package sprites;
+package game.sprites;
+
+import game.sprites.groups.SpriteGroup;
+import game.world.Map;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
-import sprites.groups.SpriteGroup;
-import world.Map;
 
 /**
  *  Abstract class for all sprites that can fight
@@ -65,7 +65,7 @@ public abstract class FightingSprite extends Sprite
     protected abstract int drawDir();
 
     /**
-     * @see sprites.Sprite#move(long, world.Map, sprites.groups.SpriteGroup)
+     * @see game.sprites.Sprite#move(long, game.world.Map, game.sprites.groups.SpriteGroup)
      */
     @Override
     public void move( long gameTime, Map map, SpriteGroup sprites )

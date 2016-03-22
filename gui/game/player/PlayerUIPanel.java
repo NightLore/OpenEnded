@@ -1,6 +1,7 @@
 package gui.game.player;
 
 import game.Game;
+import game.sprites.Player;
 import gui.Carder;
 import gui.ControlListener;
 import gui.NavigatablePanel;
@@ -10,8 +11,6 @@ import java.awt.CardLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.KeyStroke;
-
-import sprites.Player;
 
 /**
  * Manages the User Interface for spawning in players

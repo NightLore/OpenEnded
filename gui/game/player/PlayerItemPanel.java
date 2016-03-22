@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
-import sprites.Weapon;
+import game.sprites.Weapon;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;

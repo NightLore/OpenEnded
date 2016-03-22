@@ -1,4 +1,7 @@
-package sprites;
+package game.sprites;
+
+import game.sprites.groups.SpriteGroup;
+import game.world.Map;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,9 +9,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Scanner;
-
-import sprites.groups.SpriteGroup;
-import world.Map;
 
 /**
  *  Abstract class for all sprites, also used as a modifier for the ImageSprite 

@@ -1,8 +1,8 @@
-package world;
+package game.world;
+
+import game.sprites.Sprite;
 
 import java.awt.image.BufferedImage;
-
-import sprites.Sprite;
 
 /**
  *  Sprite used by Tile to manage the Image and minor collisions

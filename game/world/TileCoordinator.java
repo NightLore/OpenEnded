@@ -1,10 +1,10 @@
-package world;
+package game.world;
+
+import game.sprites.Sprite;
 
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Random;
-
-import sprites.Sprite;
 
 /**
  *  Holds all manageable similar code between LargeTile and Map
@@ -34,7 +34,7 @@ public abstract class TileCoordinator
     public abstract boolean isColliding( Sprite sprite );
     /**
      * Randomly Generates this Coordinator based on Generator
-     * @see world.Generator
+     * @see game.world.Generator
      */
     public abstract void generate();
     public abstract void load();

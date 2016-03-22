@@ -1,12 +1,12 @@
-package world;
+package game.world;
+
+import game.sprites.CollidableAdapter;
+import game.sprites.Sprite;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
-import sprites.CollidableAdapter;
-import sprites.Sprite;
 
 /**
  *  Represents a Tile on the map, manages wall collision
@@ -57,8 +57,8 @@ public class Tile extends CollidableAdapter
      * Sets this Tiles Images
      * @param floor
      * @param block
-     * @see world.Tile#setFloor(BufferedImage)
-     * @see world.Tile#setBlock(BufferedImage)
+     * @see game.world.Tile#setFloor(BufferedImage)
+     * @see game.world.Tile#setBlock(BufferedImage)
      */
     public void setTileImages( BufferedImage floor, BufferedImage block )
     {

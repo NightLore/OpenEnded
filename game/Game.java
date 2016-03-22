@@ -1,5 +1,13 @@
 package game;
 
+import game.sprites.Enemy;
+import game.sprites.Player;
+import game.sprites.Sprite;
+import game.sprites.Weapon;
+import game.sprites.groups.PlayerGroup;
+import game.sprites.groups.SpriteGroup;
+import game.world.Map;
+import game.world.Tile;
 import gui.game.GameScreen;
 
 import java.awt.Color;
@@ -9,15 +17,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import sprites.Enemy;
-import sprites.Player;
-import sprites.Sprite;
-import sprites.Weapon;
-import sprites.groups.PlayerGroup;
-import sprites.groups.SpriteGroup;
-import world.Map;
-import world.Tile;
 
 /**
  * Game Manager class

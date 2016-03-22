@@ -1,7 +1,7 @@
-package sprites.groups;
+package game.sprites.groups;
 
-import sprites.Sprite;
-import world.Map;
+import game.sprites.Sprite;
+import game.world.Map;
 
 /**
  *  Manages Sprites with their collisions and moving

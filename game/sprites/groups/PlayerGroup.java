@@ -1,9 +1,9 @@
-package sprites.groups;
+package game.sprites.groups;
+
+import game.sprites.Player;
 
 import java.awt.Point;
 import java.io.Serializable;
-
-import sprites.Player;
 
 /**
  *  Manages the group of Players

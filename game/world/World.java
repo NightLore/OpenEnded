@@ -1,9 +1,9 @@
-package world;
+package game.world;
+
+import game.sprites.Sprite;
+import game.sprites.groups.SpriteGroup;
 
 import java.awt.Point;
-
-import sprites.Sprite;
-import sprites.groups.SpriteGroup;
 
 /**
  *  Class intended to manage interactions in the game (not implemented)

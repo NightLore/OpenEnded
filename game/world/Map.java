@@ -1,13 +1,12 @@
-package world;
+package game.world;
 
 import game.Assets;
+import game.sprites.Sprite;
+import game.world.Generator.Generation;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-
-import sprites.Sprite;
-import world.Generator.Generation;
 
 /**
  *  Infinite map design

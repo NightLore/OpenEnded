@@ -1,4 +1,4 @@
-package sprites;
+package game.sprites;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;

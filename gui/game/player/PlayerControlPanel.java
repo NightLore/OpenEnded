@@ -1,5 +1,6 @@
 package gui.game.player;
 
+import game.sprites.Player;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;
@@ -13,8 +14,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import sprites.Player;
 
 /**
  *  Player panel that allows the change of controls for the associated player.
