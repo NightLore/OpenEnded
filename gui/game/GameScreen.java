@@ -119,6 +119,7 @@ public class GameScreen extends ScreenPanel
         updater.start();
         ui.reset();
         ui.switchTo( GamePanel.GAME_PANEL );
+        updateGameUI();
     }
     
     @Override
@@ -131,7 +132,7 @@ public class GameScreen extends ScreenPanel
     /**
      * Starts new game.
      */
-    public void newGame()
+    private void newGame()
     {
         // We set gameTime to zero and lastTime to current time for later calculations.
         gameTime = 0;

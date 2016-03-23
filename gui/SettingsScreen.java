@@ -34,6 +34,10 @@ public class SettingsScreen extends ScreenPanel
      */
     private static final long serialVersionUID = 1L;
     
+    public static final int MAX_LIVES = 20;
+    public static final int MAX_NPCS = 10;
+    public static final int MAX_ENEMIES = 100;
+    
     private Settings settings;
     private Settings tempSettings;
     
@@ -56,17 +60,17 @@ public class SettingsScreen extends ScreenPanel
 
         JPanel lifePanel = new ClearPanel();
         JLabel lifeLabel = new JLabel( "Number of Lives: " );
-        lifeSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
+        lifeSlider = new JSlider( JSlider.HORIZONTAL, 0, MAX_LIVES, settings.numLives );
         numLivesLabel = new JLabel( "" + settings.numNPCs );
         
         JPanel npcPanel = new ClearPanel();
         JLabel npcLabel = new JLabel( "Number of NPCs: " );
-        npcSlider = new JSlider( JSlider.HORIZONTAL, 0, 10, settings.numNPCs );
+        npcSlider = new JSlider( JSlider.HORIZONTAL, 0, MAX_NPCS, settings.numNPCs );
         numNpcLabel = new JLabel( "" + settings.numNPCs );
         
         JPanel enemyPanel = new ClearPanel();
         JLabel enemyLabel = new JLabel( "Number of Enemies: " );
-        enemySlider = new JSlider( JSlider.HORIZONTAL, 0, 100, settings.numEnemies );
+        enemySlider = new JSlider( JSlider.HORIZONTAL, 0, MAX_ENEMIES, settings.numEnemies );
         numEnmyLabel = new JLabel( "" + settings.numEnemies );
         
         JPanel friendlyFirePanel = new ClearPanel();

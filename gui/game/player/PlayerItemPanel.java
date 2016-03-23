@@ -113,7 +113,7 @@ public class PlayerItemPanel extends ScreenPanel
     }
     
 //    public void setMenuItems( String[][] selectables )
-    {
+//    {
 //        for ( int i = 0; i < NUMCHOICES; i++ )
 //        {
 //            for ( int j = 0; j < end; j++ )
@@ -121,7 +121,7 @@ public class PlayerItemPanel extends ScreenPanel
 //                this.selectables[i][j].setText( selectables[i][j] );
 //            }
 //        }
-    }
+//    }
     
     public void setItems( String skillClass, Weapon[] weapons )
     {

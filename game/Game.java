@@ -65,7 +65,7 @@ public class Game {
     {
         sprites = new SpriteGroup();
         players = new PlayerGroup( 4 );
-        numLives = settings.numLives;
+        numLives = settings.numLives + 1;
     }
     
     /**
@@ -117,9 +117,7 @@ public class Game {
                     {
                         screen.gameOver();
                     }
-                    numLives--;
                     players.remove( (Player)s );
-                    screen.updateGameUI();
                 }
                 break;
             }
@@ -155,12 +153,15 @@ public class Game {
     }
     public Player addPlayer( int panel )
     {
+        if ( numLives <= 0 )
+            return null;
         Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
         player.splitSprite( 2, 3 );
         setPlayerSpawn( player );
         player.setDefaultControls( panel );
         sprites.add( player );
         players.set( player, panel );
+        takeALife();
         return player;
     }
     private void spawnEnemies()
@@ -228,6 +229,12 @@ public class Game {
     public int numLives()
     {
         return numLives;
+    }
+    
+    private void takeALife()
+    {
+        numLives--;
+        screen.updateGameUI();
     }
     
     /**

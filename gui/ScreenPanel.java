@@ -119,7 +119,10 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener, Acti
     public void shown() {}
 
     @Override
-    public void cover() {}
+    public void cover() {
+        if ( navigator != null )
+            navigator.reset();
+    }
     
     public void back()
     {

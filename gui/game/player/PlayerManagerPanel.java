@@ -52,7 +52,7 @@ public class PlayerManagerPanel extends ScreenPanel implements Manager
         {
             mainPanels[i].setGame( game );
             if ( i == 0 )
-                mainPanels[i].switchTo( STATS_PANEL );
+                mainPanels[i].switchTo( CTRLS_PANEL );
             this.add( mainPanels[i] );
         }
     }

@@ -50,7 +50,7 @@ public class Window extends JFrame
     
     public static String getVersion()
     {
-        return "V0.19";
+        return "V0.19_9";
     }
 
     public static void main( String[] args ) {

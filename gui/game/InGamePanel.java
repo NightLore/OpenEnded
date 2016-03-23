@@ -3,7 +3,8 @@ package gui.game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 
 import javax.swing.BorderFactory;
@@ -36,6 +37,7 @@ public class InGamePanel extends ScreenPanel
     private Color overlayColor;
     
     private Image lifeImage;
+    private GridBagConstraints constraints;
 
     public InGamePanel( Carder carder, Assets assets, int numLives )
     {
@@ -50,10 +52,14 @@ public class InGamePanel extends ScreenPanel
         JButton pauseButton = new JButton( GamePanel.PAUSE_PANEL );
         JPanel westPanel = new ClearPanel();
         JPanel gameLifePanel = new JPanel( new BorderLayout() );
-        lifePanel = new ClearPanel( new GridLayout( 10, 0, 10, 10 ) );
+        lifePanel = new ClearPanel( new GridBagLayout() );
         lifeLabel = new JLabel( "LIVES" );
         overlayColor = new Color( 0, 0, 0, 128 );
         this.lifeImage = assets.getSkin( Assets.REDHEART ).getScaledInstance( 32, 32, Image.SCALE_DEFAULT );
+        
+        constraints = new GridBagConstraints();
+        constraints.ipadx = 10;
+        constraints.ipady = 10;
         
         pauseButton.setPreferredSize( new Dimension( 100, 50 ) );
         pauseButton.addActionListener( this );
@@ -101,7 +107,11 @@ public class InGamePanel extends ScreenPanel
             label.setForeground( Color.WHITE );
             label.setIcon( new ImageIcon( lifeImage ) );
             label.setHorizontalTextPosition( JLabel.CENTER );
-            lifePanel.add( label );
+            
+            constraints.gridx = i / 10;
+            constraints.gridy = i % 10;
+            lifePanel.add( label, constraints );
         }
+        this.validate();
     }
 }

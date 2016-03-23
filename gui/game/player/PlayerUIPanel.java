@@ -95,11 +95,6 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
         this.game = game;
     }
     
-    public void removePlayer()
-    {
-        this.switchTo( START_PANEL );
-    }
-    
     public CardLayout getCardLayout()
     {
         return cardLayout;
@@ -113,9 +108,9 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
     public void reset()
     {
         if ( !game.getPlayers().hasPlayer( panel ) )
-            removePlayer();
-        else if ( currentPanel.equalsIgnoreCase( DONE_PANEL ) )
-            switchTo( STATS_PANEL );
+            this.switchTo( START_PANEL );
+        else
+            this.switchTo( STATS_PANEL );
     }
 
     @Override
@@ -124,13 +119,19 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
         if ( to.equalsIgnoreCase( CTRLS_PANEL ) )
         {
             if ( !game.getPlayers().hasPlayer( panel ) )
-                setPlayer( game.addPlayer( panel ) );
+            {
+                Player p = game.addPlayer( panel );
+                if ( p == null ) 
+                {
+                    reset();
+                    return;
+                }
+                setPlayer( p );
+            }
             isDone = false;
         }
         else if ( to.equalsIgnoreCase( STATS_PANEL ) )
         {
-            if ( !game.getPlayers().hasPlayer( panel ) )
-                setPlayer( game.addPlayer( panel ) );
             isDone = false;
         }
         else if ( to.equalsIgnoreCase( DONE_PANEL ) )
