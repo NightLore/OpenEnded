@@ -3,11 +3,16 @@ package gui.game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Image;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import game.Assets;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;
@@ -26,29 +31,45 @@ public class InGamePanel extends ScreenPanel
     private static final long serialVersionUID = 1L;
 
     private JLabel lifeLabel;
+    private JPanel lifePanel;
+    
+    private Color overlayColor;
+    
+    private Image lifeImage;
 
-    public InGamePanel( Carder carder, int numLives )
+    public InGamePanel( Carder carder, Assets assets, int numLives )
     {
-        this( carder, GamePanel.PAUSE_PANEL, numLives );
+        this( carder, assets, GamePanel.PAUSE_PANEL, numLives );
     }
     
-    public InGamePanel( Carder carder, String back, int numLives )
+    public InGamePanel( Carder carder, Assets assets, String back, int numLives )
     {
         super( carder, back );
         this.setLayout( new BorderLayout() );
         JPanel gamePausePanel = new ClearPanel( new BorderLayout() );
         JButton pauseButton = new JButton( GamePanel.PAUSE_PANEL );
-        JPanel gameLifePanel = new ClearPanel();
-        lifeLabel = new JLabel( "Number of Lives: " + numLives );
+        JPanel westPanel = new ClearPanel();
+        JPanel gameLifePanel = new JPanel( new BorderLayout() );
+        lifePanel = new ClearPanel( new GridLayout( 10, 0, 10, 10 ) );
+        lifeLabel = new JLabel( "LIVES" );
+        overlayColor = new Color( 0, 0, 0, 128 );
+        this.lifeImage = assets.getSkin( Assets.REDHEART ).getScaledInstance( 32, 32, Image.SCALE_DEFAULT );
         
         pauseButton.setPreferredSize( new Dimension( 100, 50 ) );
         pauseButton.addActionListener( this );
+        gameLifePanel.setBackground( overlayColor );
         lifeLabel.setForeground( Color.WHITE );
+        lifeLabel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
+        lifePanel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
 
         gamePausePanel.add( pauseButton, BorderLayout.EAST );
-        gameLifePanel.add( lifeLabel );
+        gameLifePanel.add( lifeLabel, BorderLayout.NORTH );
+        gameLifePanel.add( lifePanel, BorderLayout.CENTER );
+        westPanel.add( gameLifePanel );
         this.add( gamePausePanel, BorderLayout.NORTH );
-        this.add( gameLifePanel, BorderLayout.WEST );
+        this.add( westPanel, BorderLayout.WEST );
+        
+        update( numLives );
     }
     
     @Override
@@ -73,6 +94,14 @@ public class InGamePanel extends ScreenPanel
 
     public void update( int numLives )
     {
-        lifeLabel.setText( "Number of Lives: " + numLives );
+        lifePanel.removeAll();
+        for ( int i = 0; i < numLives; i++ )
+        {
+            JLabel label = new JLabel( i+1 + "" );
+            label.setForeground( Color.WHITE );
+            label.setIcon( new ImageIcon( lifeImage ) );
+            label.setHorizontalTextPosition( JLabel.CENTER );
+            lifePanel.add( label );
+        }
     }
 }
