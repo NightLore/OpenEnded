@@ -16,6 +16,8 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import constants.KeyConstants;
+
 /**
  *  Base panel for most of the ui in the game, manages all defaults
  *  Gives all key input to its own navigator, except for confirm() and cancel()
@@ -30,7 +32,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class ScreenPanel extends JPanel implements Screen, ControlListener, ActionListener
+public class ScreenPanel extends JPanel implements Screen, ControlListener, ActionListener, KeyConstants
 {
 
     /**

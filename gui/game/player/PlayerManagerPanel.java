@@ -8,6 +8,8 @@ import gui.game.GamePanel;
 import java.awt.Color;
 import java.awt.GridLayout;
 
+import constants.PlayerPanelConstants;
+
 /**
  *  This Class manages the Display of the four players in the Item screen
  *
@@ -17,7 +19,7 @@ import java.awt.GridLayout;
  *
  *  @author  Sources: none
  */
-public class PlayerManagerPanel extends ScreenPanel implements Manager
+public class PlayerManagerPanel extends ScreenPanel implements Manager, PlayerPanelConstants
 {
     /**
      * 

@@ -16,6 +16,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import constants.MainScreenConstants;
+
 /**
  *  Main Menu Screen
  *
@@ -25,7 +27,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class MainMenuScreen extends ScreenPanel
+public class MainMenuScreen extends ScreenPanel implements MainScreenConstants
 {
 
     /**

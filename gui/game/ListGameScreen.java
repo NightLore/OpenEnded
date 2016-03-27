@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 
+import constants.MainScreenConstants;
+
 /**
  *  Screen Lists all game modes for user to play
  *
@@ -20,7 +22,7 @@ import javax.swing.BorderFactory;
  *
  *  @author  Sources: none
  */
-public class ListGameScreen extends ScreenPanel
+public class ListGameScreen extends ScreenPanel implements MainScreenConstants
 {
     /**
      * 

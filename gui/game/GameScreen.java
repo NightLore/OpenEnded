@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.Timer;
 
+import constants.DirectionalConstants;
+import constants.MainScreenConstants;
 import game.Assets;
 import game.Game;
 import game.InputManager;
@@ -23,7 +25,7 @@ import gui.ScreenPanel;
  *  @author  Nathan Man-ho Lui
  *  @version Nov 1, 2015
  */
-public class GameScreen extends ScreenPanel
+public class GameScreen extends ScreenPanel implements MainScreenConstants, DirectionalConstants
 {
     /**
      * Time of one second in milliseconds.

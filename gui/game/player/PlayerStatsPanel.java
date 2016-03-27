@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import constants.PlayerPanelConstants;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;
@@ -25,7 +26,7 @@ import gui.utilities.Selector;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 4, 2016
  */
-public class PlayerStatsPanel extends ScreenPanel
+public class PlayerStatsPanel extends ScreenPanel implements PlayerPanelConstants
 {
     /**
      * 

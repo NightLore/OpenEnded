@@ -38,13 +38,15 @@ public class InGamePanel extends ScreenPanel
     
     private Image lifeImage;
     private GridBagConstraints constraints;
+    
+    private int numLives;
 
-    public InGamePanel( Carder carder, Assets assets, int numLives )
+    public InGamePanel( Carder carder, Assets assets )
     {
-        this( carder, assets, GamePanel.PAUSE_PANEL, numLives );
+        this( carder, assets, GamePanel.PAUSE_PANEL );
     }
     
-    public InGamePanel( Carder carder, Assets assets, String back, int numLives )
+    public InGamePanel( Carder carder, Assets assets, String back )
     {
         super( carder, back );
         this.setLayout( new BorderLayout() );
@@ -74,8 +76,6 @@ public class InGamePanel extends ScreenPanel
         westPanel.add( gameLifePanel );
         this.add( gamePausePanel, BorderLayout.NORTH );
         this.add( westPanel, BorderLayout.WEST );
-        
-        update( numLives );
     }
     
     @Override
@@ -100,18 +100,26 @@ public class InGamePanel extends ScreenPanel
 
     public void update( int numLives )
     {
-        lifePanel.removeAll();
-        for ( int i = 0; i < numLives; i++ )
+        for ( ; this.numLives < numLives; this.numLives++ )
         {
-            JLabel label = new JLabel( i+1 + "" );
-            label.setForeground( Color.WHITE );
-            label.setIcon( new ImageIcon( lifeImage ) );
-            label.setHorizontalTextPosition( JLabel.CENTER );
-            
-            constraints.gridx = i / 10;
-            constraints.gridy = i % 10;
-            lifePanel.add( label, constraints );
+            addLife( this.numLives );
         }
-        this.validate();
+        for ( ; this.numLives > numLives; this.numLives-- )
+        {
+            lifePanel.remove( this.numLives - 1 );
+        }
+    }
+    
+    /** @param i number representing this life (index) */
+    private void addLife( int i )
+    {
+        JLabel label = new JLabel( i+1 + "" );
+        label.setForeground( Color.WHITE );
+        label.setIcon( new ImageIcon( lifeImage ) );
+        label.setHorizontalTextPosition( JLabel.CENTER );
+        
+        constraints.gridx = i / 10;
+        constraints.gridy = i % 10;
+        lifePanel.add( label, constraints );
     }
 }

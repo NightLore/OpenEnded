@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
+import constants.PlayerPanelConstants;
 import game.sprites.Weapon;
 import gui.Carder;
 import gui.ClearPanel;
@@ -25,7 +26,7 @@ import gui.utilities.Selector;
  *  @author  Nathan Lui
  *  @version Feb 4, 2016
  */
-public class PlayerItemPanel extends ScreenPanel
+public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
 {
     /**
      * 

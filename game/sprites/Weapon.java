@@ -44,6 +44,26 @@ public class Weapon extends Sprite
         direction = dir;
         mySprite = s;
     }
+    
+    @Override
+    public Weapon clone()
+    {
+        return (Weapon)super.clone();
+    }
+    
+    public Weapon clone( Sprite s )
+    {
+        Weapon w = clone();
+        w.mySprite = s;
+        return w;
+    }
+    
+    public Weapon clone( Sprite s, int dir )
+    {
+        Weapon w = clone( s );
+        w.direction = dir;
+        return w;
+    }
 
     @Override
     public boolean additionalCollisions( Sprite sprite )

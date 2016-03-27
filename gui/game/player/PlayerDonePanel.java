@@ -5,6 +5,7 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 
+import constants.PlayerPanelConstants;
 import gui.Carder;
 import gui.ScreenPanel;
 
@@ -14,7 +15,7 @@ import gui.ScreenPanel;
  *  @author  Nathan
  *  @version Feb 4, 2016
  */
-public class PlayerDonePanel extends ScreenPanel
+public class PlayerDonePanel extends ScreenPanel implements PlayerPanelConstants
 {
     
     /**

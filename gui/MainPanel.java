@@ -7,6 +7,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import constants.KeyConstants;
+import constants.MainScreenConstants;
 import game.Assets;
 import game.Settings;
 import gui.game.GameScreen;
@@ -20,7 +22,7 @@ import gui.game.LoadGameScreen;
  *  @version Jan 10, 2016
  *  @author  Assignment: OpenEnded
  */
-public class MainPanel extends NavigatablePanel
+public class MainPanel extends NavigatablePanel implements MainScreenConstants, KeyConstants
 {
     /**
      * 

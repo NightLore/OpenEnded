@@ -6,6 +6,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import constants.MainScreenConstants;
+
 /**
  *  Main JFrame of the game
  *
@@ -40,7 +42,7 @@ public class Window extends JFrame
         
         MainPanel main = new MainPanel();
         this.add( main );
-        main.switchTo( MainPanel.INITIAL );
+        main.switchTo( MainScreenConstants.INITIAL );
     }
     
     public static String getGameName()

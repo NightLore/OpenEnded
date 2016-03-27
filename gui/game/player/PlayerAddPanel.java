@@ -7,6 +7,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
+import constants.PlayerPanelConstants;
 import gui.Carder;
 import gui.ScreenPanel;
 
@@ -16,7 +17,7 @@ import gui.ScreenPanel;
  *  @author  Nathan Lui
  *  @version Feb 4, 2016
  */
-public class PlayerAddPanel extends ScreenPanel
+public class PlayerAddPanel extends ScreenPanel implements PlayerPanelConstants
 {
     /**
      * 

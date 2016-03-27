@@ -12,6 +12,8 @@ import java.awt.CardLayout;
 import javax.swing.BorderFactory;
 import javax.swing.KeyStroke;
 
+import constants.PlayerPanelConstants;
+
 /**
  * Manages the User Interface for spawning in players
  *
@@ -21,7 +23,7 @@ import javax.swing.KeyStroke;
  *
  *  @author  Sources: none
  */
-public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlListener
+public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlListener, PlayerPanelConstants
 {
     /**
      * 

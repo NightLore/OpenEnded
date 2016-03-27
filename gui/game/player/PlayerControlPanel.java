@@ -15,13 +15,15 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import constants.PlayerPanelConstants;
+
 /**
  *  Player panel that allows the change of controls for the associated player.
  *
  *  @author  Nathan Lui
  *  @version Feb 3, 2016
  */
-public class PlayerControlPanel extends ScreenPanel
+public class PlayerControlPanel extends ScreenPanel implements PlayerPanelConstants
 {
 
     /**

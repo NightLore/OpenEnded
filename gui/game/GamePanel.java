@@ -53,7 +53,7 @@ public class GamePanel extends NavigatablePanel
 
         ScreenPanel loadPanel = new GameLoadPanel( this );
         
-        gamePanel = new InGamePanel( this, game.getAssets(), settings.numLives );
+        gamePanel = new InGamePanel( this, game.getAssets() );
         gamePanel.setPreferredSize( getPreferredSize() );
         
         itemPanel = new PlayerManagerPanel( this, PAUSE_PANEL );

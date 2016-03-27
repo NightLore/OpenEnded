@@ -13,6 +13,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import constants.MainScreenConstants;
+
 /**
  *  The Splash Screen for the game
  *
@@ -22,7 +24,7 @@ import javax.swing.JPanel;
  *
  *  @author  Sources: none
  */
-public class InitialScreen extends ScreenPanel implements KeyListener, MouseListener
+public class InitialScreen extends ScreenPanel implements KeyListener, MouseListener, MainScreenConstants
 {
     /**
      * 

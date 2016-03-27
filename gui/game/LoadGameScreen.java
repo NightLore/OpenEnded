@@ -7,6 +7,8 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 
+import constants.MainScreenConstants;
+
 /**
  *  Screen for loading a presaved game
  *
@@ -16,7 +18,7 @@ import javax.swing.JButton;
  *
  *  @author  Sources: none
  */
-public class LoadGameScreen extends ScreenPanel
+public class LoadGameScreen extends ScreenPanel implements MainScreenConstants
 {
     /**
      * 
