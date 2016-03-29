@@ -275,6 +275,12 @@ public abstract class Sprite extends ImageSprite implements Collidable
         return (int)Math.toDegrees( Math.atan2( y, x ) );
     }
     
+    /** Sets this sprite's data to a copy of the new data */
+    protected void setSpriteData( SpriteData newData )
+    {
+        data = new SpriteData( newData );
+    }
+    
     /**
      * Return BufferedImage object of a picture file
      * @param fileName

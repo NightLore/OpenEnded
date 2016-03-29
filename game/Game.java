@@ -3,11 +3,14 @@ package game;
 import game.sprites.Enemy;
 import game.sprites.Player;
 import game.sprites.Sprite;
-import game.sprites.Weapon;
 import game.sprites.groups.PlayerGroup;
 import game.sprites.groups.SpriteGroup;
 import game.world.Map;
 import game.world.Tile;
+import games.sprites.weapons.MeleeWeapon;
+import games.sprites.weapons.Mine;
+import games.sprites.weapons.Projectile;
+import games.sprites.weapons.Weapon;
 import gui.game.GameScreen;
 
 import java.awt.Color;
@@ -16,6 +19,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,7 +33,16 @@ import java.util.List;
 public class Game {
 //    private HashMap<String,SpriteData> data = new HashMap<String,SpriteData>();
 //    private String[] choosable;
-    public static final int SPAWN_OFFSET = 128;
+    /** temporary method of storing Weapon's index */
+    public static final HashMap<String,Integer> WEAPON_INDEX = new HashMap<String,Integer>();
+    public static final String MELEE = "MELEE";
+    public static final String SPELL = "SPELL";
+    public static final String MINES = "MINES";
+    static {
+        WEAPON_INDEX.put( MELEE, 0 );
+        WEAPON_INDEX.put( SPELL, 1 );
+        WEAPON_INDEX.put( MINES, 2 );
+    }
     
     private SpriteGroup sprites;
     private PlayerGroup players;
@@ -37,7 +50,7 @@ public class Game {
     private Map map;
     private BufferedImage enemyImg, projImg;
     private int numEnemies;
-    private Weapon[] defaultWeapons;
+    public Weapon[] defaultWeapons;
     private Point center;
     private int numLives;
     
@@ -75,9 +88,10 @@ public class Game {
     {
         enemyImg = assets.getSkin( Assets.REDCIRCLE );
         projImg = assets.getSkin( Assets.SMALLCIRCLE );
-        defaultWeapons = new Weapon[2];
-        defaultWeapons[0] = new Weapon( projImg, "MINES" );
-        defaultWeapons[1] = new Weapon( projImg, "SPELL" );
+        defaultWeapons = new Weapon[3];
+        defaultWeapons[0] = new MeleeWeapon( assets.getSkin( Assets.SWORD ), MELEE, 1000 );
+        defaultWeapons[1] = new Projectile( projImg, SPELL );
+        defaultWeapons[2] = new Mine( projImg, MINES );
         center = new Point();
         map = new Map( assets, center, screen.getWidth(), screen.getHeight() );
         map.create();
@@ -155,10 +169,11 @@ public class Game {
     {
         if ( numLives <= 0 )
             return null;
-        Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ), defaultWeapons );
+        Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ) );
         player.splitSprite( 2, 3 );
         setPlayerSpawn( player );
         player.setDefaultControls( panel );
+        player.setWeapons( defaultWeapons );
         sprites.add( player );
         players.set( player, panel );
         takeALife();
@@ -168,7 +183,7 @@ public class Game {
     {
         if ( numEnemies < settings.numEnemies )
         {
-            sprites.add( newSprite( enemyImg, Enemy.class ) );
+            sprites.add( newEnemy( enemyImg ) );
             numEnemies++;
         }
         for ( int i = 0; numEnemies > settings.numEnemies && i < sprites.size(); i++ )
@@ -181,10 +196,11 @@ public class Game {
             }
         }
     }
-    private Sprite newSprite( BufferedImage img, Class<? extends Sprite> c )
+    private Sprite newEnemy( BufferedImage img )
     {
-        Sprite sprite = new Enemy( img, defaultWeapons );
+        Enemy sprite = new Enemy( img );
         sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
+        sprite.setWeapons( defaultWeapons );
         setSpriteSpawn( sprite );
         return sprite;
     }

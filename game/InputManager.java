@@ -1,7 +1,5 @@
 package game;
 
-import gui.game.GameScreen;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -23,12 +21,6 @@ public class InputManager implements KeyListener, MouseListener
     
     // Mouse states - Here are stored states for mouse keys - is it down or not.
     private static boolean[] mouseState = new boolean[3];
-
-    private GameScreen game;
-    public InputManager( GameScreen g )
-    {
-        game = g;
-    }
     
     public static void reset()
     {
@@ -61,7 +53,6 @@ public class InputManager implements KeyListener, MouseListener
 
 //        System.out.println( e.getKeyChar() + " released" );
         keyboardState[e.getKeyCode()] = false;
-        game.keyReleasedFramework(e);
     }
     
     @Override

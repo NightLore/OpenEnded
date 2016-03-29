@@ -2,6 +2,7 @@ package game.sprites;
 
 import game.sprites.groups.SpriteGroup;
 import game.world.Map;
+import games.sprites.weapons.Weapon;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,10 +30,10 @@ public abstract class FightingSprite extends Sprite
     private long[] attackTime = new long[delay.length];
     private String team;
     
-    public FightingSprite( BufferedImage img, Weapon[] weapons, String team )
+    public FightingSprite( BufferedImage img, String team )
     {
         super( img );
-        this.weapons = weapons;
+        this.weapons = new Weapon[2];
         this.setTeam( team );
         this.setSkillClass( "INEPT" ); // TODO replace with skill chooser
     }
@@ -103,29 +104,20 @@ public abstract class FightingSprite extends Sprite
         switch ( attack )
         {
             case 0:
-                if ( gameTime > attackTime[attack] + delay[attack] * 1000000L )
-                {
-                    weapon = attack1();
-                    attackTime[attack] = gameTime;
-                }
-                break;
             case 1:
                 if ( gameTime > attackTime[attack] + delay[attack] * 1000000L )
                 {
-                    weapon = attack2();
+                    weapon = attack( attack );
                     attackTime[attack] = gameTime;
                 }
-                break;
         }
-        if ( weapon != null )
-            weapon.setPosition( getX(), getY() );
-        
         return weapon;
     }
     
-    public abstract Weapon attack1();
-    
-    public abstract Weapon attack2();
+    public Weapon attack( int atk )
+    {
+        return weapons[atk].clone( this );
+    }
 
     @Override
     public void takeDamage( int damage )
@@ -133,10 +125,28 @@ public abstract class FightingSprite extends Sprite
         this.getSpriteData().decreaseHp( damage );
     }
     
+    public void setPrimaryWeapon( Weapon weapon )
+    {
+        weapons[0] = weapon;
+    }
+    
+    public void setSecondaryWeapon( Weapon weapon )
+    {
+        weapons[1] = weapon;
+    }
+    
+    public void setWeapons( Weapon... weapons )
+    {
+        setPrimaryWeapon( weapons[0] );
+        setSecondaryWeapon( weapons[1] );
+    }
+    
     public Weapon[] getWeapons()
     {
         return weapons.clone();
     }
+    
+    public abstract int getWeaponDirection();
     
     public void setAttack( int attack )
     {

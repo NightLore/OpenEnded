@@ -14,6 +14,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import constants.GamePanelConstants;
+
 /**
  *  Manages the User Interface in game
  *
@@ -23,21 +25,13 @@ import javax.swing.KeyStroke;
  *
  *  @author  Sources: none
  */
-public class GamePanel extends NavigatablePanel
+public class GamePanel extends NavigatablePanel implements GamePanelConstants
 {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    
-    public static final String LOAD_PANEL = "LOAD";
-    public static final String GAME_PANEL = "GAME";
-    public static final String ITEM_PANEL = "ITEM";
-    public static final String PAUSE_PANEL = "PAUSE";
-    public static final String SETTINGS_PANEL = "SETTINGS";
-    public static final String EXIT_PANEL = "EXIT";
-    public static final String OVER_PANEL = "OVER";
     
     private GameScreen game;
     private SettingsScreen settingsPanel;

@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.Timer;
 
 import constants.DirectionalConstants;
+import constants.GamePanelConstants;
 import constants.MainScreenConstants;
 import game.Assets;
 import game.Game;
@@ -25,7 +25,7 @@ import gui.ScreenPanel;
  *  @author  Nathan Man-ho Lui
  *  @version Nov 1, 2015
  */
-public class GameScreen extends ScreenPanel implements MainScreenConstants, DirectionalConstants
+public class GameScreen extends ScreenPanel implements MainScreenConstants, DirectionalConstants, GamePanelConstants
 {
     /**
      * Time of one second in milliseconds.
@@ -78,7 +78,7 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
     public GameScreen( Carder frame, Settings settings, Assets assets, String back )
     {
         super( frame, Color.BLACK, back );
-        input = new InputManager( this );
+        input = new InputManager();
         this.settings = settings;
         this.assets = assets;
         this.ui = new GamePanel( this, settings );
@@ -120,7 +120,7 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
         this.newGame();
         updater.start();
         ui.reset();
-        ui.switchTo( GamePanel.GAME_PANEL );
+        ui.switchTo( ITEM_PANEL );
         updateGameUI();
     }
     
@@ -167,17 +167,6 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
         }
     }
     
-    
-    /**
-     * This method is called when keyboard key is released.
-     * 
-     * @param e KeyEvent
-     */
-    public void keyReleasedFramework(KeyEvent e)
-    {
-        
-    }
-    
     @Override
     public void draw( Graphics2D g )
     {
@@ -196,7 +185,7 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
     
     public void gameOver()
     {
-        ui.switchTo( GamePanel.OVER_PANEL );
+        ui.switchTo( OVER_PANEL );
     }
        
     public void returnToMainMenu()

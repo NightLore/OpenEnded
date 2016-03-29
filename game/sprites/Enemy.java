@@ -29,11 +29,10 @@ public class Enemy extends FightingSprite
     private int chanceMove;
     private Sprite target;
 
-    public Enemy( BufferedImage img, Weapon[] weapons )
+    public Enemy( BufferedImage img )
     {
-        super( img, weapons, "ENEMY" );
+        super( img, "ENEMY" );
         chanceMove = 75;
-        this.weapons = weapons;
 //        prevTime = 0; // note: may need to be initialized
 //        wait = 0;
         delay[1] = 1000;
@@ -105,15 +104,9 @@ public class Enemy extends FightingSprite
     }
     
     @Override
-    public Weapon attack1()
+    public int getWeaponDirection()
     {
-        return new Weapon( this, weapons[0] );
-    }
-    
-    @Override
-    public Weapon attack2()
-    {
-        return new Weapon( this, weapons[1], this.direction( target ) );
+        return this.direction( target );
     }
 
     @Override

@@ -37,7 +37,7 @@ public class PlayerManagerPanel extends ScreenPanel implements Manager, PlayerPa
     
     public PlayerManagerPanel( Carder carder, String back )
     {
-        super( carder, new Color( 64, 64, 64 ), back );
+        super( carder, new Color( 32, 32, 32, 192 ), back );
         this.setLayout( new GridLayout( 2, 2 ) );
         
         mainPanels = new PlayerUIPanel[MAX_PLAYERS];
@@ -53,8 +53,6 @@ public class PlayerManagerPanel extends ScreenPanel implements Manager, PlayerPa
         for ( int i = 0; i < MAX_PLAYERS; i++ )
         {
             mainPanels[i].setGame( game );
-            if ( i == 0 )
-                mainPanels[i].switchTo( CTRLS_PANEL );
             this.add( mainPanels[i] );
         }
     }

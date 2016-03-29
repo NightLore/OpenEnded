@@ -89,12 +89,13 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
         if ( player == null ) return;
         statsPanel.setPlayerImage( player.getImage() );
         controlPanel.setPlayer( player );
-        itemPanel.setItems( player.getSkillClass(), player.getWeapons() );
+        itemPanel.setPlayer( player );
     }
     
     public void setGame( Game game )
     {
         this.game = game;
+        itemPanel.setGame( game );
     }
     
     public CardLayout getCardLayout()

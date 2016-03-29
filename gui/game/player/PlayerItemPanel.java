@@ -11,7 +11,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
 import constants.PlayerPanelConstants;
-import game.sprites.Weapon;
+import game.Game;
+import game.sprites.Player;
+import games.sprites.weapons.Weapon;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;
@@ -35,8 +37,8 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
     
     public static final String[] TAB_IDENTIFIERS = { "CLASS","PRIMARY ATTACK","SECONDARY ATTACK" };
     public static final String[][] ITEMS = { { "INEPT", "ADEPT", "DIRECT" }, // UNKEMPT, REJECT
-                                             { "MELEE", "SPELL", "MINES" },
-                                             { "MELEE", "SPELL", "MINES" } };
+                                             { Game.MELEE, Game.SPELL, Game.MINES },
+                                             { Game.MELEE, Game.SPELL, Game.MINES } };
     
     public static final int SKILL_CLASS = 0;
     public static final int PRIMARY = 1;
@@ -48,6 +50,8 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
     
     private JTabbedPane tabs;
     private SelectableButton[] tabButtons;
+    private Player player;
+    private Game game;
     
     public PlayerItemPanel( Carder carder )
     {
@@ -58,9 +62,9 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
         this( carder, to, DEFAULT_WIDTH, DEFAULT_HEIGHT );
     }
     
-    public PlayerItemPanel( Carder frame, String to, int w, int h )
+    public PlayerItemPanel( Carder carder, String to, int w, int h )
     {
-        super( frame, to );
+        super( carder, to );
         this.setLayout( new BorderLayout() );
         
         JPanel itemSouthPanel = new ClearPanel();
@@ -124,7 +128,18 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
 //        }
 //    }
     
-    public void setItems( String skillClass, Weapon[] weapons )
+    public void setGame( Game g )
+    {
+        this.game = g;
+    }
+    
+    public void setPlayer( Player p )
+    {
+        this.player = p;
+        this.setItems( p.getSkillClass(), p.getWeapons() );
+    }
+    
+    private void setItems( String skillClass, Weapon[] weapons )
     {
         setTabName( skillClass, SKILL_CLASS );
         setTabName( weapons[PRIMARY-1].getSkillClass(), PRIMARY );
@@ -180,7 +195,7 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
     @Override
     public void act( String selected )
     {
-        for ( int i = 0; i < NUMCHOICES; i++ )
+        for ( int i = 0; i < NUMCHOICES; i++ ) // note can use a Map instead
         {
             if ( selected.equals( TAB_IDENTIFIERS[i] ) )
             {
@@ -190,26 +205,32 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
         }
         InterSelectorNavigator n = (InterSelectorNavigator)navigator;
         int pane = n.getCurrentIndex();
-        String s = selected; // selectables[pane][i*j].getText(); // TODO
-        if ( s == null || s.equals( "" ) ) return;
-        setTabName( s, pane );
-        updatePlayer( s, pane );
+        if ( selected == null || selected.equals( "" ) ) return;
+        updatePlayer( selected, pane );
     }
     private void updateTabs( int identifier )
     {
+//        ( (ScreenPanel)tabs.getSelectedComponent() ).cover();
         tabs.setSelectedIndex( identifier );
+//        ( (ScreenPanel)tabs.getSelectedComponent() ).shown();
     }
-    private void updatePlayer( String skillClass, int pane ) // TODO update Players
+    private void updatePlayer( String selected, int pane ) // TODO update Players
     {
+        player.getBounds();
+        game.getPlayers();
+        Game.WEAPON_INDEX.get( selected );
         switch( pane )
         {
             case SKILL_CLASS:
                 break;
             case PRIMARY:
+                player.setPrimaryWeapon( game.defaultWeapons[Game.WEAPON_INDEX.get( selected )] );
                 break;
             case SECONDARY:
+                player.setSecondaryWeapon( game.defaultWeapons[Game.WEAPON_INDEX.get( selected )] );
                 break;
         }
+        setTabName( selected, pane );
     }
 
 }

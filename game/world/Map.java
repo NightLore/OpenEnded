@@ -33,7 +33,7 @@ public class Map extends TileCoordinator
         this.tiles = new LargeTile[MAP_TILE_SIZE][MAP_TILE_SIZE];
         frame = new Rectangle();
         frame.setSize( frameWidth, frameHeight );
-        this.updateFrame( center );
+        this.update( center );
         this.assets = assets;
     }
     

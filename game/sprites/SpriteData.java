@@ -106,6 +106,7 @@ public class SpriteData
         data[ATK] = atk;
     }
     
+    /** Returns the direction this sprite is facing where EAST = 0, NORTH = 90... */
     public int getDirFacing()
     {
         return dirFacing;

@@ -1,4 +1,7 @@
-package game.sprites;
+package games.sprites.weapons;
+
+import game.sprites.FightingSprite;
+import game.sprites.Sprite;
 
 import java.awt.image.BufferedImage;
 
@@ -34,7 +37,7 @@ public class Weapon extends Sprite
         this( s, w, -1 );
     }
     
-    public Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
+    private Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
     {
         this( w.getImage(), w.getSkillClass() );
         setCollidable( w.canCollide() );
@@ -51,17 +54,22 @@ public class Weapon extends Sprite
         return (Weapon)super.clone();
     }
     
+    /** Must be overriden to function */
     public Weapon clone( Sprite s )
     {
-        Weapon w = clone();
+        Weapon w = this.clone();
         w.mySprite = s;
+        w.setSpriteData( w.getSpriteData() ); // copies spriteData
         return w;
     }
     
-    public Weapon clone( Sprite s, int dir )
+    protected Weapon clone( Sprite s, int dir )
     {
-        Weapon w = clone( s );
+        Weapon w = this.clone();
+        w.mySprite = s;
         w.direction = dir;
+        w.setSpriteData( w.getSpriteData() ); // copies spriteData
+        w.setPosition( s.getX(), s.getY() );
         return w;
     }
 

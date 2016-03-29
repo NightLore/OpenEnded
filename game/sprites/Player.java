@@ -51,11 +51,17 @@ public class Player extends FightingSprite
     
     private int[] controls;
     
-    public Player( BufferedImage img, Weapon[] weapons )
+    public Player( BufferedImage img )
     {
-        super( img, weapons, "PLAYER" );
+        super( img, "PLAYER" );
         this.setDefaultControls( 0 );
         this.setSpeed( 5 );
+    }
+    
+    @Override
+    public int getWeaponDirection()
+    {
+        return getSpriteData().getDirFacing();
     }
     
     @Override
@@ -96,19 +102,6 @@ public class Player extends FightingSprite
             setAttack( 1 ); // TODO note: if both attack buttons are pressed
         }
         return ( dx == 0 && dy == 0 ) ? -1.0 : (Math.toDegrees( Math.atan2( dy, dx ))+360)%360;
-    }
-
-    @Override
-    public Weapon attack1()
-    {
-        return new Weapon( this, weapons[0] );
-    }
-
-
-    @Override
-    public Weapon attack2()
-    {
-        return new Weapon( this, weapons[1], getSpriteData().getDirFacing() );
     }
     
     public int[] getControls()
