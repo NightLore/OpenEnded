@@ -1,8 +1,8 @@
 package game.sprites;
 
 import game.sprites.groups.SpriteGroup;
+import game.sprites.weapons.Weapon;
 import game.world.Map;
-import games.sprites.weapons.Weapon;
 
 import java.awt.Color;
 import java.awt.Graphics;

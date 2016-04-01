@@ -13,7 +13,7 @@ import javax.swing.UIManager;
 import constants.PlayerPanelConstants;
 import game.Game;
 import game.sprites.Player;
-import games.sprites.weapons.Weapon;
+import game.sprites.weapons.Weapon;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;
@@ -222,6 +222,7 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
         switch( pane )
         {
             case SKILL_CLASS:
+                player.setSkillClass( selected );
                 break;
             case PRIMARY:
                 player.setPrimaryWeapon( game.defaultWeapons[Game.WEAPON_INDEX.get( selected )] );

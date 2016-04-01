@@ -1,4 +1,4 @@
-package games.sprites.weapons;
+package game.sprites.weapons;
 
 import game.sprites.Sprite;
 

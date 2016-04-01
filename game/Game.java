@@ -5,12 +5,12 @@ import game.sprites.Player;
 import game.sprites.Sprite;
 import game.sprites.groups.PlayerGroup;
 import game.sprites.groups.SpriteGroup;
+import game.sprites.weapons.MeleeWeapon;
+import game.sprites.weapons.Mine;
+import game.sprites.weapons.Projectile;
+import game.sprites.weapons.Weapon;
 import game.world.Map;
 import game.world.Tile;
-import games.sprites.weapons.MeleeWeapon;
-import games.sprites.weapons.Mine;
-import games.sprites.weapons.Projectile;
-import games.sprites.weapons.Weapon;
 import gui.game.GameScreen;
 
 import java.awt.Color;
