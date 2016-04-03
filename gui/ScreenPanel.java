@@ -117,9 +117,19 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener, Acti
         draw( g2d );
     }
     
+    /**
+     * This method may be overridden for when this ScreenPanel is shown
+     * @see gui.Screen#shown()
+     */
     @Override
     public void shown() {}
 
+    /**
+     * This method calls the navigator's reset method, when overridden, it is 
+     * suggested to call super.cover() or the navigator's reset method in order
+     * to keep the functionality
+     * @see gui.Screen#cover()
+     */
     @Override
     public void cover() {
         if ( navigator != null )
@@ -177,11 +187,28 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener, Acti
         back();
     }
 
+    /**
+     * This method is intended to be called when a key is pressed or when an 
+     * item is selected based on the navigator
+     * 
+     * <br> This method currently calls {@link gui.ScreenPanel#check(String)}
+     * @param selected the String representing what is selected or what key is 
+     *          pressed
+     * @see gui.ControlListener#act(java.lang.String)
+     */
     @Override
     public void act( String selected ) {
         check( selected );
     }
     
+    /**
+     * Checks whether the selected element is a SPACE, ENTER, ESCAPE, BACKSPACE
+     * of the {@link constants.KeyConstants}
+     * <br> if SPACE or ENTER, calls confirm()
+     * <br> if ESCAPE or BACKSPACE, calls cancel();
+     * @param selected
+     * @return true if <i>selected</i> is one of the above four Strings
+     */
     public boolean check( String selected )
     {
         if ( selected.equals( SPACE ) || selected.equals( ENTER ) )

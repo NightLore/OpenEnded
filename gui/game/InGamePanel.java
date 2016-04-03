@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import constants.GamePanelConstants;
 import game.Assets;
 import gui.Carder;
 import gui.ClearPanel;
@@ -24,14 +25,14 @@ import gui.ScreenPanel;
  *  @author  Nathan Man-ho Lui
  *  @version Feb 8, 2016
  */
-public class InGamePanel extends ScreenPanel
+public class InGamePanel extends ScreenPanel implements GameOverlay, GamePanelConstants
 {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    private JLabel lifeLabel;
+    private JLabel lifeLabel, killLabel;
     private JPanel lifePanel;
     
     private Color overlayColor;
@@ -43,7 +44,7 @@ public class InGamePanel extends ScreenPanel
 
     public InGamePanel( Carder carder, Assets assets )
     {
-        this( carder, assets, GamePanel.PAUSE_PANEL );
+        this( carder, assets, PAUSE_PANEL );
     }
     
     public InGamePanel( Carder carder, Assets assets, String back )
@@ -51,14 +52,17 @@ public class InGamePanel extends ScreenPanel
         super( carder, back );
         this.setLayout( new BorderLayout() );
         JPanel gamePausePanel = new ClearPanel( new BorderLayout() );
-        JButton pauseButton = new JButton( GamePanel.PAUSE_PANEL );
+        JButton pauseButton = new JButton( PAUSE_PANEL );
         JPanel westPanel = new ClearPanel();
         JPanel gameLifePanel = new JPanel( new BorderLayout() );
+        JPanel southPanel = new JPanel();
         lifePanel = new ClearPanel( new GridBagLayout() );
         lifeLabel = new JLabel( "LIVES" );
+        killLabel = new JLabel();
         overlayColor = new Color( 0, 0, 0, 128 );
         this.lifeImage = assets.getSkin( Assets.REDHEART ).getScaledInstance( 32, 32, Image.SCALE_DEFAULT );
         
+        // set constraints to have padding between elements
         constraints = new GridBagConstraints();
         constraints.ipadx = 10;
         constraints.ipady = 10;
@@ -69,13 +73,17 @@ public class InGamePanel extends ScreenPanel
         lifeLabel.setForeground( Color.WHITE );
         lifeLabel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
         lifePanel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
+        southPanel.setBackground( overlayColor );
+        killLabel.setForeground( Color.WHITE );
 
         gamePausePanel.add( pauseButton, BorderLayout.EAST );
         gameLifePanel.add( lifeLabel, BorderLayout.NORTH );
         gameLifePanel.add( lifePanel, BorderLayout.CENTER );
         westPanel.add( gameLifePanel );
+        southPanel.add( killLabel );
         this.add( gamePausePanel, BorderLayout.NORTH );
         this.add( westPanel, BorderLayout.WEST );
+        this.add( southPanel, BorderLayout.SOUTH );
     }
     
     @Override
@@ -88,26 +96,33 @@ public class InGamePanel extends ScreenPanel
     public void act( String selected )
     {
         if ( selected.equals( "P" ) || selected.equals( ESCAPE ) 
-          || selected.equals( BACKSPACE ) || selected.equals( GamePanel.PAUSE_PANEL ) )
+          || selected.equals( BACKSPACE ) || selected.equals( PAUSE_PANEL ) )
         {
             back();
         }
         else if ( selected.equals( ENTER ) || selected.equals( SPACE ) )
         {
-            carder.switchTo( GamePanel.ITEM_PANEL );
+            carder.switchTo( ITEM_PANEL );
         }
     }
 
-    public void update( int numLives )
+    public void updateLives( int numLives )
     {
+        // add Lives until it matches numLives
         for ( ; this.numLives < numLives; this.numLives++ )
         {
             addLife( this.numLives );
         }
+        // remove lives until it matches numLives
         for ( ; this.numLives > numLives; this.numLives-- )
         {
             lifePanel.remove( this.numLives - 1 );
         }
+    }
+    
+    public void updateKilled( int numKilled )
+    {
+        killLabel.setText( "Enemies Killed: " + numKilled );
     }
     
     /** @param i number representing this life (index) */
@@ -118,8 +133,15 @@ public class InGamePanel extends ScreenPanel
         label.setIcon( new ImageIcon( lifeImage ) );
         label.setHorizontalTextPosition( JLabel.CENTER );
         
+        // max 10 lives per column
         constraints.gridx = i / 10;
         constraints.gridy = i % 10;
         lifePanel.add( label, constraints );
+    }
+
+    @Override
+    public void gameOver()
+    {
+        carder.switchTo( OVER_PANEL );
     }
 }

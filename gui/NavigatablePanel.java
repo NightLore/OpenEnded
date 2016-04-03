@@ -8,8 +8,6 @@ import java.util.HashMap;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import constants.DirectionalConstants;
-
 /**
  *  Base Panel for Navigatable Panels
  *  
@@ -19,7 +17,7 @@ import constants.DirectionalConstants;
  *  @version Jan 10, 2016
  *  @author  Assignment: OpenEnded
  */
-public abstract class NavigatablePanel extends ClearPanel implements Carder, ControlListener, ActionListener, DirectionalConstants
+public abstract class NavigatablePanel extends ClearPanel implements Carder, ControlListener, ActionListener
 {
 
     /**

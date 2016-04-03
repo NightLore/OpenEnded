@@ -1,5 +1,6 @@
 package gui.game;
 
+import game.Game;
 import game.Settings;
 import gui.NavigatablePanel;
 import gui.ScreenPanel;
@@ -33,22 +34,23 @@ public class GamePanel extends NavigatablePanel implements GamePanelConstants
      */
     private static final long serialVersionUID = 1L;
     
-    private GameScreen game;
+    private GameScreen gameScreen;
     private SettingsScreen settingsPanel;
     private PlayerManagerPanel itemPanel;
-    private InGamePanel gamePanel;
+    private GameOverlay overlay;
     
     private Action pauseAction;
     
-    public GamePanel( GameScreen game, Settings settings )
+    public GamePanel( GameScreen g, Settings settings )
     {
-        this.game = game;
+        this.gameScreen = g;
         this.currentPanel = LOAD_PANEL;
 
         ScreenPanel loadPanel = new GameLoadPanel( this );
         
-        gamePanel = new InGamePanel( this, game.getAssets() );
+        InGamePanel gamePanel = new InGamePanel( this, g.getAssets() );
         gamePanel.setPreferredSize( getPreferredSize() );
+        overlay = gamePanel;
         
         itemPanel = new PlayerManagerPanel( this, PAUSE_PANEL );
         
@@ -95,28 +97,45 @@ public class GamePanel extends NavigatablePanel implements GamePanelConstants
     
     public void reset()
     {
-        itemPanel.initialize( game.getGame() );
+        itemPanel.initialize( gameScreen.getGame() );
     }
     
-    public void update( int numLives )
+    public void updateSettings()
     {
-        gamePanel.update( numLives );
+        gameScreen.getGame().updateSettings();
+    }
+    
+    public void updateOverlay()
+    {
+        Game g = gameScreen.getGame();
+        update( g.numLives(), g.numKilled() );
+    }
+    
+    private void update( int numLives, int numKilled )
+    {
+        overlay.updateLives( numLives );
+        overlay.updateKilled( numKilled );
     }
 
     @Override
     public void switchTo( String from, String to )
     {
         if ( from.equals( SETTINGS_PANEL ) ) {
-            game.settingsUpdate();
-            update( game.getGame().numLives() );
+            this.updateSettings();
+            this.updateOverlay();
         }
         
         if ( to.equalsIgnoreCase( LOAD_PANEL ) ) {
-            game.returnToMainMenu(); // TODO quit game
+            gameScreen.returnToMainMenu(); // TODO quit game
         }
-        game.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
+        gameScreen.inGame = to.equalsIgnoreCase( GAME_PANEL ) || to.equalsIgnoreCase( OVER_PANEL );
         this.cardLayout.show( this, to );
-        game.requestFocusInWindow(); // update gameScreen in case of mouse clicks
+        gameScreen.requestFocusInWindow(); // update gameScreen in case of mouse clicks
+    }
+    
+    public GameOverlay getOverlay()
+    {
+        return overlay;
     }
     
 }

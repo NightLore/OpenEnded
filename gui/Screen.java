@@ -12,9 +12,14 @@ package gui;
  */
 public interface Screen
 {
+    /**
+     * Method called when this screen is shown
+     */
     public void shown();
+    
+    /**
+     * Method called when this screen is hidden
+     */
     public void cover();
-//    public void pause();
-//    public void resume();
     
 }

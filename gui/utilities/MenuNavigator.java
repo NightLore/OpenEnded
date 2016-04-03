@@ -90,6 +90,10 @@ public class MenuNavigator extends AbstractNavigator
         updateSelector();
     }
     
+    /**
+     * Keeps the selected coordinates within the grid
+     * @return true if a change was made
+     */
     protected boolean keepSelectedInBounds()
     {
         boolean b = false;

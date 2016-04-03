@@ -66,6 +66,7 @@ public class SpriteData
         return data[ATK];
     }
     
+    /** Sets Hp to MAXHP */
     public void resetHp()
     {
         setHp( data[MAXHP] );
@@ -76,6 +77,7 @@ public class SpriteData
         data[HP] += increase;
     }
     
+    /** Decreases Hp by int decrement amount using the increaseHp(int) method */
     public void decreaseHp( int decrease )
     {
         increaseHp( -decrease );
@@ -91,11 +93,13 @@ public class SpriteData
         data[MAXHP] = maxHp;
     }
     
+    /** Sets Hp to 0 */
     public void dies()
     {
         this.setHp( 0 );
     }
     
+    /** Checks whether hp <= 0 */
     public boolean isDead()
     {
         return this.getHp() <= 0;

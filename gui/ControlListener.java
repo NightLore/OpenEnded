@@ -1,12 +1,14 @@
 package gui;
 
+import constants.DirectionalConstants;
+
 /**
  *  Interface for panels that use keyboard controls to navigate
  *
  *  @author  Nathan Lui
  *  @version Feb 3, 2016
  */
-public interface ControlListener
+public interface ControlListener extends DirectionalConstants
 {
     public void up();
     public void left();

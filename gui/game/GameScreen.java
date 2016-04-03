@@ -121,7 +121,7 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
         updater.start();
         ui.reset();
         ui.switchTo( ITEM_PANEL );
-        updateGameUI();
+        ui.updateOverlay();
     }
     
     @Override
@@ -140,7 +140,7 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
         gameTime = 0;
         lastTime = System.nanoTime();
         
-        game = new Game( this, settings, assets );
+        game = new Game( ui.getOverlay(), settings, assets );
     }
     
     
@@ -172,21 +172,6 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
     {
         game.draw( g, mousePosition() );
     }
-    
-    public void updateGameUI()
-    {
-        ui.update( game.numLives() );
-    }
-    
-    public void settingsUpdate()
-    {
-        game.updateSettings();
-    }
-    
-    public void gameOver()
-    {
-        ui.switchTo( OVER_PANEL );
-    }
        
     public void returnToMainMenu()
     {
@@ -213,25 +198,25 @@ public class GameScreen extends ScreenPanel implements MainScreenConstants, Dire
     @Override
     public void up()
     {
-        act( UP );
+        ui.up();
     }
 
     @Override
     public void left()
     {
-        act( LEFT );
+        ui.left();
     }
 
     @Override
     public void down()
     {
-        act( DOWN );
+        ui.down();
     }
 
     @Override
     public void right()
     {
-        act( RIGHT );
+        ui.right();
     }
 
     @Override

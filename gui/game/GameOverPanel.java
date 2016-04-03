@@ -41,7 +41,7 @@ public class GameOverPanel extends ScreenPanel
         
         gameOverLabel.setForeground( Color.WHITE );
         Font exitFont = gameOverLabel.getFont();
-        exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 );
+        exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 ); // resize font
         gameOverLabel.setFont( exitFont );
         gameOverLabel.setAlignmentX( CENTER_ALIGNMENT );
         mainMenuButton.setActionCommand( GamePanel.LOAD_PANEL );

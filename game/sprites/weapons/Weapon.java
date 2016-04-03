@@ -32,35 +32,21 @@ public class Weapon extends Sprite
         this.setSkillClass( skillClass );
     }
     
-    public Weapon( Sprite s, Weapon w )
-    {
-        this( s, w, -1 );
-    }
-    
-    private Weapon( Sprite s, Weapon w, int dir ) // TODO copy SpriteData
-    {
-        this( w.getImage(), w.getSkillClass() );
-        setCollidable( w.canCollide() );
-        setRefPixel( w.getRefX(), w.getRefY() );
-        setPosition( w.getX(), w.getY() );
-        splitSprite( w.getCols(), w.getRows() );
-        direction = dir;
-        mySprite = s;
-    }
-    
     @Override
     public Weapon clone()
     {
         return (Weapon)super.clone();
     }
     
-    /** Must be overriden to function */
+    /** 
+     * Subclasses should override this method. 
+     * Returns a copy of this sprite with direction set to the new sprite's 
+     * dirFacing
+     * @param s the Sprite that spawns this new weapon
+     */
     public Weapon clone( Sprite s )
     {
-        Weapon w = this.clone();
-        w.mySprite = s;
-        w.setSpriteData( w.getSpriteData() ); // copies spriteData
-        return w;
+        return this.clone( s, s.getSpriteData().getDirFacing() );
     }
     
     protected Weapon clone( Sprite s, int dir )
@@ -68,7 +54,6 @@ public class Weapon extends Sprite
         Weapon w = this.clone();
         w.mySprite = s;
         w.direction = dir;
-        w.setSpriteData( w.getSpriteData() ); // copies spriteData
         w.setPosition( s.getX(), s.getY() );
         return w;
     }

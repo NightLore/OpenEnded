@@ -53,6 +53,14 @@ public abstract class Sprite extends ImageSprite implements Collidable
         data = new SpriteData();
         data.setDirFacing( SOUTH );
     }
+    
+    @Override
+    public Sprite clone()
+    {
+        Sprite s = (Sprite)super.clone();
+        s.data = new SpriteData( getSpriteData() );
+        return s;
+    }
 
     @Deprecated
     @Override
@@ -100,11 +108,29 @@ public abstract class Sprite extends ImageSprite implements Collidable
             translate( 0, -y );
         }
     }
+    /**
+     * Returns whether this sprite collides with any of the sprites in the SpriteGroup
+     * <br>
+     * Note: does not inform sprites of their collisions, call 
+     * {@link game.sprites.Sprite#isColliding(SpriteGroup,boolean)}
+     * @param sprites SpriteGroup to compare with
+     * @return whether this sprite collides with any of the sprites in the SpriteGroup
+     */
+    public boolean isColliding( SpriteGroup sprites )
+    {
+        return isColliding( sprites, false );
+    }
+    /**
+     * Returns whether this sprite collides with any of the sprites in the SpriteGroup
+     * @param sprites SpriteGroup to compare with
+     * @param inform if true, this method will inform the sprites of their collisions
+     * @return whether this sprite collides with any of the sprites in the SpriteGroup
+     */
     public boolean isColliding( SpriteGroup sprites, boolean inform )
     {
         for ( Sprite s : sprites )
         {
-            if ( s != this && this.collidesWith( s ) && additionalCollisions( s ) )
+            if ( this.collidesWith( s ) )
             {
                 if ( inform )
                 {
@@ -117,9 +143,9 @@ public abstract class Sprite extends ImageSprite implements Collidable
         return false;
     }
     
-    public boolean collidesWith( ImageSprite s )
+    public boolean collidesWith( Sprite s )
     {
-        return super.collidesWith( s, PIXEL_PERFECT );
+        return s != this && super.collidesWith( s, PIXEL_PERFECT ) && additionalCollisions( s );
     }
     /**
      * Return true if all additional collision conditions are satisfied. If true,
@@ -131,6 +157,10 @@ public abstract class Sprite extends ImageSprite implements Collidable
      */
     public abstract boolean additionalCollisions( Sprite s );
     
+    /**
+     * Sets the direction facing by rounding the given <i>dir</i> to the nearest 
+     * 90 degrees
+     */
     public void setDirFacing( int dir )
     {
         int dirFacing = data.getDirFacing();
@@ -177,10 +207,23 @@ public abstract class Sprite extends ImageSprite implements Collidable
      * @param sprite any sprite in game
      */
     public abstract void hitSprite( Sprite sprite );
+    /**
+     * Unimplemented event based method that should be called when this sprite 
+     * "sees" the given sprite
+     * @param sprite Sprite seen
+     */
     public void seeSprite( Sprite sprite ) {}
     
+    /**
+     * Method called when this sprite takes damage
+     * @param damage
+     */
     public abstract void takeDamage( int damage );
     
+    /**
+     * Returns whether or not this sprite has friendly fire on
+     * @return true if friendlyFire is on
+     */
     public abstract boolean friendlyFire();
     
     @Override
@@ -191,10 +234,12 @@ public abstract class Sprite extends ImageSprite implements Collidable
         this.setRefPixel( getWidth() / 2, getHeight() / 2 );
     }
     
+    /** Returns whether Hp <= 0 */
     public boolean isDead()
     {
         return data.isDead(); // TODO
     }
+    /** sets Hp to 0 */
     public void dying()
     {
         data.dies();
@@ -268,6 +313,7 @@ public abstract class Sprite extends ImageSprite implements Collidable
         return this.getPosition().distance( p );
     }
     
+    /** Returns the direction that the given sprite is to this sprite */
     public int direction( Sprite sprite )
     {
         int x = sprite.getX() - this.getX();
@@ -275,11 +321,11 @@ public abstract class Sprite extends ImageSprite implements Collidable
         return (int)Math.toDegrees( Math.atan2( y, x ) );
     }
     
-    /** Sets this sprite's data to a copy of the new data */
-    protected void setSpriteData( SpriteData newData )
-    {
-        data = new SpriteData( newData );
-    }
+//    /** Sets this sprite's data to a copy of the new data */ TODO
+//    protected void setSpriteData( SpriteData newData )
+//    {
+//        data = new SpriteData( newData );
+//    }
     
     /**
      * Return BufferedImage object of a picture file

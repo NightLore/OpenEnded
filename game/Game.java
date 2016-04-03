@@ -11,7 +11,7 @@ import game.sprites.weapons.Projectile;
 import game.sprites.weapons.Weapon;
 import game.world.Map;
 import game.world.Tile;
-import gui.game.GameScreen;
+import gui.game.GameOverlay;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -46,13 +46,14 @@ public class Game {
     
     private SpriteGroup sprites;
     private PlayerGroup players;
-    private GameScreen screen;
+    private GameOverlay overlay;
     private Map map;
     private BufferedImage enemyImg, projImg;
     private int numEnemies;
     public Weapon[] defaultWeapons;
     private Point center;
     private int numLives;
+    private int numKilled;
     
     private Assets assets;
     private Settings settings;
@@ -60,9 +61,9 @@ public class Game {
     private long spawnTime;
     private int delay = 750; // milliseconds
 
-    public Game( GameScreen screen, Settings settings, Assets assets )
+    public Game( GameOverlay screen, Settings settings, Assets assets )
     {
-        this.screen = screen;
+        this.overlay = screen;
         this.settings = settings;
         this.assets = assets;
         // note: if too intensive use SwingWorker
@@ -93,7 +94,7 @@ public class Game {
         defaultWeapons[1] = new Projectile( projImg, SPELL );
         defaultWeapons[2] = new Mine( projImg, MINES );
         center = new Point();
-        map = new Map( assets, center, screen.getWidth(), screen.getHeight() );
+        map = new Map( assets, center, overlay.getWidth(), overlay.getHeight() );
         map.create();
         map.generate();
     }
@@ -124,12 +125,19 @@ public class Game {
             {
                 sprites.remove( s );
                 if ( s instanceof Enemy )
+                {
                     numEnemies--;
+                    if ( s.isDead() )
+                    {
+                        numKilled++;
+                        overlay.updateKilled( numKilled );
+                    }
+                }
                 else if ( s instanceof Player )
                 {
                     if ( players.numPlayers() == 1 && numLives <= 0 )
                     {
-                        screen.gameOver();
+                        overlay.gameOver();
                     }
                     players.remove( (Player)s );
                 }
@@ -204,37 +212,44 @@ public class Game {
         setSpriteSpawn( sprite );
         return sprite;
     }
+    /** Set given Sprite to a randomspot around the map, also checks whether 
+     * it collides with the map or another sprite. */
     private void setSpriteSpawn( Sprite sprite )
     {
         List<Point> points = new ArrayList<Point>();
         Rectangle frame = map.getFrame();
+        // set offset to the tile size
         int offset = Tile.TILE_SIZE;
+        // coordinates for top left corner of frame (remain offscreen)
         int x1 = frame.x - offset;
         int y1 = frame.y - offset;
         int w = frame.width + offset;
         int h = frame.height + offset;
+        // coordinates for bottom right corner of frame (remain offscreen)
         int x2 = x1 + w + offset;
         int y2 = y1 + h + offset;
+        // add all points around the frame to a list (corners are only added once using a spiral method)
         for ( int i = 0; i < w; i++ )
         {
-            points.add( new Point( i + x1, y1 ) );
-            points.add( new Point( i+offset+x1, y2 ) );
+            points.add( new Point( i + x1, y1 ) ); // add top part of frame
+            points.add( new Point( i+offset+x1, y2 ) ); // add bottom of frame
         }
         for ( int i = 0; i < h; i++ )
         {
-            points.add( new Point( x1, i+offset+y1 ) );
-            points.add( new Point( x2, i+y1 ) );
+            points.add( new Point( x1, i+offset+y1 ) ); // add left of frame
+            points.add( new Point( x2, i+y1 ) ); // add right of frame
         }
+        // remove random points from list to spawn in so that points are not repeated
         Point p;
         do {
             p = points.remove( Map.randInt( points.size() ) );
             sprite.setPosition( p.x, p.y );
-        } while ( isSpawnColliding( sprite ) );
+        } while ( isSpawnColliding( sprite ) ); // check collisions
     }
     
     private boolean isSpawnColliding( Sprite sprite )
     {
-        return sprite.isColliding( sprites, false ) || map.isColliding( sprite ); // TODO note: may hit and lose hp, etc
+        return sprite.isColliding( sprites ) || map.isColliding( sprite ); // TODO note: may hit and lose hp, etc
     }
     
     public PlayerGroup getPlayers()
@@ -247,10 +262,20 @@ public class Game {
         return numLives;
     }
     
+    public int numKilled()
+    {
+        return numKilled;
+    }
+    
     private void takeALife()
     {
         numLives--;
-        screen.updateGameUI();
+        overlay.updateLives( numLives );
+    }
+    
+    public Assets getAssets()
+    {
+        return assets;
     }
     
     /**
@@ -261,8 +286,8 @@ public class Game {
      */
     public void draw( Graphics2D g2d, Point mousePosition )// TODO note: drawing is not on same thread as updating
     {
-        int originX = screen.getWidth() / 2 - center.x;
-        int originY = screen.getHeight() / 2 - center.y;
+        int originX = overlay.getWidth() / 2 - center.x;
+        int originY = overlay.getHeight() / 2 - center.y;
         g2d.translate( originX, originY );
         map.draw( g2d, settings.debug );
         sprites.paintAll( g2d, map.getFrame(), settings.debug );
@@ -281,6 +306,6 @@ public class Game {
         }
         g2d.translate( -originX, -originY );
         g2d.setColor( Color.WHITE );
-        g2d.drawString( center.x + ", " + center.y, 0, screen.getHeight() - 5 );
+        g2d.drawString( center.x + ", " + center.y, 0, overlay.getHeight() - 5 );
     }
 }
