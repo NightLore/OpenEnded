@@ -10,7 +10,6 @@ import gui.ScreenPanel;
 import java.awt.CardLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.KeyStroke;
 
 import constants.PlayerPanelConstants;
 
@@ -65,23 +64,17 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
         navigatables.put( ITEMS_PANEL, itemPanel );
         navigatables.put( CTRLS_PANEL, controlPanel );
         navigatables.put( DONE_PANEL, donePanel );
-        
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.UP ), UP );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.LEFT ), LEFT );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.DOWN ), DOWN );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.RIGHT ), RIGHT );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.PRIMARY ), CONFIRM );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( getDefaultKeyStroke( panel, Player.SECONDARY ), CANCEL );
-        this.getActionMap().put( UP, upAction );
-        this.getActionMap().put( LEFT, leftAction );
-        this.getActionMap().put( DOWN, downAction );
-        this.getActionMap().put( RIGHT, rightAction );
-        this.getActionMap().put( CONFIRM, confirmAction );
-        this.getActionMap().put( CANCEL, cancelAction );
+
+        this.putKeyAction( getDefaultKey( panel, Player.UP ), UP, upAction );
+        this.putKeyAction( getDefaultKey( panel, Player.LEFT ), LEFT, leftAction );
+        this.putKeyAction( getDefaultKey( panel, Player.DOWN ), DOWN, downAction );
+        this.putKeyAction( getDefaultKey( panel, Player.RIGHT ), RIGHT, rightAction );
+        this.putKeyAction( getDefaultKey( panel, Player.PRIMARY ), CONFIRM, confirmAction );
+        this.putKeyAction( getDefaultKey( panel, Player.SECONDARY ), CANCEL, cancelAction );
     }
-    private KeyStroke getDefaultKeyStroke( int player, int control )
+    private int getDefaultKey( int player, int control )
     {
-        return KeyStroke.getKeyStroke( Player.defaultCtrls[player][control], 0 );
+        return Player.defaultCtrls[player][control];
     }
     
     public void setPlayer( Player player )

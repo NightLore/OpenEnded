@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.KeyStroke;
 
 /**
  *  Base Panel for Navigatable Panels
@@ -39,60 +39,23 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
         this.setLayout( cardLayout );
         this.setFocusable( true );
         
-        upAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                up();
-            }
-        };
-        leftAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                left();
-            }
-        };
-        downAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                down();
-            }
-        };
-        rightAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                right();
-            }
-        };
-        confirmAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                confirm();
-            }
-        };
-        cancelAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                cancel();
-            }
-        };
+        upAction = new ControlAction( this, UP );
+        leftAction = new ControlAction( this, LEFT );
+        downAction = new ControlAction( this, DOWN );
+        rightAction = new ControlAction( this, RIGHT );
+        confirmAction = new ControlAction( this, CONFIRM );
+        cancelAction = new ControlAction( this, CANCEL );
+    }
+    
+    public void putKeyAction( int key, String identifier, Action action )
+    {
+        putKeyAction( key, 0, identifier, action );
+    }
+    
+    public void putKeyAction( int key, int modifier, String identifier, Action action )
+    {
+        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( key, modifier ), identifier );
+        this.getActionMap().put( identifier, action );
     }
     
     @Override

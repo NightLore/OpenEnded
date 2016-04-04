@@ -1,5 +1,9 @@
 package gui;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
 import constants.DirectionalConstants;
 
 /**
@@ -18,4 +22,26 @@ public interface ControlListener extends DirectionalConstants
     public void cancel();
     
     public void act( String selected );
+    
+    public class ControlAction extends AbstractAction
+    {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+        
+        private ControlListener listener;
+        private String action;
+        public ControlAction( ControlListener listener, String action )
+        {
+            this.listener = listener;
+            this.action = action;
+        }
+
+        @Override
+        public void actionPerformed( ActionEvent e )
+        {
+            listener.act( action );
+        }
+    }
 }

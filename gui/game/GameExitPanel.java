@@ -2,7 +2,9 @@ package gui.game;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -43,8 +45,9 @@ public class GameExitPanel extends ScreenPanel
         super( carder, new Color( 0, 0, 0, 128 ), back );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
 
+        JPanel areYouSurePanel = new ClearPanel();
         JLabel areYouSureLabel = new JLabel( "Are You Sure You Want To Quit?" );
-        JPanel yesNoPanel = new ClearPanel();
+        JPanel yesNoPanel = new ClearPanel( new GridLayout( 1, 0, 100, 100 ) );
         SelectableButton yesButton = new SelectableButton( YES );
         SelectableButton noButton = new SelectableButton( NO );
 
@@ -52,16 +55,18 @@ public class GameExitPanel extends ScreenPanel
         exitFont = new Font( exitFont.getFontName(), exitFont.getStyle(), 64 );
         areYouSureLabel.setFont( exitFont );
         areYouSureLabel.setForeground( Color.LIGHT_GRAY );
-        areYouSureLabel.setAlignmentX( CENTER_ALIGNMENT );
+        
+        yesNoPanel.setBorder( BorderFactory.createEmptyBorder( 100, 200, 300, 200 ) );
         yesButton.addActionListener( this );
         noButton.addActionListener( this );
         yesButton.setActionCommand( GamePanel.LOAD_PANEL );
         noButton.setActionCommand( GamePanel.PAUSE_PANEL );
 
+        areYouSurePanel.add( areYouSureLabel );
         yesNoPanel.add( yesButton );
         yesNoPanel.add( noButton );
         this.add( Box.createVerticalGlue() );
-        this.add( areYouSureLabel );
+        this.add( areYouSurePanel );
         this.add( yesNoPanel );
         this.add( Box.createVerticalGlue() );
         

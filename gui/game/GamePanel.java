@@ -8,12 +8,9 @@ import gui.SettingsScreen;
 import gui.game.player.PlayerManagerPanel;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import constants.GamePanelConstants;
 
@@ -81,18 +78,8 @@ public class GamePanel extends NavigatablePanel implements GamePanelConstants
         
         this.switchTo( GAME_PANEL );
         
-        pauseAction = new AbstractAction() {
-            
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent e )
-            {
-                act( "P" );
-            }
-        };
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_P, 0 ), PAUSE_PANEL );
-        this.getActionMap().put( PAUSE_PANEL, pauseAction );
+        pauseAction = new ControlAction( this, "P" );
+        this.putKeyAction( KeyEvent.VK_P, PAUSE_PANEL, pauseAction );
     }
     
     public void reset()

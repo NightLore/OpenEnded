@@ -1,9 +1,7 @@
 package gui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
@@ -70,71 +68,29 @@ public class MainPanel extends NavigatablePanel implements MainScreenConstants, 
         this.add( storyGame, STORYGAME );
         this.add( loadGame, LOADGAME );
         this.add( freeGame, FREEGAME );
+
+        spaceAction = new ControlAction( this, SPACE );
+        escapeAction = new ControlAction( this, ESCAPE );
+        enterAction = new ControlAction( this, ENTER );
+        backspaceAction = new ControlAction( this, BACKSPACE );
         
-        spaceAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent arg0 )
-            {
-                act( SPACE );
-            }
-        };
-        escapeAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent arg0 )
-            {
-                act( ESCAPE );
-            }
-        };
-        enterAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent arg0 )
-            {
-                act( ENTER );
-            }
-        };
-        backspaceAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed( ActionEvent arg0 )
-            {
-                act( BACKSPACE );
-            }
-        };
-        
-
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_W, 0 ), UP );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_A, 0 ), LEFT );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_S, 0 ), DOWN );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_D, 0 ), RIGHT );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_V, 0 ), CONFIRM );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_B, 0 ), CANCEL );
+        this.putKeyAction( KeyEvent.VK_W, UP, upAction );
+        this.putKeyAction( KeyEvent.VK_A, LEFT, leftAction );
+        this.putKeyAction( KeyEvent.VK_S, DOWN, downAction );
+        this.putKeyAction( KeyEvent.VK_D, RIGHT, rightAction );
+        this.putKeyAction( KeyEvent.VK_V, CONFIRM, confirmAction );
+        this.putKeyAction( KeyEvent.VK_B, CANCEL, cancelAction );
+        this.putKeyAction( KeyEvent.VK_SPACE, SPACE, spaceAction );
+        this.putKeyAction( KeyEvent.VK_ESCAPE, ESCAPE, escapeAction );
+        this.putKeyAction( KeyEvent.VK_ENTER, ENTER, enterAction );
+        this.putKeyAction( KeyEvent.VK_BACK_SPACE, BACKSPACE, backspaceAction );
+        // treat the following the same as WASD VB
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, 0 ), UP );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, 0 ), LEFT );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0 ), DOWN );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, 0 ), RIGHT );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_COMMA, 0 ), CONFIRM );
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_PERIOD, 0 ), CANCEL );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_SPACE, 0 ), SPACE );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0 ), ESCAPE );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, 0 ), ENTER );
-        this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ), BACKSPACE );
-        this.getActionMap().put( UP, upAction );
-        this.getActionMap().put( LEFT, leftAction );
-        this.getActionMap().put( DOWN, downAction );
-        this.getActionMap().put( RIGHT, rightAction );
-        this.getActionMap().put( CONFIRM, confirmAction );
-        this.getActionMap().put( CANCEL, cancelAction );
-        this.getActionMap().put( SPACE, spaceAction );
-        this.getActionMap().put( ESCAPE, escapeAction );
-        this.getActionMap().put( ENTER, enterAction );
-        this.getActionMap().put( BACKSPACE, backspaceAction );
     }
     
     @Override
