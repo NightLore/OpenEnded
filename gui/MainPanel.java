@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 
 import javax.swing.Action;
@@ -45,10 +46,11 @@ public class MainPanel extends NavigatablePanel implements MainScreenConstants, 
         settings = new Settings(); // TODO load settings
         currentPanel = INITIAL;
         
-        ScreenPanel initial = new InitialScreen( this );
-        ScreenPanel mainMenu = new MainMenuScreen( this );
+        Image background = assets.getSkin( Assets.BACKGROUND );
+        ScreenPanel initial = new InitialScreen( this, background );
+        ScreenPanel mainMenu = new MainMenuScreen( this, background );
         ScreenPanel settings = new SettingsScreen( this, MAINMENU, this.settings );
-        ScreenPanel listGame = new ListGameScreen( this );
+        ScreenPanel listGame = new ListGameScreen( this, background );
         ScreenPanel storyGame = new GameScreen( this, this.settings, assets );
         ScreenPanel loadGame = new LoadGameScreen( this );
         ScreenPanel freeGame = new GameScreen( this, this.settings, assets );

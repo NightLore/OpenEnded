@@ -3,6 +3,7 @@ package gui;
 import game.Window;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -31,14 +32,14 @@ public class InitialScreen extends ScreenPanel implements KeyListener, MouseList
      */
     private static final long serialVersionUID = 1L;
 
-    public InitialScreen( Carder frame )
+    public InitialScreen( Carder frame, Image image )
     {
-        this( frame, MAINMENU );
+        this( frame, image, MAINMENU );
     }
     
-    public InitialScreen( Carder frame, String back )
+    public InitialScreen( Carder frame, Image image, String back )
     {
-        super( frame, "GrassyBackground.png", back );
+        super( frame, image, back );
         this.addKeyListener( this );
         this.addMouseListener( this );
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );

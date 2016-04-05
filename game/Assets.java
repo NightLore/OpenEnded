@@ -31,7 +31,8 @@ public class Assets
     public static final int SMALLCIRCLE = 2;
     public static final int REDHEART = 3;
     public static final int SWORD = 4;
-    public static final int NUMSKINS = 5;
+    public static final int BACKGROUND = 5;
+    public static final int NUMSKINS = 6;
     private String[] charSkins;
     private HashMap<String, String> charFiles;
     private HashMap<String, BufferedImage> skins;
@@ -45,8 +46,10 @@ public class Assets
         blockFiles.put( biomes[0], new String[]{ "DarkGreen.png" } );
         
         charFiles = new HashMap<String,String>();
-        charSkins = new String[]{ "greyCircle", "redCircle", "smallCircle", "redHeart", "sword" }; // how to call the files
-        String[] files = { "player.png", "redcircle.png", "smallcircle.png", "heart.png", "sword.png" };
+        charSkins = new String[]{ "greyCircle", "redCircle", "smallCircle", 
+            "redHeart", "sword", "background" }; // how to call the files
+        String[] files = { "player.png", "redcircle.png", "smallcircle.png", 
+            "heart.png", "sword.png", "GrassyBackground.png" };
         for ( int i = 0; i < NUMSKINS; i++ ) // note: change charSkins, files, NUMSKINS
             charFiles.put( charSkins[i], files[i] );
     }

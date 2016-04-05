@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -35,14 +36,14 @@ public class MainMenuScreen extends ScreenPanel implements MainScreenConstants
      */
     private static final long serialVersionUID = 1L;
     
-    public MainMenuScreen( Carder frame )
+    public MainMenuScreen( Carder frame, Image image )
     {
-        this( frame, INITIAL );
+        this( frame, image, INITIAL );
     }
     
-    public MainMenuScreen( Carder frame, String back )
+    public MainMenuScreen( Carder frame, Image image, String back )
     {
-        super( frame, "GrassyBackground.png", back );
+        super( frame, image, back );
         this.setLayout( new BorderLayout() );
         
         GridLayout gridLayout = new GridLayout( 0, 1 );

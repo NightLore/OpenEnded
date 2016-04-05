@@ -8,6 +8,7 @@ import gui.utilities.SelectableButton;
 import gui.utilities.Selector;
 
 import java.awt.GridLayout;
+import java.awt.Image;
 
 import javax.swing.BorderFactory;
 
@@ -33,14 +34,14 @@ public class ListGameScreen extends ScreenPanel implements MainScreenConstants
     public static final String ENDLESS_MODE = "ENDLESS MODE";
     public static final String LOAD_MODE = "LOAD GAME";
     
-    public ListGameScreen( Carder frame )
+    public ListGameScreen( Carder frame, Image image )
     {
-        this( frame, MAINMENU );
+        this( frame, image, MAINMENU );
     }
 
-    public ListGameScreen( Carder frame, String back )
+    public ListGameScreen( Carder frame, Image image, String back )
     {
-        super( frame, "GrassyBackground.png", back );
+        super( frame, image, back );
         int marginX = 8 * gapX;
         int marginY = 2 * gapY;
         this.setLayout( new GridLayout( 0, 1, 0, marginY ) );

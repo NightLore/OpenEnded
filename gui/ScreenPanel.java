@@ -10,10 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.Scanner;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import constants.KeyConstants;
@@ -84,28 +81,18 @@ public class ScreenPanel extends JPanel implements Screen, ControlListener, Acti
      * @param fileName
      * @param back
      */
-    public ScreenPanel( Carder carder, String fileName, String back )
+    public ScreenPanel( Carder carder, Image image, String back )
     {
         this( carder, Color.BLACK, back );
-        fileName =  "/imgs/" + fileName; // Package images are found in
-        while ( background == null )
-        {
-            try
-            {
-                background = ImageIO.read( ScreenPanel.class.getResource( fileName ) );
-//                background = new ImageIcon( ScreenPanel.class.getResource( fileName ) ).getImage();
-            }
-            catch ( IOException e )
-            {
-                e.printStackTrace(); 
-                System.out.println( "Cannot find: " + fileName );
-                @SuppressWarnings("resource")
-                Scanner scanIn = new Scanner( System.in );
-                System.out.print( "Try different file: " );
-                fileName = scanIn.nextLine();
-            }
-        }
+        this.background = image;
     }
+    
+    
+    /**
+     * Called by {@link gui.ScreenPanel#paintComponent(Graphics)}. Meant to be
+     * overridden to draw additional elements on this gui 
+     * @param g2d
+     */
     public void draw(Graphics2D g2d) {}
     
     @Override

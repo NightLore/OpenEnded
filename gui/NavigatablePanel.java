@@ -47,11 +47,27 @@ public abstract class NavigatablePanel extends ClearPanel implements Carder, Con
         cancelAction = new ControlAction( this, CANCEL );
     }
     
+    /**
+     * Given the int keycode for the key, this method associates the given
+     * Action with the key. 
+     * @param key keycode
+     * @param identifier String that differentiates this action with others when
+     *      put in the maps
+     * @param action
+     */
     public void putKeyAction( int key, String identifier, Action action )
     {
         putKeyAction( key, 0, identifier, action );
     }
     
+    /**
+     * Given the int keycode for the key and a modifier, this method associates 
+     * the given Action with the key. 
+     * @param key int keycode
+     * @param modifier int transform modifier i.e. ALT_MASK
+     * @param identifier String
+     * @param action
+     */
     public void putKeyAction( int key, int modifier, String identifier, Action action )
     {
         this.getInputMap( WHEN_IN_FOCUSED_WINDOW ).put( KeyStroke.getKeyStroke( key, modifier ), identifier );
