@@ -59,6 +59,14 @@ public class Player extends FightingSprite
     }
     
     @Override
+    public Player clone()
+    {
+        Player p = (Player)super.clone();
+        p.controls = null;
+        return p;
+    }
+    
+    @Override
     public int getWeaponDirection()
     {
         return getSpriteData().getDirFacing();
@@ -104,18 +112,37 @@ public class Player extends FightingSprite
         return ( dx == 0 && dy == 0 ) ? -1.0 : (Math.toDegrees( Math.atan2( dy, dx ))+360)%360;
     }
     
+    /**
+     * Returns an int array of this Player's controls
+     * <br><br>
+     * Note: does not clone the controls
+     * @return controls
+     */
     public int[] getControls()
     {
-        return controls.clone();
+        return controls;
     }
     
-    public void setControls( int... newCtrls )
+    /**
+     * Creates a copy of the given set of controls
+     * @param newCtrls
+     */
+    public void setControls( int[] newCtrls )
     {
         if ( controls == null || newCtrls.length > controls.length )
             controls = new int[newCtrls.length];
         System.arraycopy( newCtrls, 0, controls, 0, newCtrls.length );
     }
     
+    /**
+     * Sets the controls to one of the designated default controls
+     * @param control
+     * @see game.sprites.Player#defaultCtrls
+     * @see game.sprites.Player#WASD
+     * @see game.sprites.Player#ARROWKEYS
+     * @see game.sprites.Player#IJKL
+     * @see game.sprites.Player#NUMPADKEYS
+     */
     public void setDefaultControls( int control )
     {
         this.setControls( defaultCtrls[control] );

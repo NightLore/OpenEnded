@@ -3,6 +3,7 @@ package game;
 import game.sprites.Enemy;
 import game.sprites.Player;
 import game.sprites.Sprite;
+import game.sprites.groups.Inventory;
 import game.sprites.groups.PlayerGroup;
 import game.sprites.groups.SpriteGroup;
 import game.sprites.weapons.MeleeWeapon;
@@ -48,9 +49,14 @@ public class Game {
     private PlayerGroup players;
     private GameOverlay overlay;
     private Map map;
-    private BufferedImage enemyImg, projImg;
+    
+    public Inventory defaultInventory;
+    private Enemy defaultEnemy;
+    private Player defaultPlayer;
+//    private BufferedImage enemyImg, projImg;
+//    public Weapon[] defaultWeapons;
+    
     private int numEnemies;
-    public Weapon[] defaultWeapons;
     private Point center;
     private int numLives;
     private int numKilled;
@@ -68,7 +74,6 @@ public class Game {
         this.assets = assets;
         // note: if too intensive use SwingWorker
         initialize(); // Sets variables and objects for the game.
-        loadContent(); // Load game files (images, sounds, ...)
     }
     
     
@@ -80,25 +85,45 @@ public class Game {
         sprites = new SpriteGroup();
         players = new PlayerGroup( 4 );
         numLives = settings.numLives + 1;
-    }
-    
-    /**
-     * Load game files - images, sounds, ...
-     */
-    private void loadContent()
-    {
-        enemyImg = assets.getSkin( Assets.REDCIRCLE );
-        projImg = assets.getSkin( Assets.SMALLCIRCLE );
-        defaultWeapons = new Weapon[3];
-        defaultWeapons[0] = new MeleeWeapon( assets.getSkin( Assets.SWORD ), MELEE, 1000 );
-        defaultWeapons[1] = new Projectile( projImg, SPELL );
-        defaultWeapons[2] = new Mine( projImg, MINES );
+        createDefaults();
         center = new Point();
         map = new Map( assets, center, overlay.getWidth(), overlay.getHeight() );
         map.create();
         map.generate();
     }
     
+    /**
+     * Initializes the default inventory with all its necessary values
+     */
+    private void createDefaults()
+    {
+        BufferedImage projImg = assets.getSkin( Assets.SMALLCIRCLE );
+        Weapon[] defaultWeapons = new Weapon[3];
+        defaultWeapons[0] = new MeleeWeapon( assets.getSkin( Assets.SWORD ), MELEE, 1000 );
+        defaultWeapons[1] = new Projectile( projImg, SPELL );
+        defaultWeapons[2] = new Mine( projImg, MINES );
+        
+        defaultInventory = new Inventory();
+        for ( Weapon w : defaultWeapons )
+        {
+            defaultInventory.addWeapon( w );
+        }
+        
+        defaultEnemy = new Enemy( assets.getSkin( Assets.REDCIRCLE ) );
+        defaultEnemy.setWeapons( defaultWeapons[0], defaultWeapons[1] );
+        
+        defaultPlayer = new Player( assets.getSkin( Assets.GREYCIRCLE ) );
+        defaultPlayer.splitSprite( 2, 3 );
+        defaultPlayer.setWeapons( defaultWeapons[0], defaultWeapons[1] );
+    }
+    
+    /**
+     * Syncs game settings with the SettingsScreen Settings.<br>
+     * Currently only updates Player and Enemy Friendly Fire, numerical values 
+     * already automatically update
+     * 
+     * <br><br> TODO this method is probably not needed
+     */
     public void updateSettings()
     {
         Player.FRIENDLY_FIRE = settings.playerFriendlyFire;
@@ -117,7 +142,7 @@ public class Game {
         Point pCenter = players.getCenter();
         if ( pCenter != null )
             center = pCenter;
-        map.update( center ); // TODO
+        map.update( center );
         sprites.moveAll( gameTime, map );
         for ( Sprite s : sprites )
         {
@@ -177,11 +202,9 @@ public class Game {
     {
         if ( numLives <= 0 )
             return null;
-        Player player = new Player( assets.getSkin( Assets.GREYCIRCLE ) );
-        player.splitSprite( 2, 3 );
+        Player player = defaultPlayer.clone();
         setPlayerSpawn( player );
         player.setDefaultControls( panel );
-        player.setWeapons( defaultWeapons );
         sprites.add( player );
         players.set( player, panel );
         takeALife();
@@ -191,7 +214,7 @@ public class Game {
     {
         if ( numEnemies < settings.numEnemies )
         {
-            sprites.add( newEnemy( enemyImg ) );
+            sprites.add( newEnemy() );
             numEnemies++;
         }
         for ( int i = 0; numEnemies > settings.numEnemies && i < sprites.size(); i++ )
@@ -204,11 +227,9 @@ public class Game {
             }
         }
     }
-    private Sprite newEnemy( BufferedImage img )
+    private Sprite newEnemy()
     {
-        Enemy sprite = new Enemy( img );
-        sprite.setRefPixel( sprite.getWidth() / 2, sprite.getHeight() / 2 );
-        sprite.setWeapons( defaultWeapons );
+        Enemy sprite = defaultEnemy.clone();
         setSpriteSpawn( sprite );
         return sprite;
     }

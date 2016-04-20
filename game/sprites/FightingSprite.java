@@ -38,6 +38,12 @@ public abstract class FightingSprite extends Sprite
         this.setSkillClass( "INEPT" ); // TODO replace with skill chooser
     }
     
+    @Override
+    public FightingSprite clone()
+    {
+        return (FightingSprite)super.clone();
+    }
+    
     @Deprecated
     @Override
     public void paint( Graphics g )
@@ -84,14 +90,15 @@ public abstract class FightingSprite extends Sprite
     @Override
     public boolean additionalCollisions( Sprite s )
     {
+        // if hit a Weapon, return the Weapon's conditions, else this Sprite collided
         return s instanceof Weapon ? ((Weapon)s).additionalCollisions( this ) : true;
     }
 
     @Override
-    public void hitSprite( Sprite sprite ) {}
+    public void hitSprite( Sprite sprite ) {} // by default, does not do anything
 
     @Override
-    public void hitWall( int dir ) {}
+    public void hitWall( int dir ) {} // by default, does not do anything
 
     /**
      * Returns a weapon based on the attack type
@@ -114,6 +121,11 @@ public abstract class FightingSprite extends Sprite
         return weapon;
     }
     
+    /**
+     * Returns a clone of the weapon that represents the indicated attack
+     * @param atk
+     * @return weapons[atk].clone(this);
+     */
     public Weapon attack( int atk )
     {
         return weapons[atk].clone( this );
@@ -127,18 +139,23 @@ public abstract class FightingSprite extends Sprite
     
     public void setPrimaryWeapon( Weapon weapon )
     {
-        weapons[0] = weapon;
+        setWeapon( weapon, 0 );
     }
     
     public void setSecondaryWeapon( Weapon weapon )
     {
-        weapons[1] = weapon;
+        setWeapon( weapon, 1 );
     }
     
     public void setWeapons( Weapon... weapons )
     {
         setPrimaryWeapon( weapons[0] );
         setSecondaryWeapon( weapons[1] );
+    }
+    
+    public void setWeapon( Weapon weapon, int index )
+    {
+        weapons[index] = weapon;
     }
     
     public Weapon[] getWeapons()

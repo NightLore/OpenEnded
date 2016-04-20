@@ -35,7 +35,7 @@ public class Window extends JFrame
         this.getContentPane().setPreferredSize( windowSize );
         this.pack();
 //        this.setMinimumSize( windowSize );
-        this.setLocationRelativeTo( null );
+        this.setLocationRelativeTo( null ); // centers the window on the screen
         this.setDefaultCloseOperation( EXIT_ON_CLOSE );
 //        this.setResizable( false );
         this.setVisible( true );

@@ -21,8 +21,15 @@ public class PlayerGroup implements Serializable
      */
     private static final long serialVersionUID = 1L;
     
+    public static final int DEFAULT_MAX_NUMBER = 4;
+    
     private Player[] players;
     private int numPlayers;
+    
+    public PlayerGroup()
+    {
+        this( DEFAULT_MAX_NUMBER );
+    }
     
     public PlayerGroup( int maxPlayers )
     {

@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.Scanner;
 
 /**
  *  Abstract class for all sprites, also used as a modifier for the ImageSprite 
@@ -40,10 +39,6 @@ public abstract class Sprite extends ImageSprite implements Collidable
     private SpriteData data;
     private int speed;
     private String skillClass;
-    public Sprite( String imgFile )
-    {
-        this( makeTransparent( toImage( "/imgs/" + imgFile ), java.awt.Color.WHITE ) );
-    }
 
     public Sprite( BufferedImage img )
     {
@@ -52,7 +47,14 @@ public abstract class Sprite extends ImageSprite implements Collidable
         this.setRefPixel( getWidth() / 2, getHeight() / 2 );
         data = new SpriteData();
         data.setDirFacing( SOUTH );
+        init();
     }
+    
+    /**
+     * Empty Method called by the Constructor in case subclasses need more 
+     * control in constructing
+     */
+    public void init() {}
     
     @Override
     public Sprite clone()
@@ -61,23 +63,30 @@ public abstract class Sprite extends ImageSprite implements Collidable
         s.data = new SpriteData( getSpriteData() );
         return s;
     }
-
-    @Deprecated
-    @Override
-    public void paint( Graphics g )
-    {
-        paint( g, false );
-    }
     
+    /**
+     * Paints this Sprite and the debug information if indicated
+     * @param g
+     * @param debug
+     */
     public void paint( Graphics g, boolean debug )
     {
         super.paint( g );
         if ( debug )
         {
-            Rectangle rect = this.getBounds();
-            g.setColor( Color.WHITE );
-            g.drawRect( rect.x, rect.y, rect.width, rect.height );
+            paintDebug( g );
         }
+    }
+    
+    /**
+     * Paints this Sprite's debug information
+     * @param g
+     */
+    public void paintDebug( Graphics g )
+    {
+        Rectangle rect = this.getBounds();
+        g.setColor( Color.WHITE );
+        g.drawRect( rect.x, rect.y, rect.width, rect.height );
     }
     
     public void move( long gameTime, Map map, SpriteGroup sprites )
@@ -87,34 +96,39 @@ public abstract class Sprite extends ImageSprite implements Collidable
             for ( Sprite s : sprites )
             {
                 if ( s instanceof FightingSprite )
-                    sprite.seeSprite( s );
+                    sprite.seeSprite( s ); // unimplemented event check
             }
         }
-        double dir = getDirection( gameTime );
-        if ( dir == -1 ) return;
-        this.setDirFacing( (int)dir );
-        dir = Math.toRadians( dir );
-        int speed = getSpeed();
+        
+        double dir = getDirection( gameTime ); // getThis sprites direction to go
+        if ( dir == -1 ) return; // -1 means don't move
+        this.setDirFacing( (int)dir ); // updates animation direction
+        dir = Math.toRadians( dir ); // converts to radians
+        int speed = getSpeed(); // get speed
+        // calculate change in x and y
         int x = (int)Math.round( speed * Math.cos( dir ) ); // note: does not work because ints
         int y = (int)Math.round( speed * Math.sin( dir ) );
-        translate( x, 0 );
+        
+        translate( x, 0 ); // move in x direction
         if ( map.isColliding( this ) || isColliding( sprites, true ) )
         {
-            translate( -x, 0 );
+            translate( -x, 0 ); // move back if collided
         }
-        translate( 0, y );
+        translate( 0, y ); // move in y direction
         if ( map.isColliding( this ) || isColliding( sprites, true ) )
         {
-            translate( 0, -y );
+            translate( 0, -y ); // move back if collided
         }
     }
     /**
      * Returns whether this sprite collides with any of the sprites in the SpriteGroup
-     * <br>
-     * Note: does not inform sprites of their collisions, call 
-     * {@link game.sprites.Sprite#isColliding(SpriteGroup,boolean)}
+     * <br><br>
+     * Note: in order to inform sprites of their collisions, call 
+     * isColliding(SpriteGroup,boolean)
+     * 
      * @param sprites SpriteGroup to compare with
      * @return whether this sprite collides with any of the sprites in the SpriteGroup
+     * @see game.sprites.Sprite#isColliding(SpriteGroup,boolean)
      */
     public boolean isColliding( SpriteGroup sprites )
     {
@@ -143,17 +157,31 @@ public abstract class Sprite extends ImageSprite implements Collidable
         return false;
     }
     
+    /**
+     * Determines whether or not this sprite collides with a Sprite.
+     * <br><br>Calls the additionalCollisions(Sprite) method
+     * @param s Sprite to compare with
+     * @return
+     * @see game.sprites.Sprite#additionalCollisions(Sprite)
+     */
     public boolean collidesWith( Sprite s )
     {
-        return s != this && super.collidesWith( s, PIXEL_PERFECT ) && additionalCollisions( s );
+        return s != this && collidesWith( s, PIXEL_PERFECT ) && additionalCollisions( s );
     }
     /**
+     * Called with the given sprite such that Sprite <i>s</i> satisfies the 
+     * following conditions:
+     * <br> 1. s != this
+     * <br> 2. this.collidesWith( s, PIXEL_PERFECT )
+     * 
      * Return true if all additional collision conditions are satisfied. If true,
      * this sprite will collide with the sprite in the parameter
      * 
      * False means that this sprite is not to be collided with
      * @param s Sprite that is visually colliding with this sprite
      * @return
+     * @see game.sprites.Sprite#collidesWith(ImageSprite, boolean)
+     * @see game.sprites.Sprite#PIXEL_PERFECT
      */
     public abstract boolean additionalCollisions( Sprite s );
     
@@ -184,6 +212,11 @@ public abstract class Sprite extends ImageSprite implements Collidable
         data.setDirFacing( dirFacing );
     }
     
+    /**
+     * Returns this sprite's data
+     * <br><br>Note: does NOT make a copy of the SpriteData
+     * @return data
+     */
     public SpriteData getSpriteData()
     {
         return data;
@@ -192,6 +225,8 @@ public abstract class Sprite extends ImageSprite implements Collidable
     /**
      * Returns the direction that this sprite should move or -1.0
      * if not moving.
+     * <br><br>
+     * This method is where attacking should be done for FightingSprites
      * @param gameTime the total time in the game
      * @return direction in degrees
      */
@@ -199,6 +234,9 @@ public abstract class Sprite extends ImageSprite implements Collidable
     
     /**
      * Method called when sprite hits the wall
+     * <br><br>
+     * Note: not properly supported by {@link game.world.Map#isColliding(Sprite)}
+     * 
      * @param dir direction that the wall is (will be: NORTH, EAST, SOUTH, WEST)
      */
     public abstract void hitWall( int dir );
@@ -319,33 +357,6 @@ public abstract class Sprite extends ImageSprite implements Collidable
         int x = sprite.getX() - this.getX();
         int y = sprite.getY() - this.getY();
         return (int)Math.toDegrees( Math.atan2( y, x ) );
-    }
-    
-//    /** Sets this sprite's data to a copy of the new data */ TODO
-//    protected void setSpriteData( SpriteData newData )
-//    {
-//        data = new SpriteData( newData );
-//    }
-    
-    /**
-     * Return BufferedImage object of a picture file
-     * @param fileName
-     * @return buffered image
-     */
-    public static java.awt.image.BufferedImage toImage( String fileName )
-    {
-//        System.out.println( Sprite.class.getResource( fileName ) );
-        try { 
-            return javax.imageio.ImageIO.read( Sprite.class.getResource( fileName ) );
-        } catch ( java.io.IOException e ) { 
-            System.out.println( "Cannot find: " + fileName );
-            e.printStackTrace(); 
-            @SuppressWarnings("resource")
-            Scanner scanIn = new Scanner( System.in );
-            System.out.print( "Input file: " );
-            return toImage( scanIn.nextLine() );
-        }
-        // return null;
     }
     
     @Override

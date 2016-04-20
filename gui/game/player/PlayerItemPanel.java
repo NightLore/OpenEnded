@@ -81,6 +81,7 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
         
         JPanel[] panes = new JPanel[NUMCHOICES];
         
+        // force different format
 //        Insets oldInsets = UIManager.getInsets("TabbedPane.contentBorderInsets");
         UIManager.put("TabbedPane.contentBorderInsets", new Insets(0, 0, 0, 0));
         UIManager.put("TabbedPane.contentOpaque", false);
@@ -208,7 +209,7 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
         if ( selected == null || selected.equals( "" ) ) return;
         updatePlayer( selected, pane );
     }
-    private void updateTabs( int identifier )
+    private void updateTabs( int identifier ) // TODO call cover and shown events properly
     {
 //        ( (ScreenPanel)tabs.getSelectedComponent() ).cover();
         tabs.setSelectedIndex( identifier );
@@ -224,11 +225,11 @@ public class PlayerItemPanel extends ScreenPanel implements PlayerPanelConstants
             case SKILL_CLASS:
                 player.setSkillClass( selected );
                 break;
-            case PRIMARY:
-                player.setPrimaryWeapon( game.defaultWeapons[Game.WEAPON_INDEX.get( selected )] );
+            case PRIMARY: // TODO make this more elegant
+                player.setPrimaryWeapon( (Weapon)game.defaultInventory.getWeapons().get( Game.WEAPON_INDEX.get( selected ) ).getSprite() );
                 break;
             case SECONDARY:
-                player.setSecondaryWeapon( game.defaultWeapons[Game.WEAPON_INDEX.get( selected )] );
+                player.setSecondaryWeapon( (Weapon)game.defaultInventory.getWeapons().get( Game.WEAPON_INDEX.get( selected ) ).getSprite() );
                 break;
         }
         setTabName( selected, pane );

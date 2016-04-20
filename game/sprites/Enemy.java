@@ -38,6 +38,12 @@ public class Enemy extends FightingSprite
         delay[1] = 1000;
         this.setSpeed( 3 );
     }
+    
+    @Override
+    public Enemy clone()
+    {
+        return (Enemy)super.clone();
+    }
 
     @Override
     protected int drawDir()
