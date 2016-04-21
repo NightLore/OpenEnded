@@ -1,8 +1,10 @@
 package gui.utilities;
 
 /**
- *  An Abstract Navigator that defines reset(), setSelector(), and provides 
- *  updateSelector()
+ *  An Abstract Navigator that defines {@link #reset()}, {@link #setSelector()}, 
+ *  and provides {@link #updateSelector()} methods
+ *  <br><br>
+ *  Implements {@link Navigator}
  *
  *  @author  Nathan Man-ho Lui
  *  @version Feb 17, 2016
@@ -25,6 +27,10 @@ public abstract class AbstractNavigator implements Navigator
         updateSelector();
     }
 
+    /**
+     * Sets the Selector and then updates it by calling {@link #updateSelector()}
+     * @param selector
+     */
     @Override
     public void setSelector( Selector selector )
     {
@@ -32,6 +38,7 @@ public abstract class AbstractNavigator implements Navigator
         updateSelector();
     }
     
+    @Override
     public void updateSelector()
     {
         if ( selector != null )

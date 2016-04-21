@@ -188,6 +188,8 @@ public abstract class Sprite extends ImageSprite implements Collidable
     /**
      * Sets the direction facing by rounding the given <i>dir</i> to the nearest 
      * 90 degrees
+     * <br><br>
+     * This direction is meant to be used for animation and Player input purposes
      */
     public void setDirFacing( int dir )
     {

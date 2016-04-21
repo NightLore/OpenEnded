@@ -52,7 +52,7 @@ public class Window extends JFrame
     
     public static String getVersion()
     {
-        return "V0.20_1";
+        return "V0.20_2";
     }
 
     public static void main( String[] args ) {

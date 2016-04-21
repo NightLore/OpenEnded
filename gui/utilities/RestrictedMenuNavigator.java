@@ -1,7 +1,7 @@
 package gui.utilities;
 
 /**
- *  Extends the {@link gui.utilities.MenuNavigator} and overrides the 
+ *  Extends the {@link MenuNavigator} and overrides the 
  *  keepSelectedInBounds() method in order to add the extra condition that the
  *  selected element should never be null or empty
  *
@@ -12,6 +12,11 @@ package gui.utilities;
 public class RestrictedMenuNavigator extends MenuNavigator
 {
 
+    /**
+     * @param w width of grid
+     * @param h height of grid
+     * @see gui.utilities.MenuNavigator#MenuNavigator(int, int)
+     */
     public RestrictedMenuNavigator( int w, int h )
     {
         super( w, h );
@@ -20,17 +25,37 @@ public class RestrictedMenuNavigator extends MenuNavigator
     @Override
     protected boolean keepSelectedInBounds()
     {
-        boolean b = super.keepSelectedInBounds();
+        boolean wentOutOfBounds = super.keepSelectedInBounds();
         String s = getSelected();
-        if ( s == null || s.equals( "" ) ) // if selected element is null or empty
+        while ( s == null || s.equals( "" ) ) // while selected element is null or empty
         {
-            // Assuming entire grid is filled and has no holes...
-            selectedY--; // go back in y direction
-            if ( selectedY < 0 ) // if can't go back in y direction
-                selectedX--; // go back in x direction
-            super.keepSelectedInBounds(); // sets anything less than 0 to 0
-            b = true;
+            if ( !wentOutOfBounds )
+            {
+                int x = selectedX;
+                selectedX--;
+                if ( !this.keepSelectedInBounds() )
+                {
+                    selectedX = 0;
+                }
+                else
+                {
+                    selectedX = x;
+                    selectedY = 0;
+                }
+                wentOutOfBounds = true;
+            }
+            else
+            {
+                // Assuming entire grid is filled and has no holes...
+                selectedY--; // returns selectedY to the lowest available element using the loop
+                if ( selectedY < 0 )
+                    selectedX--;
+                if ( selectedX < 0 ) // no element in this grid
+                    break;
+                super.keepSelectedInBounds(); // makes sure that selected is not out of bounds
+            }
+            s = getSelected(); // update s to the selected element
         }
-        return b;
+        return wentOutOfBounds;
     }
 }

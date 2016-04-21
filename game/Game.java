@@ -53,8 +53,6 @@ public class Game {
     public Inventory defaultInventory;
     private Enemy defaultEnemy;
     private Player defaultPlayer;
-//    private BufferedImage enemyImg, projImg;
-//    public Weapon[] defaultWeapons;
     
     private int numEnemies;
     private Point center;

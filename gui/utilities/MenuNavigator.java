@@ -2,7 +2,9 @@ package gui.utilities;
 
 /**
  *  This class navigates through a given grid of Strings (intended to represent 
- *  a function. When  
+ *  a function. The grid is assumed to be completely filled so if there is no
+ *  element in that section of the grid, it will either return <b>null</b> or
+ *  an empty String.
  *
  *  @author  Nathan Man-ho Lui
  *  @version Feb 7, 2016
@@ -12,6 +14,12 @@ public class MenuNavigator extends AbstractNavigator
     private String[][] menu;
     private int addX, addY;
     
+    /**
+     * Initializes an empty MenuNavigator with the given width and height
+     * 
+     * @param w width of grid
+     * @param h height of grid
+     */
     public MenuNavigator( int w, int h )
     {
         init( w, h );
@@ -30,7 +38,13 @@ public class MenuNavigator extends AbstractNavigator
         addY = 0;
         reset();
     }
-    
+
+    /**
+     * Adds a menu item to this navigator
+     * <br><br>
+     * <b>Note:</b> Does not update its selector with the new item
+     * @param item
+     */
     @Override
     public void addMenuItem( String item )
     {
@@ -97,10 +111,10 @@ public class MenuNavigator extends AbstractNavigator
     protected boolean keepSelectedInBounds()
     {
         boolean b = false;
-        if ( selectedX < 0 ) { selectedX = 0; b = true; }
-        if ( selectedY < 0 ) { selectedY = 0; b = true; }
-        if ( selectedX >= menu.length ) { selectedX = menu.length - 1; b = true; }
-        if ( selectedY >= menu[0].length ) { selectedY = menu[0].length - 1; b = true; }
+        if ( selectedX < 0 ) { selectedX = menu.length - 1;    b = true; }
+        if ( selectedY < 0 ) { selectedY = menu[0].length - 1; b = true; }
+        if ( selectedX >= menu.length    ) { selectedX = 0;    b = true; }
+        if ( selectedY >= menu[0].length ) { selectedY = 0;    b = true; }
         return b;
     }
     

@@ -17,6 +17,8 @@ import javax.imageio.ImageIO;
  */
 public class Assets
 {
+    
+    public static final String PACKAGE = "/game-images/";
     // NOTE: Switch back to enums for type safety once game is situated
     public static final int PLAINS = 0;
     public static final int NUMBIOMES = 1;
@@ -73,9 +75,9 @@ public class Assets
             BufferedImage[] floor = new BufferedImage[fLength];
             BufferedImage[] block = new BufferedImage[bLength];
             for ( int i = 0; i < fLength; i++ ) 
-                floor[i] = toImage( "/imgs/" + fFiles[i] );// TODO image packages
+                floor[i] = toImage( PACKAGE + fFiles[i] );// TODO image packages
             for ( int i = 0; i < bLength; i++ ) 
-                block[i] = toImage( "/imgs/" + bFiles[i] );
+                block[i] = toImage( PACKAGE + bFiles[i] );
             floors.put( biome, floor );
             blocks.put( biome, block );
         }
@@ -86,7 +88,7 @@ public class Assets
         skins = new HashMap<String,BufferedImage>();
         for ( String s : charSkins )
         {
-            skins.put( s, toImage( "/imgs/" + charFiles.get( s ) ) );
+            skins.put( s, toImage( PACKAGE + charFiles.get( s ) ) );
         }
     }
     
