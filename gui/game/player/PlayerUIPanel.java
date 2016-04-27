@@ -80,7 +80,7 @@ public class PlayerUIPanel extends NavigatablePanel implements Carder, ControlLi
     public void setPlayer( Player player )
     {
         if ( player == null ) return;
-        statsPanel.setPlayerImage( player.getImage() );
+        statsPanel.setPlayer( player );
         controlPanel.setPlayer( player );
         itemPanel.setPlayer( player );
     }

@@ -1,5 +1,7 @@
 package game.sprites.groups;
 
+import javax.swing.ImageIcon;
+
 import game.sprites.Sprite;
 
 /**
@@ -16,6 +18,8 @@ import game.sprites.Sprite;
  */
 public interface ItemType
 {
+    public static final DefaultItemType[] DEFAULT_ITEM_TYPES = DefaultItemType.values();
+    
     /**
      *  Enum represents all the default item types that will be in the inventory.
      *  <br><br>
@@ -44,12 +48,16 @@ public interface ItemType
      *  @version Apr 19, 2016
      *  @author  Assignment: OpenEnded
      */
-    public class InventoryItem
+    public class InventoryItem extends ImageIcon
     {
+        private static final long serialVersionUID = 1L;
+        
+        
         private Sprite sprite;
         private ItemType type;
         public InventoryItem( Sprite sprite, ItemType type )
         {
+            super( sprite.getImage() );
             this.sprite = sprite;
             this.type = type;
         }

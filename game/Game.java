@@ -177,14 +177,32 @@ public class Game {
     {
         return !map.inMap( s ) || s.isDead();
     }
+    public Player addPlayer( int panel )
+    {
+        if ( numLives <= 0 )
+            return null;
+        Player player = newPlayer();
+        player.setDefaultControls( panel );
+        sprites.add( player );
+        players.set( player, panel );
+        takeALife();
+        return player;
+    }
+    private Player newPlayer()
+    {
+        Player player = defaultPlayer.clone();
+        setPlayerSpawn( player );
+        return player;
+    }
     private void setPlayerSpawn( Sprite sprite )
     {
         boolean adjustX = true;
         int offset = Tile.TILE_SIZE;
         Point p = players.getCenter();
         if ( p == null ) p = center;
-        do {
-            sprite.setPosition( p.x, p.y );
+        sprite.setPosition( p.x, p.y );
+        while ( isSpawnColliding( sprite ) )
+        {
             if ( adjustX ) // note: better replaced with array of "predetermined" locations
             {
                 p.x += offset;
@@ -194,19 +212,8 @@ public class Game {
                 p.y += offset;
             }
             adjustX = !adjustX;
-        } while ( isSpawnColliding( sprite ) );
-    }
-    public Player addPlayer( int panel )
-    {
-        if ( numLives <= 0 )
-            return null;
-        Player player = defaultPlayer.clone();
-        setPlayerSpawn( player );
-        player.setDefaultControls( panel );
-        sprites.add( player );
-        players.set( player, panel );
-        takeALife();
-        return player;
+            sprite.setPosition( p.x, p.y );
+        }
     }
     private void spawnEnemies()
     {
@@ -228,12 +235,12 @@ public class Game {
     private Sprite newEnemy()
     {
         Enemy sprite = defaultEnemy.clone();
-        setSpriteSpawn( sprite );
+        setEnemySpawn( sprite );
         return sprite;
     }
     /** Set given Sprite to a randomspot around the map, also checks whether 
      * it collides with the map or another sprite. */
-    private void setSpriteSpawn( Sprite sprite )
+    private void setEnemySpawn( Sprite sprite )
     {
         List<Point> points = new ArrayList<Point>();
         Rectangle frame = map.getFrame();

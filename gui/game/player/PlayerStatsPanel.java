@@ -4,14 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import constants.PlayerPanelConstants;
+import game.sprites.Player;
 import gui.Carder;
 import gui.ClearPanel;
 import gui.ScreenPanel;
@@ -32,7 +31,8 @@ public class PlayerStatsPanel extends ScreenPanel implements PlayerPanelConstant
      * 
      */
     private static final long serialVersionUID = 1L;
-    private JLabel imageLabel;
+
+    private StatDisplay statDisplay;
     
     public PlayerStatsPanel( Carder frame, int panel )
     {
@@ -47,8 +47,7 @@ public class PlayerStatsPanel extends ScreenPanel implements PlayerPanelConstant
         JPanel titlePanel = new ClearPanel();
         JPanel centerPanel = new ClearPanel( new GridLayout( 1, 2 ) );
         JLabel playerLabel = new JLabel( "Player " + (panel+1) );
-        JPanel imagePanel = new ClearPanel();
-        imageLabel = new JLabel();
+        statDisplay = new StatDisplay();
         JPanel sidePanel = new ClearPanel();
         SelectableButton itemButton = new SelectableButton( ITEMS_PANEL );
         SelectableButton controlButton = new SelectableButton( "CONTROLS" );
@@ -61,18 +60,17 @@ public class PlayerStatsPanel extends ScreenPanel implements PlayerPanelConstant
         playerLabel.setFont( tempFont );
         
         titlePanel.add( playerLabel );
-        imagePanel.add( imageLabel );
-        sidePanel.setLayout( new GridLayout( 0, 1, gapX, gapY ) );
+        statDisplay.setBorder( BorderFactory.createEmptyBorder( gapY, gapX, gapY, gapX ) );
+        sidePanel.setLayout( new GridLayout( 0, 1, gapX, gapY / 2 ) );
         sidePanel.setBorder( BorderFactory.createEmptyBorder( gapY, gapX, gapY, gapX ) );
         sidePanel.add( itemButton );
         sidePanel.add( controlButton );
-        centerPanel.add( imagePanel );
+        sidePanel.add( doneButton );
+        centerPanel.add( statDisplay );
         centerPanel.add( sidePanel );
         
         this.add( titlePanel, BorderLayout.NORTH );
         this.add( centerPanel, BorderLayout.CENTER );
-        this.add( doneButton, BorderLayout.SOUTH );
-        
         
         controlButton.setActionCommand( CTRLS_PANEL );
         itemButton.addActionListener( this );
@@ -91,14 +89,15 @@ public class PlayerStatsPanel extends ScreenPanel implements PlayerPanelConstant
     }
     
     @Override
-    public void cover()
+    public void shown()
     {
-        navigator.reset();
+        statDisplay.updateVisuals();
     }
     
-    public void setPlayerImage( Image i )
+    public void setPlayer( Player p )
     {
-        imageLabel.setIcon( new ImageIcon( i ) );
+//        imageLabel.setIcon( new ImageIcon( p.getImage() ) );
+        statDisplay.setSprite( p );
     }
 
     @Override
