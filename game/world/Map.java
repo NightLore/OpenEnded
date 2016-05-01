@@ -7,6 +7,7 @@ import game.world.Generator.Generation;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 /**
  *  Infinite map design
@@ -19,9 +20,10 @@ import java.awt.Rectangle;
  */
 public class Map extends TileCoordinator
 {
-    public static final int MAP_TILE_SIZE = 3;
+    private static final int MAP_TILE_SIZE = 3;
     
     // ------------------------------- Class --------------------------- //
+    private HashMap<Point,LargeTile> prevTiles;
     
     private Assets assets;
     private LargeTile[][] tiles;
@@ -38,11 +40,12 @@ public class Map extends TileCoordinator
     }
     
     /**
-     * Creates this map
+     * Creates this map. Removes all memory of the previous map
      */
     @Override
     public void create()
     {
+        this.prevTiles = new HashMap<Point,LargeTile>();
         int size = this.getSize();
         for ( int i = 0; i < MAP_TILE_SIZE; i++ )
         {
@@ -50,13 +53,18 @@ public class Map extends TileCoordinator
             {
                 int tileX = i * size - size;
                 int tileY = j * size - size;
-                tiles[i][j] = new LargeTile( tileX, tileY, size );
-                tiles[i][j].changeBiome( assets.getFloor( Generator.randInt( Assets.NUMBIOMES ) ), 
-                                         assets.getBlock( Generator.randInt( Assets.NUMBIOMES ) ) );
-                tiles[i][j].create();
+                tiles[i][j] = newLargeTile( tileX, tileY, size );
             }
         }
-        
+    }
+    
+    private LargeTile newLargeTile( int tileX, int tileY, int size )
+    {
+        LargeTile t = new LargeTile( tileX, tileY, size );
+        t.changeBiome( assets.getFloor( Generator.randInt( Assets.NUMBIOMES ) ), 
+                       assets.getBlock( Generator.randInt( Assets.NUMBIOMES ) ) );
+        t.create();
+        return t;
     }
 
     @Override
@@ -139,7 +147,10 @@ public class Map extends TileCoordinator
     
     /**
      * Updates this map with the center of screen position and the width and 
-     * height of the screen
+     * height of the screen by shifting all the tiles over one.
+     * <br><br>
+     * May be better with ArrayList as it does the same thing.
+     * 
      * @param centerX x-coordinate of center of screen
      * @param centerY y-coordinate of center of screen
      * @param screenW width of screen
@@ -157,15 +168,16 @@ public class Map extends TileCoordinator
         LargeTile temp;
         Point pTemp;
         Point p;
-        if ( Math.abs( dx ) > distance )
+        if ( Math.abs( dx ) > distance ) // if change in x
         {
-            if ( dx > 0 )
+            if ( dx > 0 ) // if change in x is positive
             {
                 for ( int j = 0; j < MAP_TILE_SIZE; j++ )
                 {
                     int i = 0;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
+                    prevTiles.put( this.toThisCoords( pTemp ), temp );
                     for ( ; i < MAP_TILE_SIZE - 1; i++ )
                     {
                         p = tiles[i+1][j].getPosition();
@@ -173,19 +185,25 @@ public class Map extends TileCoordinator
                         tiles[i][j] = tiles[i+1][j];
                         pTemp = p;
                     }
-                    temp.setPosition( pTemp );
+                    temp = prevTiles.get( this.toThisCoords( pTemp.x + size, pTemp.y ) );
+                    if ( temp == null )
+                    {
+                        temp = newLargeTile( pTemp.x, pTemp.y, size );
+                        temp.generate();
+                    }
+                    else temp.setPosition( pTemp );
                     tiles[i][j] = temp;
-                    temp.generate();
                 }
                 this.setX( getX() + adjust );
             }
-            else
+            else // if ( dx < 0 ) // change in x is negative
             {
                 for ( int j = 0; j < MAP_TILE_SIZE; j++ )
                 {
                     int i = MAP_TILE_SIZE - 1;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
+                    prevTiles.put( this.toThisCoords( pTemp ), temp );
                     for ( ; i > 0; i-- )
                     {
                         p = tiles[i-1][j].getPosition();
@@ -193,9 +211,14 @@ public class Map extends TileCoordinator
                         tiles[i][j] = tiles[i-1][j];
                         pTemp = p;
                     }
-                    temp.setPosition( pTemp );
+                    temp = prevTiles.get( this.toThisCoords( pTemp.x - size, pTemp.y ) );
+                    if ( temp == null )
+                    {
+                        temp = newLargeTile( pTemp.x, pTemp.y, size );
+                        temp.generate();
+                    }
+                    else temp.setPosition( pTemp );
                     tiles[i][j] = temp;
-                    temp.generate();
                 }
                 this.setX( getX() - adjust );
             }
@@ -209,6 +232,7 @@ public class Map extends TileCoordinator
                     int j = 0;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
+                    prevTiles.put( this.toThisCoords( pTemp ), temp );
                     for ( ; j < MAP_TILE_SIZE - 1; j++ )
                     {
                         p = tiles[i][j+1].getPosition();
@@ -216,9 +240,14 @@ public class Map extends TileCoordinator
                         tiles[i][j] = tiles[i][j+1];
                         pTemp = p;
                     }
-                    temp.setPosition( pTemp );
+                    temp = prevTiles.get( this.toThisCoords( pTemp.x, pTemp.y + size ) );
+                    if ( temp == null )
+                    {
+                        temp = newLargeTile( pTemp.x, pTemp.y, size );
+                        temp.generate();
+                    }
+                    else temp.setPosition( pTemp );
                     tiles[i][j] = temp;
-                    temp.generate();
                 }
                 this.setY( getY() + adjust );
             }
@@ -229,6 +258,7 @@ public class Map extends TileCoordinator
                     int j = MAP_TILE_SIZE - 1;
                     temp = tiles[i][j];
                     pTemp = temp.getPosition();
+                    prevTiles.put( this.toThisCoords( pTemp ), temp );
                     for ( ; j > 0; j-- )
                     {
                         p = tiles[i][j-1].getPosition();
@@ -236,13 +266,19 @@ public class Map extends TileCoordinator
                         tiles[i][j] = tiles[i][j-1];
                         pTemp = p;
                     }
-                    temp.setPosition( pTemp );
+                    temp = prevTiles.get( this.toThisCoords( pTemp.x, pTemp.y - size ) );
+                    if ( temp == null )
+                    {
+                        temp = newLargeTile( pTemp.x, pTemp.y, size );
+                        temp.generate();
+                    }
+                    else temp.setPosition( pTemp );
                     tiles[i][j] = temp;
-                    temp.generate();
                 }
                 this.setY( getY() - adjust );
             }
         }
+        
     }
 //    private void shift( int x, int y, int dx, int dy )// TODO compress code for update?
 //    {

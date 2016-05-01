@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -143,5 +144,19 @@ public class InGamePanel extends ScreenPanel implements GameOverlay, GamePanelCo
     public void gameOver()
     {
         carder.switchTo( OVER_PANEL );
+    }
+
+    @Override
+    public void displayText( String text )
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setCutScene( List<String> text )
+    {
+        // TODO Auto-generated method stub
+        
     }
 }

@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 public class Assets
 {
     
-    public static final String PACKAGE = "/game-images/";
+    public static final String PACKAGE = "/imgs/";
     // NOTE: Switch back to enums for type safety once game is situated
     public static final int PLAINS = 0;
     public static final int NUMBIOMES = 1;

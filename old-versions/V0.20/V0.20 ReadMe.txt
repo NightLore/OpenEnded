@@ -1,0 +1,3 @@
+Note:
+V0.20_2 and V0.20_3 require the folder game-images to be next to them in order 
+to run due to a failure in exporting them with their images.
